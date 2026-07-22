@@ -3,137 +3,151 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CBT KUSUMA - SMA Negeri 1 Mlati</title>
+  <title>CBT KUSUMA - SMAN 1 Mlati (Tampilan CBT CPNS)</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="/socket.io/socket.io.js"></script>
 </head>
-<body id="studentExamBody">
+<body>
 
-  <!-- CBT KUSUMA Taskbar (Branding SMAN 1 Mlati) -->
-  <div class="kusuma-kiosk-bar">
-    <div class="kusuma-logo">
-      <div class="kusuma-logo-icon"><i class="fa-solid fa-graduation-cap"></i></div>
-      <span>CBT KUSUMA</span>
-      <span class="badge badge-primary" id="studentRoomBadge" style="font-size: 0.7rem; padding: 0.15rem 0.5rem; background: rgba(37,99,235,0.3); color: #93c5fd; border-color: rgba(147,197,253,0.3);">Ruang --</span>
-    </div>
-
-    <!-- Center System Clock & Network Status -->
-    <div class="kusuma-kiosk-center">
-      <div><i class="fa-regular fa-clock" style="color: #93c5fd;"></i> <span id="kusumaClock">00:00:00</span></div>
-      <div id="netStatus" style="color: #4ade80;"><i class="fa-solid fa-wifi"></i> Online</div>
-    </div>
-
-    <!-- Right Kiosk Indicators & Zoom Controls -->
-    <div class="kusuma-kiosk-right">
-      <div style="font-size: 0.8rem; color: #94a3b8;" id="batteryStatus">
-        <i class="fa-solid fa-battery-three-quarters" style="color: #4ade80;"></i> 90%
+  <!-- TOP HEADER (CBT CPNS STYLE) -->
+  <header class="cpns-header">
+    <div class="cpns-brand">
+      <div class="cpns-brand-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+      <div>
+        <div>CBT KUSUMA</div>
+        <div style="font-size: 0.7rem; font-weight: 500; color: #94a3b8;">SMA Negeri 1 Mlati</div>
       </div>
-      
-      <button class="kusuma-btn" onclick="changeZoom(-1)" title="Kecilkan Font">A-</button>
-      <button class="kusuma-btn" onclick="changeZoom(1)" title="Besarkan Font">A+</button>
-      
-      <button class="kusuma-btn kusuma-btn-danger" onclick="quitExam()" title="Keluar Ujian">
-        <i class="fa-solid fa-right-from-bracket"></i> Keluar Ujian
-      </button>
     </div>
-  </div>
 
-  <!-- Sub Header for Student Exam Status -->
-  <header class="app-header" style="background: #ffffff; border-bottom: 1px solid #e2e8f0; height: 44px; font-size: 0.85rem; color: #0f172a;">
-    <div style="display: flex; align-items: center; gap: 0.75rem;">
-      <span style="font-weight: 700; color: #0f172a;" id="studentName">Siswa</span>
-      <span style="color: #64748b; font-size: 0.75rem;" id="studentNis">NIS: --</span>
+    <!-- Prominent CPNS Countdown Timer Box -->
+    <div class="cpns-timer-box">
+      <i class="fa-regular fa-clock" style="color: #ef4444;"></i>
+      <span>Sisa Waktu: </span>
+      <span id="cpnsTimer" style="color: #ffffff;">01:00:00</span>
     </div>
-    
+
+    <!-- Student Profile & Quit -->
     <div style="display: flex; align-items: center; gap: 1rem;">
-      <!-- Auto Save Badge -->
-      <div id="saveStatus" class="badge badge-success">
-        <i class="fa-solid fa-cloud-arrow-up"></i> Jawaban Tersimpan
+      <div style="text-align: right; display: flex; align-items: center; gap: 0.75rem;">
+        <div style="width: 32px; height: 32px; border-radius: 50%; background: #2563eb; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem;">
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <div class="desktop-only">
+          <div style="font-weight: 700; font-size: 0.85rem;" id="studentName">Siswa</div>
+          <div style="font-size: 0.7rem; color: #94a3b8;" id="studentNis">NIS: --</div>
+        </div>
       </div>
 
-      <!-- Violation Badge -->
-      <div id="violationBadge" class="badge badge-neutral">
-        <i class="fa-solid fa-shield-halved"></i> Pelanggaran: <span id="violationCount">0</span>/3
-      </div>
+      <button onclick="quitExam()" class="btn btn-danger" style="padding: 0.35rem 0.75rem; font-size: 0.8rem; border-radius: 6px;">
+        <i class="fa-solid fa-right-from-bracket"></i> Keluar
+      </button>
     </div>
   </header>
 
-  <!-- Main Container -->
-  <main style="max-width: 920px; margin: 1.5rem auto; padding: 0 1rem; flex: 1;">
+  <!-- SECONDARY BAR (STATUS PELANGGARAN & AUTO-SAVE) -->
+  <div style="background: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 0.5rem 1.25rem; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center;">
+    <div style="display: flex; align-items: center; gap: 0.75rem;">
+      <span id="studentRoomBadge" class="badge badge-neutral">Ruang --</span>
+      <span id="saveStatus" class="badge badge-success"><i class="fa-solid fa-cloud-arrow-up"></i> Jawaban Tersimpan</span>
+    </div>
+    <div>
+      <span id="violationBadge" class="badge badge-neutral">
+        <i class="fa-solid fa-shield-halved"></i> Pelanggaran: <span id="violationCount">0</span>/3
+      </span>
+    </div>
+  </div>
 
-    <!-- Question Container -->
-    <div id="examContainer" class="glass-card" style="padding: 1.75rem; display: none;">
-      <!-- Top Info Row -->
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 1rem;">
-        <div>
-          <span style="font-size: 0.85rem; color: #64748b; font-weight: 600;" id="subjectName">Mata Pelajaran: Ekonomi X</span>
-          <h2 style="font-size: 1.2rem; font-weight: 800; color: #0f172a; margin-top: 0.2rem;">Soal No. <span id="currentQuestionNum">1</span></h2>
-        </div>
+  <!-- MAIN CPNS SPLIT LAYOUT -->
+  <main class="cpns-layout">
 
-        <button onclick="toggleQuestionSheet()" class="btn btn-outline" style="padding: 0.4rem 0.85rem; font-size: 0.85rem;">
-          <i class="fa-solid fa-grid-2"></i> Lembar Soal <i class="fa-solid fa-chevron-down"></i>
-        </button>
+    <!-- LEFT PANEL: QUESTION & OPTIONS -->
+    <div class="cpns-card" id="examCard">
+      <!-- Question Header -->
+      <div class="question-header">
+        <div class="question-title">SOAL NOMOR <span id="currentQuestionNum">1</span></div>
+        <div class="question-subject-tag" id="subjectName">Mata Pelajaran: Ekonomi X</div>
       </div>
 
-      <!-- Question Sheet Drawer -->
-      <div id="questionSheet" style="display: none; padding-bottom: 1.25rem; border-bottom: 1px solid #e2e8f0; margin-bottom: 1.25rem;">
-        <div style="font-size: 0.85rem; color: #64748b; font-weight: 600; margin-bottom: 0.5rem;">Navigasi Nomor Soal:</div>
-        <div class="question-grid" id="questionGridButtons"></div>
+      <!-- Question Text Box -->
+      <div class="question-content" id="questionText">
+        Memuat soal ujian...
       </div>
 
-      <!-- Question Content -->
-      <div style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 1.75rem; font-weight: 600; color: #0f172a;" id="questionText">
-        Memuat soal...
+      <!-- CPNS Radio Options List -->
+      <div class="cpns-options-container" id="optionsList">
+        <!-- Options rendered dynamically -->
       </div>
 
-      <!-- Options List -->
-      <div id="optionsList"></div>
-
-      <!-- Bottom Action Row -->
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; border-top: 1px solid #e2e8f0; padding-top: 1.25rem;">
+      <!-- Bottom Navigation Action Bar (With Ragu-Ragu Button) -->
+      <div class="cpns-action-bar">
         <button id="btnPrev" onclick="navigateQuestion(-1)" class="btn btn-outline" disabled>
-          <i class="fa-solid fa-arrow-left"></i> Sebelumnya
+          <i class="fa-solid fa-arrow-left"></i> <span>Sebelumnya</span>
+        </button>
+
+        <button id="btnRagu" onclick="toggleRaguRagu()" class="btn btn-ragu">
+          <i class="fa-regular fa-square-check"></i> <span>Ragu - Ragu</span>
         </button>
 
         <button id="btnNext" onclick="navigateQuestion(1)" class="btn btn-primary">
-          Berikutnya <i class="fa-solid fa-arrow-right"></i>
+          <span>Berikutnya</span> <i class="fa-solid fa-arrow-right"></i>
         </button>
 
         <button id="btnSubmit" onclick="submitExam()" class="btn btn-success" style="display: none;">
-          Selesai & Kirim <i class="fa-solid fa-check-double"></i>
+          <span>Selesai Ujian</span> <i class="fa-solid fa-check-double"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL: SIDEBAR NUMBER GRID (PERMANENT IN CPNS) -->
+    <div class="cpns-sidebar">
+      <div class="sidebar-title">
+        <span><i class="fa-solid fa-grid-2" style="color: #2563eb;"></i> NAVIGASI SOAL</span>
+        <span style="font-size: 0.8rem; color: #64748b;" id="totalQCount">5 Soal</span>
+      </div>
+
+      <!-- Legend Colors -->
+      <div class="cpns-legend">
+        <div class="legend-item"><div class="legend-box answered"></div> <span>Dijawab</span></div>
+        <div class="legend-item"><div class="legend-box ragu"></div> <span>Ragu-Ragu</span></div>
+        <div class="legend-item"><div class="legend-box unanswered"></div> <span>Belum</span></div>
+        <div class="legend-item"><div class="legend-box active"></div> <span>Aktif</span></div>
+      </div>
+
+      <!-- Number Grid Buttons -->
+      <div class="cpns-num-grid" id="questionGridButtons">
+        <!-- Buttons 1..N rendered here -->
+      </div>
+
+      <div style="margin-top: auto; padding-top: 1.25rem;">
+        <button onclick="submitExam()" class="btn btn-success" style="width: 100%; justify-content: center;">
+          <i class="fa-solid fa-paper-plane"></i> Selesai & Kirim Ujian
         </button>
       </div>
     </div>
 
   </main>
 
-  <!-- Bottom Kiosk Footer Status Bar -->
-  <div style="height: 32px; background: #0f172a; border-top: 1px solid #334155; display: flex; align-items: center; justify-content: space-between; padding: 0 1.25rem; font-size: 0.75rem; color: #cbd5e1;">
-    <div><i class="fa-solid fa-shield-halved" style="color: #4ade80;"></i> Lingkungan Ujian Aman Terproteksi — SMAN 1 Mlati</div>
-    <div>CBT KUSUMA © 2026</div>
-  </div>
-
   <!-- Pre-Exam Instructions Modal -->
   <div class="modal-overlay active" id="preExamModal">
-    <div class="modal-container glass-card">
+    <div class="modal-container">
       <div style="font-size: 2.75rem; color: #2563eb; margin-bottom: 0.75rem;">
         <i class="fa-solid fa-graduation-cap"></i>
       </div>
-      <h2 style="margin-bottom: 0.5rem; font-size: 1.3rem; color: #0f172a;">Modus Ujian CBT Kusuma</h2>
+      <h2 style="margin-bottom: 0.5rem; font-size: 1.3rem; color: #0f172a;">Ujian CBT SMAN 1 Mlati</h2>
       <p style="color: #64748b; font-size: 0.85rem; line-height: 1.5; margin-bottom: 1.25rem;">
-        Aplikasi ini berjalan dalam lingkungan terproteksi <strong>SMA Negeri 1 Mlati</strong>. Dilarang berpindah tab/aplikasi, keluar dari layar penuh, atau menggunakan tombol pintas dilarang selama ujian berlangsung.
+        Aplikasi menggunakan tampilan standar <strong>CBT CPNS / CAT BKN</strong>. Dilarang berpindah tab/aplikasi atau keluar layar penuh selama ujian berlangsung.
       </p>
       
       <button onclick="startExamWithFullscreen()" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.8rem; font-size: 1rem;">
-        <i class="fa-solid fa-expand"></i> Mulai Ujian & Masuk Layar Penuh
+        <i class="fa-solid fa-expand"></i> Mulai Mengerjakan Ujian
       </button>
     </div>
   </div>
 
   <!-- Cheating Warning Alert Modal -->
   <div class="modal-overlay" id="warningModal">
-    <div class="modal-container glass-card alert-pulse" style="border-color: #f59e0b;">
+    <div class="modal-container" style="border: 2px solid #f59e0b;">
       <div style="font-size: 3rem; color: #d97706; margin-bottom: 0.5rem;">
         <i class="fa-solid fa-triangle-exclamation"></i>
       </div>
@@ -153,7 +167,7 @@
 
   <!-- Locked Screen Modal -->
   <div class="modal-overlay" id="lockedModal">
-    <div class="modal-container glass-card" style="border-color: #ef4444; background: #ffffff;">
+    <div class="modal-container" style="border: 2px solid #ef4444; background: #ffffff;">
       <div style="font-size: 3.5rem; color: #dc2626; margin-bottom: 0.5rem;">
         <i class="fa-solid fa-lock"></i>
       </div>
