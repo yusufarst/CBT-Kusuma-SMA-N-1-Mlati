@@ -4,42 +4,46 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lembar Ujian Siswa - CBT KUSUMA SMAN 1 Mlati</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/style.css?v=1.0.2">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="/socket.io/socket.io.js"></script>
 </head>
-<body>
+<body style="background: #f8fafc; margin: 0; padding: 0;">
 
   <!-- TOP UNIFIED HEADER BAR (SOLID DARK NAVY) -->
-  <header class="cpns-header-bar">
+  <header class="cpns-header-bar" style="background: #0f172a !important; color: #ffffff !important; display: flex !important; align-items: center !important; justify-content: space-between !important; height: 60px !important; padding: 0 1.5rem !important; box-shadow: 0 4px 12px rgba(0,0,0,0.15); flex-shrink: 0; box-sizing: border-box;">
     
     <!-- Left: School Brand -->
-    <div class="cpns-brand-box">
-      <div class="cpns-brand-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+    <div class="cpns-brand-box" style="display: flex; align-items: center; gap: 0.75rem;">
+      <div class="cpns-brand-icon" style="width: 36px; height: 36px; border-radius: 8px; background: #2563eb; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+        <i class="fa-solid fa-graduation-cap"></i>
+      </div>
       <div>
-        <div class="cpns-brand-title">CBT KUSUMA</div>
-        <div class="cpns-brand-sub">SMA Negeri 1 Mlati</div>
+        <div class="cpns-brand-title" style="font-size: 1.1rem; font-weight: 800; color: #ffffff !important;">CBT KUSUMA</div>
+        <div class="cpns-brand-sub" style="font-size: 0.725rem; color: #94a3b8; font-weight: 600;">SMA Negeri 1 Mlati</div>
       </div>
     </div>
 
     <!-- Center: Prominent Timer Box -->
-    <div class="cpns-timer-badge">
-      <i class="fa-regular fa-clock"></i>
-      <span class="cpns-timer-text">Sisa Waktu:</span>
-      <span class="cpns-timer-val" id="cpnsTimer">01:00:00</span>
+    <div class="cpns-timer-badge" style="background: #1e293b; border: 1.5px solid #334155; padding: 0.4rem 1.1rem; border-radius: 8px; display: flex; align-items: center; gap: 0.6rem; font-family: monospace; font-weight: 700;">
+      <i class="fa-regular fa-clock" style="color: #f87171; font-size: 1.1rem;"></i>
+      <span class="cpns-timer-text" style="color: #94a3b8; font-size: 0.8rem;">Sisa Waktu:</span>
+      <span class="cpns-timer-val" id="cpnsTimer" style="color: #ffffff !important; font-size: 1.05rem;">01:00:00</span>
     </div>
 
     <!-- Right: Student Profile & Exit -->
-    <div class="cpns-user-box">
-      <div class="cpns-user-info">
-        <div class="cpns-user-avatar"><i class="fa-solid fa-user"></i></div>
+    <div class="cpns-user-box" style="display: flex; align-items: center; gap: 1.25rem;">
+      <div class="cpns-user-info" style="display: flex; align-items: center; gap: 0.75rem;">
+        <div class="cpns-user-avatar" style="width: 34px; height: 34px; border-radius: 50%; background: #2563eb; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 0.9rem;">
+          <i class="fa-solid fa-user"></i>
+        </div>
         <div>
-          <div class="cpns-user-name" id="studentName">Siswa</div>
-          <div class="cpns-user-nis" id="studentNis">NIS: --</div>
+          <div class="cpns-user-name" id="studentName" style="font-size: 0.9rem; font-weight: 700; color: #ffffff !important;">Siswa</div>
+          <div class="cpns-user-nis" id="studentNis" style="font-size: 0.725rem; color: #94a3b8; font-weight: 600;">NIS: --</div>
         </div>
       </div>
 
-      <button onclick="quitExam()" class="btn btn-danger" style="padding: 0.4rem 0.85rem; font-size: 0.8rem; border-radius: 6px;">
+      <button onclick="quitExam()" class="btn btn-danger" style="padding: 0.4rem 0.85rem; font-size: 0.8rem; border-radius: 6px; background: #dc2626; color: white; border: none; cursor: pointer; font-weight: 700;">
         <i class="fa-solid fa-right-from-bracket"></i> Keluar
       </button>
     </div>
@@ -47,7 +51,7 @@
   </header>
 
   <!-- SUB-HEADER STATUS BAR -->
-  <div class="cpns-status-bar">
+  <div class="cpns-status-bar" style="height: 46px; background: #ffffff; border-bottom: 1px solid #cbd5e1; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; font-size: 0.85rem; flex-shrink: 0; box-sizing: border-box;">
     <div style="display: flex; align-items: center; gap: 0.85rem;">
       <span id="studentRoomBadge" class="badge badge-neutral">Ruang --</span>
       <span id="saveStatus" class="badge badge-success"><i class="fa-solid fa-cloud-arrow-up"></i> Jawaban Tersimpan</span>
