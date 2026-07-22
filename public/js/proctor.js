@@ -1,4 +1,4 @@
-// Proctor & Operator Dashboard Controller - CBT Kusuma
+// Proctor & Operator Dashboard Controller - CBT Kusuma (SMAN 1 Mlati)
 let currentUser = null;
 let currentRoomId = 0;
 let roomsList = [];
@@ -22,11 +22,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Socket Event Listeners
   socket.on('cheating-alert', (data) => {
-    // Only handle if in current room or viewing all rooms
     if (currentRoomId === 0 || data.roomId == currentRoomId) {
       appendCheatingFeed(data);
       playAlertSound();
-      fetchRoomStatus(); // Refresh cards
+      fetchRoomStatus();
     }
   });
 
@@ -40,7 +39,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   await fetchRooms();
 
-  // Default room selection based on proctor's assigned room
   if (currentUser.room_id) {
     document.getElementById('roomSelect').value = currentUser.room_id;
     currentRoomId = currentUser.room_id;
@@ -91,7 +89,6 @@ async function fetchRoomStatus() {
       renderStats(studentsData);
       renderStudentGrid(studentsData);
 
-      // Render initial logs if feed empty
       if (data.logs && data.logs.length > 0) {
         renderInitialLogs(data.logs);
       }
@@ -119,8 +116,9 @@ function renderStudentGrid(students) {
 
   if (students.length === 0) {
     grid.innerHTML = `
-      <div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 3rem;" class="glass-card">
-        Tidak ada peserta ujian di ruangan ini.
+      <div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 3rem;" class="card-ui">
+        <i class="fa-solid fa-users-slash" style="font-size: 2.5rem; margin-bottom: 0.5rem; color: #cbd5e1; display: block;"></i>
+        Tidak ada peserta ujian terdaftar di ruangan ini.
       </div>
     `;
     return;
@@ -131,7 +129,7 @@ function renderStudentGrid(students) {
     const isLocked = s.status === 'LOCKED';
     const isWarning = s.violations_count > 0 && !isLocked;
 
-    let cardCls = 'glass-card student-card';
+    let cardCls = 'student-card';
     if (isLocked) cardCls += ' status-locked';
     else if (isWarning) cardCls += ' status-warning';
 
@@ -148,32 +146,37 @@ function renderStudentGrid(students) {
 
     card.className = cardCls;
     card.innerHTML = `
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
-        <div>
-          <h4 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.2rem;">${s.name}</h4>
-          <span style="font-size: 0.8rem; color: var(--text-muted);">NIS: ${s.nis || '-'}</span>
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.85rem;">
+        <div style="display: flex; align-items: center; gap: 0.65rem;">
+          <div style="width: 36px; height: 36px; border-radius: 50%; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; border: 1px solid #bfdbfe;">
+            <i class="fa-solid fa-user-graduate"></i>
+          </div>
+          <div>
+            <h4 style="font-size: 0.95rem; font-weight: 800; color: #0f172a; margin-bottom: 0.1rem;">${s.name}</h4>
+            <span style="font-size: 0.75rem; color: #64748b; font-weight: 600;">NIS: ${s.nis || '-'}</span>
+          </div>
         </div>
         ${statusBadge}
       </div>
 
-      <div style="display: flex; justify-content: space-between; font-size: 0.8rem; background: rgba(15, 23, 42, 0.4); padding: 0.6rem; border-radius: 8px; margin-bottom: 0.75rem;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; font-size: 0.8rem; background: #f8fafc; padding: 0.6rem 0.75rem; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 0.85rem;">
         <div>
-          <span style="color: var(--text-muted);">Pelanggaran:</span>
-          <strong style="color: ${isLocked ? '#f87171' : isWarning ? '#fbbf24' : '#34d399'};"> ${s.violations_count}/3</strong>
+          <span style="color: #64748b; font-weight: 600;">Pelanggaran:</span>
+          <strong style="color: ${isLocked ? '#dc2626' : isWarning ? '#d97706' : '#16a34a'};"> ${s.violations_count}/3</strong>
         </div>
-        <div>
-          <span style="color: var(--text-muted);">Soal:</span>
-          <strong> ${s.answeredCount}/5</strong>
+        <div style="text-align: right;">
+          <span style="color: #64748b; font-weight: 600;">Dijawab:</span>
+          <strong style="color: #2563eb;"> ${s.answeredCount}/5</strong>
         </div>
       </div>
 
       <div style="display: flex; gap: 0.5rem;">
         ${isLocked ? `
-          <button onclick="openProctorUnlockModal(${s.student_id}, '${s.name}')" class="btn btn-danger" style="width: 100%; justify-content: center; font-size: 0.8rem; padding: 0.4rem;">
+          <button onclick="openProctorUnlockModal(${s.student_id}, '${s.name}')" class="btn btn-danger" style="width: 100%; justify-content: center; font-size: 0.8rem; padding: 0.45rem;">
             <i class="fa-solid fa-key"></i> Buka Kunci (Unlock)
           </button>
         ` : `
-          <button onclick="openProctorUnlockModal(${s.student_id}, '${s.name}')" class="btn btn-outline" style="width: 100%; justify-content: center; font-size: 0.8rem; padding: 0.4rem;">
+          <button onclick="openProctorUnlockModal(${s.student_id}, '${s.name}')" class="btn btn-outline" style="width: 100%; justify-content: center; font-size: 0.8rem; padding: 0.45rem;">
             <i class="fa-solid fa-unlock-keyhole"></i> Reset / Unlock
           </button>
         `}
@@ -201,32 +204,31 @@ function renderInitialLogs(logs) {
 function appendCheatingFeed(data) {
   const feed = document.getElementById('alertFeedList');
 
-  // Remove empty message if exists
   if (feed.children.length === 1 && feed.children[0].innerText.includes('Belum ada pelanggaran')) {
     feed.innerHTML = '';
   }
 
   const item = document.createElement('div');
   item.style.cssText = `
-    padding: 0.75rem;
-    border-radius: 10px;
-    background: ${data.isLocked ? 'rgba(239, 68, 68, 0.15)' : 'rgba(245, 158, 11, 0.15)'};
-    border: 1px solid ${data.isLocked ? 'rgba(239, 68, 68, 0.3)' : 'rgba(245, 158, 11, 0.3)'};
-    margin-bottom: 0.75rem;
-    font-size: 0.85rem;
+    padding: 0.75rem 0.85rem;
+    border-radius: 8px;
+    background: ${data.isLocked ? '#fef2f2' : '#fef3c7'};
+    border: 1px solid ${data.isLocked ? '#fecaca' : '#fde68a'};
+    margin-bottom: 0.6rem;
+    font-size: 0.825rem;
   `;
 
   item.innerHTML = `
-    <div style="display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 0.25rem;">
-      <span style="color: ${data.isLocked ? '#f87171' : '#fbbf24'};">
+    <div style="display: flex; justify-content: space-between; font-weight: 800; margin-bottom: 0.2rem;">
+      <span style="color: ${data.isLocked ? '#b91c1c' : '#92400e'};">
         <i class="fa-solid ${data.isLocked ? 'fa-lock' : 'fa-triangle-exclamation'}"></i> ${data.studentName}
       </span>
-      <span style="font-size: 0.75rem; color: var(--text-muted);">${data.timestamp}</span>
+      <span style="font-size: 0.7rem; color: #64748b; font-weight: 600;">${data.timestamp}</span>
     </div>
-    <div style="color: var(--text-main); font-size: 0.8rem; margin-bottom: 0.25rem;">
+    <div style="color: #1e293b; font-size: 0.8rem; margin-bottom: 0.2rem; font-weight: 500;">
       ${data.description}
     </div>
-    <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">
+    <div style="font-size: 0.725rem; font-weight: 700; color: #64748b;">
       Total Pelanggaran: ${data.violationsCount}/3 ${data.isLocked ? '(TERKUNCI)' : ''}
     </div>
   `;
@@ -240,7 +242,7 @@ function playAlertSound() {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(660, ctx.currentTime); // Sound alert
+    osc.frequency.setValueAtTime(660, ctx.currentTime);
     gain.gain.setValueAtTime(0.1, ctx.currentTime);
     osc.connect(gain);
     gain.connect(ctx.destination);
@@ -291,7 +293,7 @@ async function confirmProctorUnlock() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         studentId: selectedStudentToUnlock,
-        inputCode: '999999' // Master code from proctor dashboard
+        inputCode: '999999'
       })
     });
     const data = await res.json();
