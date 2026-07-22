@@ -3,43 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Safe Exam Browser - CBT KUSUMA</title>
+  <title>CBT KUSUMA - SMA Negeri 1 Mlati</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="/socket.io/socket.io.js"></script>
 </head>
-<body id="sebBody">
+<body id="studentExamBody">
 
-  <!-- SEB Dedicated Kiosk Header Bar (Dark Institutional Navy Header) -->
-  <div class="seb-kiosk-bar">
-    <div class="seb-logo">
-      <div class="seb-logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
-      <span>SEB KUSUMA</span>
+  <!-- CBT KUSUMA Taskbar (Branding SMAN 1 Mlati) -->
+  <div class="kusuma-kiosk-bar">
+    <div class="kusuma-logo">
+      <div class="kusuma-logo-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+      <span>CBT KUSUMA</span>
       <span class="badge badge-primary" id="studentRoomBadge" style="font-size: 0.7rem; padding: 0.15rem 0.5rem; background: rgba(37,99,235,0.3); color: #93c5fd; border-color: rgba(147,197,253,0.3);">Ruang --</span>
     </div>
 
-    <!-- SEB Center System Clock & Network Status -->
-    <div class="seb-kiosk-center">
-      <div><i class="fa-regular fa-clock" style="color: #93c5fd;"></i> <span id="sebClock">00:00:00</span></div>
+    <!-- Center System Clock & Network Status -->
+    <div class="kusuma-kiosk-center">
+      <div><i class="fa-regular fa-clock" style="color: #93c5fd;"></i> <span id="kusumaClock">00:00:00</span></div>
       <div id="netStatus" style="color: #4ade80;"><i class="fa-solid fa-wifi"></i> Online</div>
     </div>
 
-    <!-- SEB Right Kiosk Indicators & Zoom Controls -->
-    <div class="seb-kiosk-right">
+    <!-- Right Kiosk Indicators & Zoom Controls -->
+    <div class="kusuma-kiosk-right">
       <div style="font-size: 0.8rem; color: #94a3b8;" id="batteryStatus">
         <i class="fa-solid fa-battery-three-quarters" style="color: #4ade80;"></i> 90%
       </div>
       
-      <button class="seb-btn" onclick="changeZoom(-1)" title="Kecilkan Font">A-</button>
-      <button class="seb-btn" onclick="changeZoom(1)" title="Besarkan Font">A+</button>
+      <button class="kusuma-btn" onclick="changeZoom(-1)" title="Kecilkan Font">A-</button>
+      <button class="kusuma-btn" onclick="changeZoom(1)" title="Besarkan Font">A+</button>
       
-      <button class="seb-btn seb-btn-danger" onclick="quitSEB()" title="Keluar dari SEB">
-        <i class="fa-solid fa-power-off"></i> Exit SEB
+      <button class="kusuma-btn kusuma-btn-danger" onclick="quitExam()" title="Keluar Ujian">
+        <i class="fa-solid fa-right-from-bracket"></i> Keluar Ujian
       </button>
     </div>
   </div>
 
-  <!-- Sub Header for Student Exam Status (Clean Light Subheader) -->
+  <!-- Sub Header for Student Exam Status -->
   <header class="app-header" style="background: #ffffff; border-bottom: 1px solid #e2e8f0; height: 44px; font-size: 0.85rem; color: #0f172a;">
     <div style="display: flex; align-items: center; gap: 0.75rem;">
       <span style="font-weight: 700; color: #0f172a;" id="studentName">Siswa</span>
@@ -49,7 +49,7 @@
     <div style="display: flex; align-items: center; gap: 1rem;">
       <!-- Auto Save Badge -->
       <div id="saveStatus" class="badge badge-success">
-        <i class="fa-solid fa-cloud-arrow-up"></i> Tersimpan
+        <i class="fa-solid fa-cloud-arrow-up"></i> Jawaban Tersimpan
       </div>
 
       <!-- Violation Badge -->
@@ -108,25 +108,25 @@
 
   </main>
 
-  <!-- SEB Bottom Kiosk Footer Status Bar -->
+  <!-- Bottom Kiosk Footer Status Bar -->
   <div style="height: 32px; background: #0f172a; border-top: 1px solid #334155; display: flex; align-items: center; justify-content: space-between; padding: 0 1.25rem; font-size: 0.75rem; color: #cbd5e1;">
-    <div><i class="fa-solid fa-lock" style="color: #4ade80;"></i> Safe Exam Browser Environment Active</div>
-    <div>SMA Negeri 1 Mlati — Sleman</div>
+    <div><i class="fa-solid fa-shield-halved" style="color: #4ade80;"></i> Lingkungan Ujian Aman Terproteksi — SMAN 1 Mlati</div>
+    <div>CBT KUSUMA © 2026</div>
   </div>
 
   <!-- Pre-Exam Instructions Modal -->
   <div class="modal-overlay active" id="preExamModal">
     <div class="modal-container glass-card">
       <div style="font-size: 2.75rem; color: #2563eb; margin-bottom: 0.75rem;">
-        <i class="fa-solid fa-shield-halved"></i>
+        <i class="fa-solid fa-graduation-cap"></i>
       </div>
-      <h2 style="margin-bottom: 0.5rem; font-size: 1.3rem; color: #0f172a;">Mode Kiosk SEB KUSUMA</h2>
+      <h2 style="margin-bottom: 0.5rem; font-size: 1.3rem; color: #0f172a;">Modus Ujian CBT Kusuma</h2>
       <p style="color: #64748b; font-size: 0.85rem; line-height: 1.5; margin-bottom: 1.25rem;">
-        Aplikasi ini berjalan dalam lingkungan terisolasi <strong>Safe Exam Browser Kiosk Mode</strong>. Dilarang berpindah tab/aplikasi, keluar dari layar penuh, atau menggunakan tombol pintas dilarang.
+        Aplikasi ini berjalan dalam lingkungan terproteksi <strong>SMA Negeri 1 Mlati</strong>. Dilarang berpindah tab/aplikasi, keluar dari layar penuh, atau menggunakan tombol pintas dilarang selama ujian berlangsung.
       </p>
       
       <button onclick="startExamWithFullscreen()" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.8rem; font-size: 1rem;">
-        <i class="fa-solid fa-expand"></i> Mulai Ujian & Lock Screen
+        <i class="fa-solid fa-expand"></i> Mulai Ujian & Masuk Layar Penuh
       </button>
     </div>
   </div>
@@ -137,7 +137,7 @@
       <div style="font-size: 3rem; color: #d97706; margin-bottom: 0.5rem;">
         <i class="fa-solid fa-triangle-exclamation"></i>
       </div>
-      <h2 style="color: #b45309; margin-bottom: 0.5rem; font-size: 1.25rem;">PERINGATAN SEB KIOSK!</h2>
+      <h2 style="color: #b45309; margin-bottom: 0.5rem; font-size: 1.25rem;">PERINGATAN KECURANGAN UJIAN!</h2>
       <p id="warningText" style="font-size: 0.95rem; margin-bottom: 1.25rem; line-height: 1.5; color: #334155;">
         Terdeteksi keluar dari area ujian.
       </p>
@@ -157,9 +157,9 @@
       <div style="font-size: 3.5rem; color: #dc2626; margin-bottom: 0.5rem;">
         <i class="fa-solid fa-lock"></i>
       </div>
-      <h2 style="color: #dc2626; margin-bottom: 0.5rem; font-size: 1.4rem;">LAYAR SEB TERKUNCI</h2>
+      <h2 style="color: #dc2626; margin-bottom: 0.5rem; font-size: 1.4rem;">LAYAR UJIAN TERKUNCI</h2>
       <p style="color: #64748b; font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.25rem;">
-        Sesi Anda dikunci oleh Anti-Cheating Engine karena melampaui batas pelanggaran.
+        Sesi Anda dikunci oleh Anti-Cheating Engine SMAN 1 Mlati karena melampaui batas pelanggaran.
       </p>
 
       <div style="background: #fef2f2; border: 1px solid #fecaca; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; text-align: left;">
