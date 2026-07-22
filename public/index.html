@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - CBT KUSUMA SMA Negeri 1 Mlati</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body style="display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 1.5rem;">
+
+  <div class="glass-card" style="max-width: 440px; width: 100%; padding: 2.5rem 2rem;">
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <div style="width: 60px; height: 60px; border-radius: 16px; background: linear-gradient(135deg, #3b82f6, #6366f1); display: inline-flex; align-items: center; justify-content: center; font-size: 1.75rem; margin-bottom: 1rem; box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);">
+        <i class="fa-solid fa-graduation-cap"></i>
+      </div>
+      <h1 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.25rem;">CBT KUSUMA</h1>
+      <p style="color: var(--text-muted); font-size: 0.85rem;">SMA Negeri 1 Mlati, Sleman — Yogyakarta</p>
+    </div>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <label class="form-label"><i class="fa-solid fa-user"></i> Username / NIS</label>
+        <input type="text" id="username" class="form-control" placeholder="Masukkan username" required value="siswa101">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label"><i class="fa-solid fa-lock"></i> Password</label>
+        <input type="password" id="password" class="form-control" placeholder="Masukkan password" required value="123456">
+      </div>
+
+      <div id="errorMessage" style="color: var(--danger); font-size: 0.85rem; margin-bottom: 1rem; display: none; text-align: center;"></div>
+
+      <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.8rem; font-size: 1rem;">
+        <i class="fa-solid fa-right-to-bracket"></i> Masuk Aplikasi
+      </button>
+    </form>
+
+    <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border-glass);">
+      <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center; margin-bottom: 0.75rem;">
+        <i class="fa-solid fa-bolt" style="color: var(--warning);"></i> <strong>Quick Demo Login (Uji Coba Langsung):</strong>
+      </p>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+        <button class="btn btn-outline" onclick="quickLogin('siswa101', '123456')" style="font-size: 0.75rem; padding: 0.4rem;">
+          <i class="fa-solid fa-user-graduate" style="color: #60a5fa;"></i> Siswa R.01
+        </button>
+        <button class="btn btn-outline" onclick="quickLogin('siswa201', '123456')" style="font-size: 0.75rem; padding: 0.4rem;">
+          <i class="fa-solid fa-user-graduate" style="color: #a78bfa;"></i> Siswa R.02
+        </button>
+        <button class="btn btn-outline" onclick="quickLogin('pengawas1', '123456')" style="font-size: 0.75rem; padding: 0.4rem;">
+          <i class="fa-solid fa-user-shield" style="color: #34d399;"></i> Pengawas R.01
+        </button>
+        <button class="btn btn-outline" onclick="quickLogin('operator', 'admin123')" style="font-size: 0.75rem; padding: 0.4rem;">
+          <i class="fa-solid fa-sliders" style="color: #fbbf24;"></i> Operator
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function quickLogin(user, pass) {
+      document.getElementById('username').value = user;
+      document.getElementById('password').value = pass;
+      document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const errDiv = document.getElementById('errorMessage');
+      errDiv.style.display = 'none';
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          localStorage.setItem('cbt_user', JSON.stringify(data.user));
+          if (data.session) {
+            localStorage.setItem('cbt_session', JSON.stringify(data.session));
+          }
+
+          if (data.user.role === 'student') {
+            window.location.href = '/student.html';
+          } else {
+            window.location.href = '/proctor.html';
+          }
+        } else {
+          errDiv.innerText = data.message;
+          errDiv.style.display = 'block';
+        }
+      } catch (err) {
+        errDiv.innerText = 'Gagal terhubung ke server CBT.';
+        errDiv.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>
