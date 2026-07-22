@@ -10,24 +10,24 @@
 </head>
 <body id="sebBody">
 
-  <!-- SEB Dedicated Kiosk Header Bar -->
+  <!-- SEB Dedicated Kiosk Header Bar (Dark Institutional Navy Header) -->
   <div class="seb-kiosk-bar">
     <div class="seb-logo">
       <div class="seb-logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
       <span>SEB KUSUMA</span>
-      <span class="school-badge" id="studentRoomBadge" style="font-size: 0.7rem; padding: 0.15rem 0.5rem;">Ruang --</span>
+      <span class="badge badge-primary" id="studentRoomBadge" style="font-size: 0.7rem; padding: 0.15rem 0.5rem; background: rgba(37,99,235,0.3); color: #93c5fd; border-color: rgba(147,197,253,0.3);">Ruang --</span>
     </div>
 
     <!-- SEB Center System Clock & Network Status -->
     <div class="seb-kiosk-center">
-      <div><i class="fa-regular fa-clock" style="color: #60a5fa;"></i> <span id="sebClock">00:00:00</span></div>
-      <div id="netStatus" style="color: #34d399;"><i class="fa-solid fa-wifi"></i> Online</div>
+      <div><i class="fa-regular fa-clock" style="color: #93c5fd;"></i> <span id="sebClock">00:00:00</span></div>
+      <div id="netStatus" style="color: #4ade80;"><i class="fa-solid fa-wifi"></i> Online</div>
     </div>
 
     <!-- SEB Right Kiosk Indicators & Zoom Controls -->
     <div class="seb-kiosk-right">
-      <div style="font-size: 0.8rem; color: var(--text-muted);" id="batteryStatus">
-        <i class="fa-solid fa-battery-three-quarters" style="color: #34d399;"></i> 90%
+      <div style="font-size: 0.8rem; color: #94a3b8;" id="batteryStatus">
+        <i class="fa-solid fa-battery-three-quarters" style="color: #4ade80;"></i> 90%
       </div>
       
       <button class="seb-btn" onclick="changeZoom(-1)" title="Kecilkan Font">A-</button>
@@ -39,11 +39,11 @@
     </div>
   </div>
 
-  <!-- Sub Header for Student Exam Status -->
-  <header class="app-header" style="background: rgba(11, 17, 32, 0.7); height: 42px; font-size: 0.85rem;">
+  <!-- Sub Header for Student Exam Status (Clean Light Subheader) -->
+  <header class="app-header" style="background: #ffffff; border-bottom: 1px solid #e2e8f0; height: 44px; font-size: 0.85rem; color: #0f172a;">
     <div style="display: flex; align-items: center; gap: 0.75rem;">
-      <span style="font-weight: 600;" id="studentName">Siswa</span>
-      <span style="color: var(--text-muted); font-size: 0.75rem;" id="studentNis">NIS: --</span>
+      <span style="font-weight: 700; color: #0f172a;" id="studentName">Siswa</span>
+      <span style="color: #64748b; font-size: 0.75rem;" id="studentNis">NIS: --</span>
     </div>
     
     <div style="display: flex; align-items: center; gap: 1rem;">
@@ -60,30 +60,30 @@
   </header>
 
   <!-- Main Container -->
-  <main style="max-width: 920px; margin: 1.25rem auto; padding: 0 1rem; flex: 1;">
+  <main style="max-width: 920px; margin: 1.5rem auto; padding: 0 1rem; flex: 1;">
 
     <!-- Question Container -->
-    <div id="examContainer" class="glass-card" style="padding: 1.5rem; display: none;">
+    <div id="examContainer" class="glass-card" style="padding: 1.75rem; display: none;">
       <!-- Top Info Row -->
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-glass); padding-bottom: 1rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 1rem;">
         <div>
-          <span style="font-size: 0.85rem; color: var(--text-muted);" id="subjectName">Mata Pelajaran: Ekonomi X</span>
-          <h2 style="font-size: 1.1rem; font-weight: 700; margin-top: 0.2rem;">Soal No. <span id="currentQuestionNum">1</span></h2>
+          <span style="font-size: 0.85rem; color: #64748b; font-weight: 600;" id="subjectName">Mata Pelajaran: Ekonomi X</span>
+          <h2 style="font-size: 1.2rem; font-weight: 800; color: #0f172a; margin-top: 0.2rem;">Soal No. <span id="currentQuestionNum">1</span></h2>
         </div>
 
-        <button onclick="toggleQuestionSheet()" class="btn btn-outline" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">
+        <button onclick="toggleQuestionSheet()" class="btn btn-outline" style="padding: 0.4rem 0.85rem; font-size: 0.85rem;">
           <i class="fa-solid fa-grid-2"></i> Lembar Soal <i class="fa-solid fa-chevron-down"></i>
         </button>
       </div>
 
       <!-- Question Sheet Drawer -->
-      <div id="questionSheet" style="display: none; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border-glass); margin-bottom: 1.25rem;">
-        <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">Navigasi Nomor Soal:</div>
+      <div id="questionSheet" style="display: none; padding-bottom: 1.25rem; border-bottom: 1px solid #e2e8f0; margin-bottom: 1.25rem;">
+        <div style="font-size: 0.85rem; color: #64748b; font-weight: 600; margin-bottom: 0.5rem;">Navigasi Nomor Soal:</div>
         <div class="question-grid" id="questionGridButtons"></div>
       </div>
 
       <!-- Question Content -->
-      <div style="font-size: 1.05rem; line-height: 1.6; margin-bottom: 1.5rem; font-weight: 500;" id="questionText">
+      <div style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 1.75rem; font-weight: 600; color: #0f172a;" id="questionText">
         Memuat soal...
       </div>
 
@@ -91,7 +91,7 @@
       <div id="optionsList"></div>
 
       <!-- Bottom Action Row -->
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; border-top: 1px solid var(--border-glass); padding-top: 1.25rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; border-top: 1px solid #e2e8f0; padding-top: 1.25rem;">
         <button id="btnPrev" onclick="navigateQuestion(-1)" class="btn btn-outline" disabled>
           <i class="fa-solid fa-arrow-left"></i> Sebelumnya
         </button>
@@ -109,19 +109,19 @@
   </main>
 
   <!-- SEB Bottom Kiosk Footer Status Bar -->
-  <div style="height: 28px; background: #060911; border-top: 1px solid var(--border-glass); display: flex; align-items: center; justify-content: space-between; padding: 0 1rem; font-size: 0.75rem; color: var(--text-muted);">
-    <div><i class="fa-solid fa-lock" style="color: var(--success);"></i> Safe Exam Browser Environment Active</div>
+  <div style="height: 32px; background: #0f172a; border-top: 1px solid #334155; display: flex; align-items: center; justify-content: space-between; padding: 0 1.25rem; font-size: 0.75rem; color: #cbd5e1;">
+    <div><i class="fa-solid fa-lock" style="color: #4ade80;"></i> Safe Exam Browser Environment Active</div>
     <div>SMA Negeri 1 Mlati — Sleman</div>
   </div>
 
   <!-- Pre-Exam Instructions Modal -->
   <div class="modal-overlay active" id="preExamModal">
     <div class="modal-container glass-card">
-      <div style="font-size: 2.75rem; color: var(--primary); margin-bottom: 0.75rem;">
+      <div style="font-size: 2.75rem; color: #2563eb; margin-bottom: 0.75rem;">
         <i class="fa-solid fa-shield-halved"></i>
       </div>
-      <h2 style="margin-bottom: 0.5rem; font-size: 1.3rem;">Mode Kiosk SEB KUSUMA</h2>
-      <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; margin-bottom: 1.25rem;">
+      <h2 style="margin-bottom: 0.5rem; font-size: 1.3rem; color: #0f172a;">Mode Kiosk SEB KUSUMA</h2>
+      <p style="color: #64748b; font-size: 0.85rem; line-height: 1.5; margin-bottom: 1.25rem;">
         Aplikasi ini berjalan dalam lingkungan terisolasi <strong>Safe Exam Browser Kiosk Mode</strong>. Dilarang berpindah tab/aplikasi, keluar dari layar penuh, atau menggunakan tombol pintas dilarang.
       </p>
       
@@ -133,19 +133,19 @@
 
   <!-- Cheating Warning Alert Modal -->
   <div class="modal-overlay" id="warningModal">
-    <div class="modal-container glass-card alert-pulse" style="border-color: var(--warning);">
-      <div style="font-size: 3rem; color: var(--warning); margin-bottom: 0.5rem;">
+    <div class="modal-container glass-card alert-pulse" style="border-color: #f59e0b;">
+      <div style="font-size: 3rem; color: #d97706; margin-bottom: 0.5rem;">
         <i class="fa-solid fa-triangle-exclamation"></i>
       </div>
-      <h2 style="color: var(--warning); margin-bottom: 0.5rem; font-size: 1.25rem;">PERINGATAN SEB KIOSK!</h2>
-      <p id="warningText" style="font-size: 0.95rem; margin-bottom: 1.25rem; line-height: 1.5;">
+      <h2 style="color: #b45309; margin-bottom: 0.5rem; font-size: 1.25rem;">PERINGATAN SEB KIOSK!</h2>
+      <p id="warningText" style="font-size: 0.95rem; margin-bottom: 1.25rem; line-height: 1.5; color: #334155;">
         Terdeteksi keluar dari area ujian.
       </p>
-      <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); padding: 0.75rem; border-radius: 10px; margin-bottom: 1.5rem; font-size: 0.85rem;">
+      <div style="background: #fef3c7; border: 1px solid #fde68a; padding: 0.75rem; border-radius: 10px; margin-bottom: 1.5rem; font-size: 0.85rem; color: #92400e;">
         Akumulasi Pelanggaran: <strong id="warnCount">1</strong> / 3.<br>
-        <span style="color: var(--text-muted);">Jika mencapai 3 kali, layar ujian Anda akan TERKUNCI!</span>
+        <span style="color: #78350f;">Jika mencapai 3 kali, layar ujian Anda akan TERKUNCI!</span>
       </div>
-      <button onclick="closeWarningModal()" class="btn btn-warning" style="width: 100%; justify-content: center; background: var(--warning); color: #000;">
+      <button onclick="closeWarningModal()" class="btn btn-warning" style="width: 100%; justify-content: center; background: #f59e0b; color: #000;">
         Saya Mengerti & Kembali Ujian
       </button>
     </div>
@@ -153,18 +153,18 @@
 
   <!-- Locked Screen Modal -->
   <div class="modal-overlay" id="lockedModal">
-    <div class="modal-container glass-card" style="border-color: var(--danger); background: rgba(9, 13, 22, 0.96);">
-      <div style="font-size: 3.5rem; color: var(--danger); margin-bottom: 0.5rem;">
+    <div class="modal-container glass-card" style="border-color: #ef4444; background: #ffffff;">
+      <div style="font-size: 3.5rem; color: #dc2626; margin-bottom: 0.5rem;">
         <i class="fa-solid fa-lock"></i>
       </div>
-      <h2 style="color: var(--danger); margin-bottom: 0.5rem; font-size: 1.4rem;">LAYAR SEB TERKUNCI</h2>
-      <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.25rem;">
+      <h2 style="color: #dc2626; margin-bottom: 0.5rem; font-size: 1.4rem;">LAYAR SEB TERKUNCI</h2>
+      <p style="color: #64748b; font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.25rem;">
         Sesi Anda dikunci oleh Anti-Cheating Engine karena melampaui batas pelanggaran.
       </p>
 
-      <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; text-align: left;">
-        <div style="font-size: 0.85rem; font-weight: 600; color: #f87171; margin-bottom: 0.25rem;">Instruksi Pemulihan:</div>
-        <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">
+      <div style="background: #fef2f2; border: 1px solid #fecaca; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; text-align: left;">
+        <div style="font-size: 0.85rem; font-weight: 700; color: #b91c1c; margin-bottom: 0.25rem;">Instruksi Pemulihan:</div>
+        <div style="font-size: 0.8rem; color: #7f1d1d; line-height: 1.4;">
           Minta <strong>Guru Pengawas</strong> di ruangan Anda untuk menginput <strong>Kode Unlock 6 Digit Harian</strong>.
         </div>
       </div>
@@ -173,7 +173,7 @@
         <div class="form-group" style="margin-bottom: 1rem;">
           <input type="text" id="unlockCodeInput" class="form-control" placeholder="Masukkan 6 Digit Kode Unlock" maxlength="6" style="text-align: center; font-size: 1.25rem; letter-spacing: 4px; font-weight: 700;" required>
         </div>
-        <div id="unlockError" style="color: var(--danger); font-size: 0.85rem; margin-bottom: 1rem; display: none;"></div>
+        <div id="unlockError" style="color: #dc2626; font-size: 0.85rem; margin-bottom: 1rem; display: none;"></div>
         <button type="submit" class="btn btn-danger" style="width: 100%; justify-content: center; padding: 0.8rem;">
           <i class="fa-solid fa-key"></i> Buka Kunci Sesi
         </button>
