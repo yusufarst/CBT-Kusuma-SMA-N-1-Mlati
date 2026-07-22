@@ -3,51 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CBT KUSUMA - SMAN 1 Mlati (Tampilan Ujian CAT BKN / CPNS)</title>
+  <title>Lembar Ujian Siswa - CBT KUSUMA SMAN 1 Mlati</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
 
-  <!-- TOP HEADER (UNIFIED BRANDING & TIMER) -->
-  <header class="cpns-header">
-    <div class="cpns-brand">
+  <!-- TOP UNIFIED HEADER BAR (SOLID DARK NAVY) -->
+  <header class="cpns-header-bar">
+    
+    <!-- Left: School Brand -->
+    <div class="cpns-brand-box">
       <div class="cpns-brand-icon"><i class="fa-solid fa-graduation-cap"></i></div>
       <div>
-        <div style="font-size: 1.05rem;">CBT KUSUMA</div>
-        <div style="font-size: 0.7rem; font-weight: 500; color: #94a3b8;">SMA Negeri 1 Mlati</div>
+        <div class="cpns-brand-title">CBT KUSUMA</div>
+        <div class="cpns-brand-sub">SMA Negeri 1 Mlati</div>
       </div>
     </div>
 
-    <!-- Prominent CPNS Countdown Timer Box -->
-    <div class="cpns-timer-box">
+    <!-- Center: Prominent Timer Box -->
+    <div class="cpns-timer-badge">
       <i class="fa-regular fa-clock"></i>
-      <span>Sisa Waktu: </span>
-      <span id="cpnsTimer">01:00:00</span>
+      <span class="cpns-timer-text">Sisa Waktu:</span>
+      <span class="cpns-timer-val" id="cpnsTimer">01:00:00</span>
     </div>
 
-    <!-- Student Profile & Quit -->
-    <div style="display: flex; align-items: center; gap: 1rem;">
-      <div style="text-align: right; display: flex; align-items: center; gap: 0.75rem;">
-        <div style="width: 32px; height: 32px; border-radius: 50%; background: #2563eb; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem;">
-          <i class="fa-solid fa-user"></i>
-        </div>
+    <!-- Right: Student Profile & Exit -->
+    <div class="cpns-user-box">
+      <div class="cpns-user-info">
+        <div class="cpns-user-avatar"><i class="fa-solid fa-user"></i></div>
         <div>
-          <div style="font-weight: 700; font-size: 0.85rem; color: white;" id="studentName">Siswa</div>
-          <div style="font-size: 0.7rem; color: #94a3b8;" id="studentNis">NIS: --</div>
+          <div class="cpns-user-name" id="studentName">Siswa</div>
+          <div class="cpns-user-nis" id="studentNis">NIS: --</div>
         </div>
       </div>
 
-      <button onclick="quitExam()" class="btn btn-danger" style="padding: 0.35rem 0.75rem; font-size: 0.8rem; border-radius: 6px;">
+      <button onclick="quitExam()" class="btn btn-danger" style="padding: 0.4rem 0.85rem; font-size: 0.8rem; border-radius: 6px;">
         <i class="fa-solid fa-right-from-bracket"></i> Keluar
       </button>
     </div>
+
   </header>
 
-  <!-- SUB HEADER (STATUS BAR) -->
-  <div class="cpns-sub-bar">
-    <div style="display: flex; align-items: center; gap: 0.75rem;">
+  <!-- SUB-HEADER STATUS BAR -->
+  <div class="cpns-status-bar">
+    <div style="display: flex; align-items: center; gap: 0.85rem;">
       <span id="studentRoomBadge" class="badge badge-neutral">Ruang --</span>
       <span id="saveStatus" class="badge badge-success"><i class="fa-solid fa-cloud-arrow-up"></i> Jawaban Tersimpan</span>
     </div>
@@ -69,17 +70,14 @@
         <div class="question-subject-tag" id="subjectName">Mata Pelajaran: Ekonomi X</div>
       </div>
 
-      <!-- Question Scroll Body -->
-      <div class="question-scroll-body">
-        <!-- Question Box -->
-        <div class="question-box" id="questionText">
-          Memuat soal ujian...
-        </div>
+      <!-- Question Text Box -->
+      <div class="question-box" id="questionText">
+        Memuat soal ujian...
+      </div>
 
-        <!-- Options Container -->
-        <div class="cpns-options-container" id="optionsList">
-          <!-- Options rendered dynamically -->
-        </div>
+      <!-- CPNS Radio Options List -->
+      <div class="cpns-options-container" id="optionsList">
+        <!-- Options rendered dynamically -->
       </div>
 
       <!-- Bottom Action Bar (CPNS Standard) -->
@@ -122,7 +120,7 @@
         <!-- Grid Buttons 1..N -->
       </div>
 
-      <div style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid #e2e8f0; flex-shrink: 0;">
+      <div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
         <button onclick="submitExam()" class="btn btn-success" style="width: 100%; justify-content: center;">
           <i class="fa-solid fa-paper-plane"></i> Selesai & Kirim Ujian
         </button>
