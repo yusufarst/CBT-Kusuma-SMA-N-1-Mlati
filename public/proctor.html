@@ -10,20 +10,21 @@
 </head>
 <body>
 
-  <!-- App Header -->
-  <header class="app-header">
-    <div class="app-title">
-      <i class="fa-solid fa-user-shield"></i> DASHBOARD PENGAWAS UJIAN
-      <span class="school-badge">SMA Negeri 1 Mlati</span>
+  <!-- App Header (Institutional Navy Header) -->
+  <header class="seb-kiosk-bar" style="height: 54px;">
+    <div class="seb-logo">
+      <div class="seb-logo-icon"><i class="fa-solid fa-user-shield"></i></div>
+      <span>DASHBOARD PENGAWAS UJIAN</span>
+      <span class="badge badge-primary" style="font-size: 0.75rem; background: rgba(37,99,235,0.3); color: #93c5fd; border-color: rgba(147,197,253,0.3);">SMA Negeri 1 Mlati</span>
     </div>
     
     <div style="display: flex; align-items: center; gap: 1rem;">
       <div style="text-align: right;">
-        <div style="font-weight: 600; font-size: 0.9rem;" id="proctorName">Pengawas</div>
-        <div style="font-size: 0.75rem; color: var(--text-muted);" id="proctorRole">Guru Pengawas / Operator</div>
+        <div style="font-weight: 700; font-size: 0.9rem; color: white;" id="proctorName">Pengawas</div>
+        <div style="font-size: 0.75rem; color: #94a3b8;" id="proctorRole">Guru Pengawas / Operator</div>
       </div>
 
-      <button onclick="logout()" class="btn btn-outline" style="padding: 0.4rem 0.75rem; font-size: 0.8rem;">
+      <button onclick="logout()" class="seb-btn seb-btn-danger" style="padding: 0.4rem 0.75rem; font-size: 0.8rem;">
         <i class="fa-solid fa-right-from-bracket"></i> Keluar
       </button>
     </div>
@@ -33,29 +34,29 @@
   <main style="max-width: 1280px; margin: 1.5rem auto; padding: 0 1.5rem;">
 
     <!-- Control Bar (Room Selector & Unlock Code Generator) -->
-    <div class="glass-card" style="padding: 1.25rem 1.5rem; margin-bottom: 1.5rem;">
+    <div class="glass-card" style="padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; background: #ffffff;">
       <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem;">
         
         <!-- Room Filter Selector -->
         <div style="display: flex; align-items: center; gap: 0.75rem;">
-          <label style="font-weight: 600; font-size: 0.95rem; white-space: nowrap;">
-            <i class="fa-solid fa-door-open" style="color: var(--primary);"></i> Ruang Ujian:
+          <label style="font-weight: 700; font-size: 0.95rem; color: #0f172a; white-space: nowrap;">
+            <i class="fa-solid fa-door-open" style="color: #2563eb;"></i> Ruang Ujian:
           </label>
-          <select id="roomSelect" onchange="changeRoomFilter()" class="form-control" style="width: auto; min-width: 220px; font-weight: 600;">
+          <select id="roomSelect" onchange="changeRoomFilter()" class="form-control" style="width: auto; min-width: 240px; font-weight: 700;">
             <option value="0">Semua Ruangan (Operator View)</option>
           </select>
         </div>
 
         <!-- Daily Unlock Code Generator Display -->
-        <div style="display: flex; align-items: center; gap: 1rem; background: rgba(15, 23, 42, 0.6); padding: 0.5rem 1rem; border-radius: 12px; border: 1px solid var(--border-glass);">
+        <div style="display: flex; align-items: center; gap: 1rem; background: #f8fafc; padding: 0.5rem 1rem; border-radius: 12px; border: 1px solid #cbd5e1;">
           <div>
-            <div style="font-size: 0.75rem; color: var(--text-muted);">Kode Unlock Harian:</div>
-            <div style="font-size: 1.25rem; font-weight: 800; color: var(--warning); letter-spacing: 3px;" id="activeCodeDisplay">
+            <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">Kode Unlock Harian:</div>
+            <div style="font-size: 1.35rem; font-weight: 800; color: #d97706; letter-spacing: 3px;" id="activeCodeDisplay">
               ------
             </div>
           </div>
 
-          <button onclick="generateNewUnlockCode()" class="btn btn-outline" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">
+          <button onclick="generateNewUnlockCode()" class="btn btn-outline" style="padding: 0.45rem 0.85rem; font-size: 0.8rem;">
             <i class="fa-solid fa-arrows-rotate"></i> Buat Kode Baru
           </button>
         </div>
@@ -65,21 +66,21 @@
 
     <!-- Quick Stats Cards Row -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
-      <div class="glass-card" style="padding: 1rem 1.25rem;">
-        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.25rem;">Total Peserta Ruangan</div>
-        <div style="font-size: 1.75rem; font-weight: 700; color: #60a5fa;" id="statTotal">0</div>
+      <div class="glass-card" style="padding: 1rem 1.25rem; background: #ffffff;">
+        <div style="font-size: 0.8rem; color: #64748b; font-weight: 600; margin-bottom: 0.25rem;">Total Peserta Ruangan</div>
+        <div style="font-size: 1.85rem; font-weight: 800; color: #2563eb;" id="statTotal">0</div>
       </div>
-      <div class="glass-card" style="padding: 1rem 1.25rem;">
-        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.25rem;">Sedang Mengerjakan</div>
-        <div style="font-size: 1.75rem; font-weight: 700; color: #34d399;" id="statActive">0</div>
+      <div class="glass-card" style="padding: 1rem 1.25rem; background: #ffffff;">
+        <div style="font-size: 0.8rem; color: #64748b; font-weight: 600; margin-bottom: 0.25rem;">Sedang Mengerjakan</div>
+        <div style="font-size: 1.85rem; font-weight: 800; color: #16a34a;" id="statActive">0</div>
       </div>
-      <div class="glass-card" style="padding: 1rem 1.25rem;">
-        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.25rem;">Peringatan Pelanggaran</div>
-        <div style="font-size: 1.75rem; font-weight: 700; color: #fbbf24;" id="statWarning">0</div>
+      <div class="glass-card" style="padding: 1rem 1.25rem; background: #ffffff;">
+        <div style="font-size: 0.8rem; color: #64748b; font-weight: 600; margin-bottom: 0.25rem;">Peringatan Pelanggaran</div>
+        <div style="font-size: 1.85rem; font-weight: 800; color: #d97706;" id="statWarning">0</div>
       </div>
-      <div class="glass-card" style="padding: 1rem 1.25rem; border-color: rgba(239, 68, 68, 0.4);">
-        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.25rem;">Layar Terkunci (Locked)</div>
-        <div style="font-size: 1.75rem; font-weight: 700; color: #f87171;" id="statLocked">0</div>
+      <div class="glass-card" style="padding: 1rem 1.25rem; background: #fef2f2; border-color: #fecaca;">
+        <div style="font-size: 0.8rem; color: #991b1b; font-weight: 600; margin-bottom: 0.25rem;">Layar Terkunci (Locked)</div>
+        <div style="font-size: 1.85rem; font-weight: 800; color: #dc2626;" id="statLocked">0</div>
       </div>
     </div>
 
@@ -89,10 +90,10 @@
       <!-- Student Monitoring Grid -->
       <div>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-          <h2 style="font-size: 1.1rem; font-weight: 700;">
-            <i class="fa-solid fa-users" style="color: var(--primary);"></i> Daftar Siswa Dalam Ruangan
+          <h2 style="font-size: 1.15rem; font-weight: 800; color: #0f172a;">
+            <i class="fa-solid fa-users" style="color: #2563eb;"></i> Daftar Siswa Dalam Ruangan
           </h2>
-          <span style="font-size: 0.8rem; color: var(--text-muted);">Real-time status updates</span>
+          <span style="font-size: 0.8rem; color: #64748b; font-weight: 600;">Real-time status updates</span>
         </div>
 
         <div class="proctor-grid" id="studentGrid">
@@ -103,14 +104,14 @@
       <!-- Live Cheating Alert Stream / Activity Logs -->
       <div>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-          <h2 style="font-size: 1.1rem; font-weight: 700;">
-            <i class="fa-solid fa-bell" style="color: var(--warning);"></i> Live Feed Pelanggaran
+          <h2 style="font-size: 1.15rem; font-weight: 800; color: #0f172a;">
+            <i class="fa-solid fa-bell" style="color: #d97706;"></i> Live Feed Pelanggaran
           </h2>
         </div>
 
-        <div class="glass-card" style="padding: 1rem; max-height: 600px; overflow-y: auto;" id="alertFeedContainer">
+        <div class="glass-card" style="padding: 1rem; max-height: 600px; overflow-y: auto; background: #ffffff;" id="alertFeedContainer">
           <div id="alertFeedList">
-            <div style="text-align: center; color: var(--text-muted); padding: 2rem; font-size: 0.85rem;">
+            <div style="text-align: center; color: #94a3b8; padding: 2rem; font-size: 0.85rem;">
               Belum ada pelanggaran terdeteksi di ruangan ini.
             </div>
           </div>
@@ -124,11 +125,11 @@
   <!-- Unlock Confirmation Modal -->
   <div class="modal-overlay" id="proctorUnlockModal">
     <div class="modal-container glass-card">
-      <div style="font-size: 2.5rem; color: var(--success); margin-bottom: 0.5rem;">
+      <div style="font-size: 2.75rem; color: #16a34a; margin-bottom: 0.5rem;">
         <i class="fa-solid fa-lock-open"></i>
       </div>
-      <h3 style="margin-bottom: 0.5rem;" id="modalStudentName">Buka Kunci Layar Siswa</h3>
-      <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">
+      <h3 style="margin-bottom: 0.5rem; color: #0f172a;" id="modalStudentName">Buka Kunci Layar Siswa</h3>
+      <p style="color: #64748b; font-size: 0.85rem; margin-bottom: 1.25rem;">
         Apakah Anda yakin ingin memulihkan sesi siswa ini? Status ujian akan kembali ke <span class="badge badge-success">IN_PROGRESS</span> dan counter pelanggaran direset.
       </p>
 
