@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lembar Ujian Siswa - CBT KUSUMA</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="app-title">
+      <i class="fa-solid fa-laptop-code"></i> CBT KUSUMA
+      <span class="school-badge" id="studentRoomBadge">Ruang --</span>
+    </div>
+    
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <!-- Auto Save Badge -->
+      <div id="saveStatus" class="badge badge-success">
+        <i class="fa-solid fa-cloud-arrow-up"></i> Tersimpan
+      </div>
+
+      <!-- Violation Badge -->
+      <div id="violationBadge" class="badge badge-neutral">
+        <i class="fa-solid fa-shield-halved"></i> Pelanggaran: <span id="violationCount">0</span>/3
+      </div>
+
+      <!-- Student Profile -->
+      <div style="text-align: right; display: none;" id="studentProfileHeader" class="desktop-only">
+        <div style="font-weight: 600; font-size: 0.9rem;" id="studentName">Siswa</div>
+        <div style="font-size: 0.75rem; color: var(--text-muted);" id="studentNis">NIS: --</div>
+      </div>
+
+      <button onclick="logout()" class="btn btn-outline" style="padding: 0.4rem 0.75rem; font-size: 0.8rem;">
+        <i class="fa-solid fa-right-from-bracket"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main style="max-width: 900px; margin: 1.5rem auto; padding: 0 1rem; min-height: 80vh;">
+
+    <!-- Question Container -->
+    <div id="examContainer" class="glass-card" style="padding: 1.5rem; display: none;">
+      <!-- Top Info Row -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-glass); padding-bottom: 1rem;">
+        <div>
+          <span style="font-size: 0.85rem; color: var(--text-muted);" id="subjectName">Mata Pelajaran: Ekonomi X</span>
+          <h2 style="font-size: 1.1rem; font-weight: 700; margin-top: 0.2rem;">Soal No. <span id="currentQuestionNum">1</span></h2>
+        </div>
+
+        <button onclick="toggleQuestionSheet()" class="btn btn-outline" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">
+          <i class="fa-solid fa-grid-2"></i> No. Soal <i class="fa-solid fa-chevron-down"></i>
+        </button>
+      </div>
+
+      <!-- Question Sheet Drawer (Hidden by default) -->
+      <div id="questionSheet" style="display: none; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border-glass); margin-bottom: 1.25rem;">
+        <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">Navigasi Nomor Soal:</div>
+        <div class="question-grid" id="questionGridButtons"></div>
+      </div>
+
+      <!-- Question Content -->
+      <div style="font-size: 1.05rem; line-height: 1.6; margin-bottom: 1.5rem; font-weight: 500;" id="questionText">
+        Memuat soal...
+      </div>
+
+      <!-- Options List -->
+      <div id="optionsList"></div>
+
+      <!-- Bottom Action Row -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; border-top: 1px solid var(--border-glass); padding-top: 1.25rem;">
+        <button id="btnPrev" onclick="navigateQuestion(-1)" class="btn btn-outline" disabled>
+          <i class="fa-solid fa-arrow-left"></i> Sebelumnya
+        </button>
+
+        <button id="btnNext" onclick="navigateQuestion(1)" class="btn btn-primary">
+          Berikutnya <i class="fa-solid fa-arrow-right"></i>
+        </button>
+
+        <button id="btnSubmit" onclick="submitExam()" class="btn btn-success" style="display: none;">
+          Selesai & Kirim <i class="fa-solid fa-check-double"></i>
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Pre-Exam Instructions Modal -->
+  <div class="modal-overlay active" id="preExamModal">
+    <div class="modal-container glass-card">
+      <div style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem;">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+      <h2 style="margin-bottom: 0.5rem; font-size: 1.3rem;">Aturan Keamanan Ujian</h2>
+      <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.5rem;">
+        Aplikasi ini dilengkapi <strong>Anti-Cheating Engine CBT Kusuma</strong>. Dilarang berpindah tab/aplikasi, keluar dari layar penuh (*fullscreen*), atau membuka DevTools. Setiap pelanggaran dicatat dan dilaporkan secara <em>real-time</em> ke Pengawas Ruangan.
+      </p>
+      
+      <button onclick="startExamWithFullscreen()" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.8rem; font-size: 1rem;">
+        <i class="fa-solid fa-expand"></i> Mulai Ujian & Fullscreen
+      </button>
+    </div>
+  </div>
+
+  <!-- Cheating Warning Alert Modal -->
+  <div class="modal-overlay" id="warningModal">
+    <div class="modal-container glass-card alert-pulse" style="border-color: var(--warning);">
+      <div style="font-size: 3rem; color: var(--warning); margin-bottom: 0.5rem;">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+      </div>
+      <h2 style="color: var(--warning); margin-bottom: 0.5rem; font-size: 1.25rem;">PERINGATAN PELANGGARAN!</h2>
+      <p id="warningText" style="font-size: 0.95rem; margin-bottom: 1.25rem; line-height: 1.5;">
+        Terdeteksi keluar dari area ujian.
+      </p>
+      <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); padding: 0.75rem; border-radius: 10px; margin-bottom: 1.5rem; font-size: 0.85rem;">
+        Akumulasi Pelanggaran: <strong id="warnCount">1</strong> / 3.<br>
+        <span style="color: var(--text-muted);">Jika mencapai 3 kali, layar ujian Anda akan TERKUNCI!</span>
+      </div>
+      <button onclick="closeWarningModal()" class="btn btn-warning" style="width: 100%; justify-content: center; background: var(--warning); color: #000;">
+        Saya Mengerti & Kembali Ujian
+      </button>
+    </div>
+  </div>
+
+  <!-- Locked Screen Modal (Core Feature) -->
+  <div class="modal-overlay" id="lockedModal">
+    <div class="modal-container glass-card" style="border-color: var(--danger); background: rgba(15, 23, 42, 0.95);">
+      <div style="font-size: 3.5rem; color: var(--danger); margin-bottom: 0.5rem;">
+        <i class="fa-solid fa-lock"></i>
+      </div>
+      <h2 style="color: var(--danger); margin-bottom: 0.5rem; font-size: 1.4rem;">LAYAR UJIAN TERKUNCI</h2>
+      <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.25rem;">
+        Sesi Anda dikunci oleh Anti-Cheating Engine karena melebihi batas batas toleransi pelanggaran.
+      </p>
+
+      <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; text-align: left;">
+        <div style="font-size: 0.85rem; font-weight: 600; color: #f87171; margin-bottom: 0.25rem;">Instruksi Pemulihan:</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">
+          Minta <strong>Guru Pengawas</strong> di ruangan Anda untuk menginput <strong>Kode Unlock 6 Digit Harian</strong> pada kolom di bawah ini.
+        </div>
+      </div>
+
+      <form id="unlockForm" onsubmit="submitUnlockCode(event)">
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <input type="text" id="unlockCodeInput" class="form-control" placeholder="Masukkan 6 Digit Kode Unlock" maxlength="6" style="text-align: center; font-size: 1.25rem; letter-spacing: 4px; font-weight: 700;" required>
+        </div>
+        <div id="unlockError" style="color: var(--danger); font-size: 0.85rem; margin-bottom: 1rem; display: none;"></div>
+        <button type="submit" class="btn btn-danger" style="width: 100%; justify-content: center; padding: 0.8rem;">
+          <i class="fa-solid fa-key"></i> Buka Kunci Sesi
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/anti-cheating.js"></script>
+</body>
+</html>
