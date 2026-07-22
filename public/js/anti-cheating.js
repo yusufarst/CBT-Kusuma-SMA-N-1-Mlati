@@ -1,11 +1,13 @@
-// Anti-Cheating & Student Engine - CBT Kusuma (SMAN 1 Mlati)
+// Anti-Cheating & CBT CPNS Student Engine - CBT Kusuma (SMAN 1 Mlati)
 let currentUser = null;
 let currentSession = null;
 let questions = [];
 let currentIndex = 0;
 let studentAnswers = {};
+let studentRagu = {};
 let isExamStarted = false;
 let socket = null;
+let timerSeconds = 3600;
 
 document.addEventListener('DOMContentLoaded', async () => {
   const userStr = localStorage.getItem('cbt_user');
@@ -18,15 +20,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('studentName').innerText = currentUser.name;
   document.getElementById('studentNis').innerText = `NIS: ${currentUser.nis || '-'}`;
   document.getElementById('studentRoomBadge').innerText = currentUser.room_name || `Ruang ${currentUser.room_id}`;
-
-  // Live Clock WIB
-  setInterval(() => {
-    const now = new Date();
-    const clockEl = document.getElementById('liveClock');
-    if (clockEl) {
-      clockEl.innerText = `${now.toLocaleTimeString('id-ID')} WIB`;
-    }
-  }, 1000);
 
   // Connect Socket.io
   socket = io();
@@ -47,7 +40,26 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Fetch session & questions
   await fetchSession();
   await fetchQuestions();
+  startCPNSTimer();
 });
+
+function startCPNSTimer() {
+  setInterval(() => {
+    if (!isExamStarted || currentSession?.status === 'LOCKED') return;
+
+    if (timerSeconds > 0) {
+      timerSeconds--;
+      const hrs = String(Math.floor(timerSeconds / 3600)).padStart(2, '0');
+      const mins = String(Math.floor((timerSeconds % 3600) / 60)).padStart(2, '0');
+      const secs = String(timerSeconds % 60).padStart(2, '0');
+      const timerEl = document.getElementById('cpnsTimer');
+      if (timerEl) timerEl.innerText = `${hrs}:${mins}:${secs}`;
+    } else {
+      alert('Waktu Ujian Telah Habis! Sistem akan mengumpulkan jawaban Anda secara otomatis.');
+      submitExamAuto();
+    }
+  }, 1000);
+}
 
 async function fetchSession() {
   try {
@@ -73,6 +85,7 @@ async function fetchQuestions() {
     const data = await res.json();
     if (data.success) {
       questions = data.questions;
+      document.getElementById('totalQCount').innerText = `${questions.length} Soal`;
       renderQuestionGrid();
     }
   } catch (err) {
@@ -229,7 +242,7 @@ function renderCurrentQuestion() {
   document.getElementById('subjectName').innerText = `Mata Pelajaran: ${q.subject}`;
   document.getElementById('questionText').innerHTML = q.question_text;
 
-  // Options rendering
+  // Options rendering (CPNS Radio Style)
   const optionsContainer = document.getElementById('optionsList');
   optionsContainer.innerHTML = '';
 
@@ -237,15 +250,22 @@ function renderCurrentQuestion() {
   q.options.forEach((optText, idx) => {
     const isSelected = studentAnswers[q.id] === idx;
     const item = document.createElement('div');
-    item.className = `option-card ${isSelected ? 'selected' : ''}`;
+    item.className = `cpns-option-item ${isSelected ? 'selected' : ''}`;
     item.onclick = () => selectOption(q.id, idx);
 
     item.innerHTML = `
-      <div class="opt-badge">${letters[idx]}</div>
+      <div class="radio-indicator"></div>
+      <div class="opt-letter-badge">${letters[idx]}.</div>
       <div class="opt-text">${optText}</div>
     `;
     optionsContainer.appendChild(item);
   });
+
+  // Ragu-Ragu button state
+  const btnRagu = document.getElementById('btnRagu');
+  if (btnRagu) {
+    btnRagu.className = studentRagu[q.id] ? 'btn btn-ragu active' : 'btn btn-ragu';
+  }
 
   // Navigation Buttons
   document.getElementById('btnPrev').disabled = currentIndex === 0;
@@ -291,17 +311,20 @@ async function selectOption(questionId, selectedIdx) {
   }
 }
 
+function toggleRaguRagu() {
+  const q = questions[currentIndex];
+  if (!q) return;
+
+  studentRagu[q.id] = !studentRagu[q.id];
+  renderCurrentQuestion();
+}
+
 function navigateQuestion(direction) {
   const target = currentIndex + direction;
   if (target >= 0 && target < questions.length) {
     currentIndex = target;
     renderCurrentQuestion();
   }
-}
-
-function toggleSheetModal() {
-  const modal = document.getElementById('sheetModal');
-  modal.classList.toggle('active');
 }
 
 function renderQuestionGrid() {
@@ -313,9 +336,12 @@ function renderQuestionGrid() {
     const btn = document.createElement('button');
     const isCurrent = idx === currentIndex;
     const isAnswered = studentAnswers[q.id] !== undefined;
+    const isRagu = studentRagu[q.id];
 
-    let cls = 'q-grid-btn';
-    if (isAnswered) cls += ' answered';
+    let cls = 'cat-grid-btn';
+    if (isRagu) cls += ' ragu';
+    else if (isAnswered) cls += ' answered';
+
     if (isCurrent) cls += ' active';
 
     btn.className = cls;
@@ -323,7 +349,6 @@ function renderQuestionGrid() {
     btn.onclick = () => {
       currentIndex = idx;
       renderCurrentQuestion();
-      toggleSheetModal();
     };
     grid.appendChild(btn);
   });
