@@ -7,7 +7,7 @@ let studentAnswers = {};
 let studentRagu = {};
 let isExamStarted = false;
 let socket = null;
-let timerSeconds = 3600; // 60 minutes countdown
+let timerSeconds = 3600;
 
 document.addEventListener('DOMContentLoaded', async () => {
   const userStr = localStorage.getItem('cbt_user');
