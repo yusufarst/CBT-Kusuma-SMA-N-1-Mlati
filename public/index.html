@@ -3,60 +3,134 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - CBT KUSUMA SMA Negeri 1 Mlati</title>
+  <title>Portal CBT KUSUMA - SMA Negeri 1 Mlati</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body style="display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 1.5rem; background: #f1f5f9;">
+<body style="background: #f8fafc; min-height: 100vh; display: flex; flex-direction: column;">
 
-  <div class="glass-card" style="max-width: 440px; width: 100%; padding: 2.5rem 2rem; background: #ffffff; border: 1px solid #cbd5e1; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);">
-    <div style="text-align: center; margin-bottom: 2rem;">
-      <div style="width: 64px; height: 64px; border-radius: 16px; background: #2563eb; display: inline-flex; align-items: center; justify-content: center; font-size: 1.85rem; color: white; margin-bottom: 1rem; box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);">
-        <i class="fa-solid fa-graduation-cap"></i>
+  <!-- Institutional Top Header Bar -->
+  <header class="app-header-main">
+    <div class="brand-wrapper">
+      <div class="brand-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+      <div>
+        <div style="font-size: 1.05rem;">CBT KUSUMA</div>
+        <div style="font-size: 0.7rem; font-weight: 500; color: #94a3b8;">SMA Negeri 1 Mlati, Sleman — DIY</div>
       </div>
-      <h1 style="font-size: 1.6rem; font-weight: 800; color: #0f172a; margin-bottom: 0.25rem;">CBT KUSUMA</h1>
-      <p style="color: #64748b; font-size: 0.85rem; font-weight: 600;">SMA Negeri 1 Mlati, Sleman — Yogyakarta</p>
     </div>
+    <span class="badge badge-primary"><i class="fa-solid fa-shield-halved"></i> System Online & Secure</span>
+  </header>
 
-    <form id="loginForm">
-      <div class="form-group">
-        <label class="form-label"><i class="fa-solid fa-user"></i> Username / NIS</label>
-        <input type="text" id="username" class="form-control" placeholder="Masukkan username" required value="siswa101">
-      </div>
-
-      <div class="form-group">
-        <label class="form-label"><i class="fa-solid fa-lock"></i> Password</label>
-        <input type="password" id="password" class="form-control" placeholder="Masukkan password" required value="123456">
-      </div>
-
-      <div id="errorMessage" style="color: #dc2626; font-size: 0.85rem; margin-bottom: 1rem; display: none; text-align: center; font-weight: 600;"></div>
-
-      <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.8rem; font-size: 1rem;">
-        <i class="fa-solid fa-right-to-bracket"></i> Masuk Aplikasi
-      </button>
-    </form>
-
-    <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #e2e8f0;">
-      <p style="font-size: 0.8rem; color: #64748b; font-weight: 600; text-align: center; margin-bottom: 0.75rem;">
-        <i class="fa-solid fa-bolt" style="color: #d97706;"></i> <strong>Quick Demo Login (Uji Coba Langsung):</strong>
-      </p>
+  <!-- Main Showcase & Login Container -->
+  <main style="max-width: 1200px; width: 100%; margin: 2rem auto; padding: 0 1.5rem; flex: 1; display: flex; align-items: center;">
+    
+    <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 2.5rem; width: 100%; align-items: center;">
       
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
-        <button class="btn btn-outline" onclick="quickLogin('siswa101', '123456')" style="font-size: 0.75rem; padding: 0.45rem;">
-          <i class="fa-solid fa-user-graduate" style="color: #2563eb;"></i> Siswa R.01
-        </button>
-        <button class="btn btn-outline" onclick="quickLogin('siswa201', '123456')" style="font-size: 0.75rem; padding: 0.45rem;">
-          <i class="fa-solid fa-user-graduate" style="color: #4f46e5;"></i> Siswa R.02
-        </button>
-        <button class="btn btn-outline" onclick="quickLogin('pengawas1', '123456')" style="font-size: 0.75rem; padding: 0.45rem;">
-          <i class="fa-solid fa-user-shield" style="color: #16a34a;"></i> Pengawas R.01
-        </button>
-        <button class="btn btn-outline" onclick="quickLogin('operator', 'admin123')" style="font-size: 0.75rem; padding: 0.45rem;">
-          <i class="fa-solid fa-sliders" style="color: #d97706;"></i> Operator
-        </button>
+      <!-- Left Column: School Showcase Banner -->
+      <div>
+        <div class="badge badge-primary" style="margin-bottom: 1rem; font-size: 0.8rem; padding: 0.4rem 0.85rem;">
+          <i class="fa-solid fa-school"></i> Portal Ujian Berbasis Komputer & Mobile
+        </div>
+
+        <h1 style="font-size: 2.25rem; font-weight: 800; color: #0f172a; line-height: 1.25; margin-bottom: 1rem;">
+          Platform Ujian Digital Terproteksi <br><span style="color: #2563eb;">SMA Negeri 1 Mlati</span>
+        </h1>
+
+        <p style="color: #64748b; font-size: 1rem; line-height: 1.6; margin-bottom: 1.75rem;">
+          Sistem penilaian ujian digital yang dilengkapi dengan <strong>Anti-Cheating Engine</strong>, penguncian layar otomatis (*Screen Lock*), serta <strong>Dashboard Pengawas Real-Time</strong> per ruangan untuk menjamin integritas dan kelancaran ujian.
+        </p>
+
+        <!-- Features Showcase Grid -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="card-ui" style="padding: 1rem; border-left: 4px solid #2563eb;">
+            <div style="font-weight: 700; font-size: 0.9rem; color: #0f172a; margin-bottom: 0.2rem;">
+              <i class="fa-solid fa-mobile-screen-button" style="color: #2563eb;"></i> Mobile & PC Ready
+            </div>
+            <div style="font-size: 0.8rem; color: #64748b;">Optimal untuk Smartphone Android, iOS, Tablet, & PC Lab.</div>
+          </div>
+
+          <div class="card-ui" style="padding: 1rem; border-left: 4px solid #16a34a;">
+            <div style="font-weight: 700; font-size: 0.9rem; color: #0f172a; margin-bottom: 0.2rem;">
+              <i class="fa-solid fa-cloud-arrow-up" style="color: #16a34a;"></i> Auto-Save Real-time
+            </div>
+            <div style="font-size: 0.8rem; color: #64748b;">Jawaban tersimpan otomatis secara berkala di server.</div>
+          </div>
+
+          <div class="card-ui" style="padding: 1rem; border-left: 4px solid #d97706;">
+            <div style="font-weight: 700; font-size: 0.9rem; color: #0f172a; margin-bottom: 0.2rem;">
+              <i class="fa-solid fa-shield-halved" style="color: #d97706;"></i> Anti-Cheating Engine
+            </div>
+            <div style="font-size: 0.8rem; color: #64748b;">Deteksi pindah tab, kelancaran ujian, & penguncian layar.</div>
+          </div>
+
+          <div class="card-ui" style="padding: 1rem; border-left: 4px solid #4f46e5;">
+            <div style="font-weight: 700; font-size: 0.9rem; color: #0f172a; margin-bottom: 0.2rem;">
+              <i class="fa-solid fa-user-shield" style="color: #4f46e5;"></i> Dashboard Pengawas
+            </div>
+            <div style="font-size: 0.8rem; color: #64748b;">Pemantauan status peserta per ruang ujian live via Socket.io.</div>
+          </div>
+        </div>
       </div>
+
+      <!-- Right Column: Symmetrical Login Card -->
+      <div class="card-ui" style="padding: 2.25rem 2rem; box-shadow: var(--shadow-lg);">
+        
+        <div style="text-align: center; margin-bottom: 1.75rem;">
+          <h2 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-bottom: 0.25rem;">Masuk Aplikasi</h2>
+          <p style="color: #64748b; font-size: 0.85rem;">Silakan masuk menggunakan akun Siswa atau Pengawas</p>
+        </div>
+
+        <form id="loginForm">
+          <div class="form-group">
+            <label class="form-label"><i class="fa-solid fa-user"></i> Username / NIS</label>
+            <input type="text" id="username" class="form-control" placeholder="Masukkan username / NIS Anda" required value="siswa101">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label"><i class="fa-solid fa-lock"></i> Kata Sandi</label>
+            <input type="password" id="password" class="form-control" placeholder="Masukkan password Anda" required value="123456">
+          </div>
+
+          <div id="errorMessage" style="color: #dc2626; font-size: 0.85rem; margin-bottom: 1rem; display: none; text-align: center; font-weight: 700;"></div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.8rem; font-size: 0.95rem; border-radius: 8px;">
+            <i class="fa-solid fa-right-to-bracket"></i> Masuk Sekarang
+          </button>
+        </form>
+
+        <!-- Quick Demo Login Buttons -->
+        <div style="margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px solid var(--border-color);">
+          <p style="font-size: 0.8rem; color: #64748b; font-weight: 700; text-align: center; margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-bolt" style="color: #d97706;"></i> Quick Demo Login (Uji Coba Langsung):
+          </p>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+            <button class="btn btn-outline" onclick="quickLogin('siswa101', '123456')" style="font-size: 0.75rem; padding: 0.45rem;">
+              <i class="fa-solid fa-user-graduate" style="color: #2563eb;"></i> Siswa R.01
+            </button>
+            <button class="btn btn-outline" onclick="quickLogin('siswa201', '123456')" style="font-size: 0.75rem; padding: 0.45rem;">
+              <i class="fa-solid fa-user-graduate" style="color: #4f46e5;"></i> Siswa R.02
+            </button>
+            <button class="btn btn-outline" onclick="quickLogin('pengawas1', '123456')" style="font-size: 0.75rem; padding: 0.45rem;">
+              <i class="fa-solid fa-user-shield" style="color: #16a34a;"></i> Pengawas R.01
+            </button>
+            <button class="btn btn-outline" onclick="quickLogin('operator', 'admin123')" style="font-size: 0.75rem; padding: 0.45rem;">
+              <i class="fa-solid fa-sliders" style="color: #d97706;"></i> Operator
+            </button>
+          </div>
+        </div>
+
+      </div>
+
     </div>
-  </div>
+
+  </main>
+
+  <!-- Institutional Footer -->
+  <footer style="background: #ffffff; border-top: 1px solid var(--border-color); padding: 0.85rem 1.5rem; font-size: 0.8rem; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;">
+    <div>Hak Cipta © 2026 <strong>SMA Negeri 1 Mlati, Sleman — DIY</strong>. All rights reserved.</div>
+    <div>Versi 1.0 (Production Ready)</div>
+  </footer>
 
   <script>
     function quickLogin(user, pass) {
