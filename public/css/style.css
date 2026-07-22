@@ -7,6 +7,7 @@
   --primary: #2563eb;
   --primary-hover: #1d4ed8;
   --primary-light: #eff6ff;
+  --accent: #4f46e5;
   --success: #16a34a;
   --success-light: #dcfce7;
   --warning: #d97706;
@@ -17,6 +18,9 @@
   --text-muted: #64748b;
   --border-color: #cbd5e1;
   --radius: 10px;
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 4px 16px rgba(15, 23, 42, 0.06);
+  --shadow-lg: 0 10px 30px rgba(15, 23, 42, 0.12);
 }
 
 * {
@@ -35,10 +39,12 @@ html, body {
   flex-direction: column;
 }
 
-/* ====================
-   CBT CPNS TOP HEADER BAR
-   ==================== */
-.cat-header-bar {
+/* ==========================================
+   UNIFIED HEADER BARS (ALL ROLES & PAGES)
+   ========================================== */
+.app-header-main,
+.cat-header-bar,
+.kusuma-kiosk-bar {
   height: 60px;
   background: #0f172a !important;
   color: #ffffff !important;
@@ -52,13 +58,20 @@ html, body {
   z-index: 1000;
 }
 
-.cat-brand-box {
+.brand-wrapper,
+.cat-brand-box,
+.kusuma-logo {
   display: flex !important;
   align-items: center !important;
   gap: 0.85rem !important;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: #ffffff !important;
 }
 
-.cat-brand-icon {
+.brand-icon,
+.cat-brand-icon,
+.kusuma-logo-icon {
   width: 36px;
   height: 36px;
   border-radius: 8px;
@@ -71,87 +84,10 @@ html, body {
   box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
 }
 
-.cat-brand-title {
-  font-size: 1.1rem;
-  font-weight: 800;
-  color: #ffffff !important;
-  line-height: 1.2;
-}
-
-.cat-brand-sub {
-  font-size: 0.725rem;
-  color: #94a3b8 !important;
-  font-weight: 600;
-}
-
-/* TIMER BOX (CENTER) */
-.cat-timer-box {
-  background: #1e293b;
-  border: 1.5px solid #334155;
-  padding: 0.4rem 1.1rem;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 700;
-}
-
-.cat-timer-box i {
-  color: #ef4444;
-  font-size: 1.1rem;
-}
-
-.cat-timer-text {
-  color: #94a3b8;
-  font-size: 0.8rem;
-}
-
-.cat-timer-val {
-  color: #ffffff !important;
-  font-size: 1.05rem;
-}
-
-/* USER INFO (RIGHT) */
-.cat-user-box {
-  display: flex !important;
-  align-items: center !important;
-  gap: 1.25rem !important;
-}
-
-.cat-user-info {
-  display: flex !important;
-  align-items: center !important;
-  gap: 0.75rem !important;
-}
-
-.cat-user-avatar {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: #2563eb;
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.9rem;
-  font-weight: 700;
-}
-
-.cat-user-name {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #ffffff !important;
-}
-
-.cat-user-nis {
-  font-size: 0.725rem;
-  color: #94a3b8 !important;
-  font-weight: 600;
-}
-
-/* SUB BAR (STATUS & ROOM) */
-.cat-sub-bar {
+/* SUB HEADER (STATUS BAR) */
+.app-sub-bar,
+.cat-sub-bar,
+.sub-header-bar {
   height: 44px;
   background: #ffffff;
   border-bottom: 1px solid #cbd5e1;
@@ -161,11 +97,25 @@ html, body {
   justify-content: space-between !important;
   font-size: 0.85rem;
   flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.02);
 }
 
-/* ====================
-   MAIN CBT CPNS 2-COLUMN LAYOUT
-   ==================== */
+/* ==========================================
+   CARDS & CONTAINERS (UNIFIED)
+   ========================================== */
+.card-ui,
+.cat-card,
+.glass-card {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  padding: 1.5rem;
+}
+
+/* ==========================================
+   CBT CPNS STUDENT EXAM LAYOUT (2-COLUMN)
+   ========================================== */
 .cat-layout {
   max-width: 1440px;
   width: 100%;
@@ -181,17 +131,6 @@ html, body {
   .cat-layout {
     grid-template-columns: 1fr;
   }
-}
-
-/* QUESTION CARD (LEFT) */
-.cat-card {
-  background: #ffffff;
-  border: 1px solid #cbd5e1;
-  border-radius: var(--radius);
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
 }
 
 .question-header {
@@ -343,7 +282,7 @@ html, body {
   background: #ffffff;
   border: 1px solid #cbd5e1;
   border-radius: var(--radius);
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+  box-shadow: var(--shadow-md);
   padding: 1.25rem;
   display: flex;
   flex-direction: column;
@@ -408,11 +347,13 @@ html, body {
 .cat-grid-btn.active { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25); }
 .cat-grid-btn.active:not(.answered):not(.ragu) { background: #eff6ff; color: #2563eb; }
 
-/* PROCTOR DASHBOARD GRID */
+/* ==========================================
+   PROCTOR DASHBOARD VIEW
+   ========================================== */
 .metrics-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
+  gap: 1.25rem;
   margin-bottom: 1.25rem;
 }
 
@@ -420,11 +361,40 @@ html, body {
   background: #ffffff;
   border: 1px solid var(--border-color);
   border-radius: var(--radius);
-  padding: 1.1rem 1.25rem;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  transition: transform 0.15s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.metric-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 0.3rem;
+}
+
+.metric-value {
+  font-size: 1.85rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.metric-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
 }
 
 .proctor-grid {
@@ -438,13 +408,16 @@ html, body {
   border-radius: var(--radius);
   background: #ffffff;
   border: 1px solid #cbd5e1;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s ease;
 }
-
+.student-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
 .student-card.status-locked { border-color: var(--danger); background: var(--danger-light); }
 .student-card.status-warning { border-color: var(--warning); background: var(--warning-light); }
 
-/* BADGES & BUTTONS */
+/* ==========================================
+   BADGES & BUTTONS
+   ========================================== */
 .badge {
   padding: 0.35rem 0.75rem;
   border-radius: 20px;
@@ -469,7 +442,7 @@ html, body {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   transition: all 0.15s ease;
 }
 .btn-primary { background: #2563eb; color: white; }
@@ -477,9 +450,26 @@ html, body {
 .btn-danger { background: #dc2626; color: white; }
 .btn-success { background: #16a34a; color: white; }
 .btn-outline { background: white; border: 1.5px solid #cbd5e1; color: #0f172a; }
-.btn-outline:hover { background: #f8fafc; }
+.btn-outline:hover { background: #f8fafc; border-color: #94a3b8; }
 
-/* MODALS */
+/* ==========================================
+   FORM CONTROLS & MODALS
+   ========================================== */
+.form-group { margin-bottom: 1.25rem; }
+.form-label { display: block; margin-bottom: 0.4rem; font-size: 0.85rem; font-weight: 700; color: #334155; }
+.form-control {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: #ffffff;
+  border: 1.5px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-dark);
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+.form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
+
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
