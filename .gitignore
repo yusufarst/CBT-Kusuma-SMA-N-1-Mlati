@@ -1,0 +1,5 @@
+node_modules/
+src/database/cbt_kusuma.db
+.env
+.DS_Store
+*.log
