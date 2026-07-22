@@ -1,4 +1,4 @@
-// Anti-Cheating & SEB Kiosk Student Engine - CBT Kusuma
+// Anti-Cheating & Kiosk Student Engine - CBT Kusuma (SMAN 1 Mlati)
 let currentUser = null;
 let currentSession = null;
 let questions = [];
@@ -20,8 +20,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('studentNis').innerText = `NIS: ${currentUser.nis || '-'}`;
   document.getElementById('studentRoomBadge').innerText = currentUser.room_name || `Ruang ${currentUser.room_id}`;
 
-  // Start SEB Kiosk Clock & Battery Status
-  initSEBKioskBar();
+  // Start System Clock & Battery Status
+  initKusumaKioskBar();
 
   // Connect Socket.io
   socket = io();
@@ -44,12 +44,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   await fetchQuestions();
 });
 
-function initSEBKioskBar() {
+function initKusumaKioskBar() {
   // 1. Digital Clock
   setInterval(() => {
     const now = new Date();
     const clockStr = now.toLocaleTimeString('id-ID', { hour12: false });
-    const clockEl = document.getElementById('sebClock');
+    const clockEl = document.getElementById('kusumaClock');
     if (clockEl) clockEl.innerText = `${clockStr} WIB`;
   }, 1000);
 
@@ -65,11 +65,11 @@ function initSEBKioskBar() {
   // 3. Online/Offline Network Status
   window.addEventListener('online', () => {
     const el = document.getElementById('netStatus');
-    if (el) el.innerHTML = '<i class="fa-solid fa-wifi" style="color: #34d399;"></i> Online';
+    if (el) el.innerHTML = '<i class="fa-solid fa-wifi" style="color: #4ade80;"></i> Online';
   });
   window.addEventListener('offline', () => {
     const el = document.getElementById('netStatus');
-    if (el) el.innerHTML = '<i class="fa-solid fa-plane-slash" style="color: #f87171;"></i> Offline';
+    if (el) el.innerHTML = '<i class="fa-solid fa-plane-slash" style="color: #f87171;"></i> Terputus';
   });
 }
 
@@ -78,7 +78,7 @@ function updateBatteryUI(level, charging) {
   const batEl = document.getElementById('batteryStatus');
   if (batEl) {
     const icon = charging ? 'fa-battery-charging' : percent > 50 ? 'fa-battery-three-quarters' : 'fa-battery-quarter';
-    batEl.innerHTML = `<i class="fa-solid ${icon}" style="color: ${percent < 20 ? '#f87171' : '#34d399'};"></i> ${percent}%`;
+    batEl.innerHTML = `<i class="fa-solid ${icon}" style="color: ${percent < 20 ? '#ef4444' : '#10b981'};"></i> ${percent}%`;
   }
 }
 
@@ -89,8 +89,8 @@ function changeZoom(direction) {
   document.getElementById('examContainer').style.zoom = `${currentZoom}%`;
 }
 
-function quitSEB() {
-  if (confirm('Keluar dari Safe Exam Browser Kiosk Mode? Sesi ujian akan diakhiri.')) {
+function quitExam() {
+  if (confirm('Apakah Anda yakin ingin keluar dari sesi Ujian SMAN 1 Mlati? Sesi ujian akan diakhiri.')) {
     localStorage.clear();
     window.location.href = '/index.html';
   }
@@ -147,7 +147,7 @@ function startExamWithFullscreen() {
 function initCheatingProtection() {
   document.addEventListener('visibilitychange', () => {
     if (document.hidden && isExamStarted && currentSession?.status === 'IN_PROGRESS') {
-      triggerViolation('TAB_SWITCH', 'Pindah tab atau berpindah ke aplikasi lain di SEB Kiosk Mode');
+      triggerViolation('TAB_SWITCH', 'Pindah tab atau berpindah ke aplikasi lain selama ujian');
     }
   });
 
@@ -171,7 +171,7 @@ function initCheatingProtection() {
       (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.key === 'c' || e.key === 'C' || e.key === 'v' || e.key === 'V'))
     ) {
       e.preventDefault();
-      triggerViolation('DEVTOOLS', 'Mencoba menggunakan shortcut dilarang di SEB Kiosk');
+      triggerViolation('DEVTOOLS', 'Mencoba menggunakan shortcut keyboard dilarang');
     }
   });
 }
@@ -329,7 +329,7 @@ async function selectOption(questionId, selectedIdx) {
     if (data.success) {
       setTimeout(() => {
         saveBadge.className = 'badge badge-success';
-        saveBadge.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Tersimpan';
+        saveBadge.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Jawaban Tersimpan';
       }, 300);
     }
   } catch (err) {
@@ -376,7 +376,7 @@ function renderQuestionGrid() {
 }
 
 async function submitExam() {
-  if (confirm('Apakah Anda yakin ingin mengumpulkan ujian? Sesi SEB akan diakhiri.')) {
+  if (confirm('Apakah Anda yakin ingin mengumpulkan ujian? Sesi Ujian SMAN 1 Mlati akan diakhiri.')) {
     try {
       const res = await fetch('/api/exam/submit', {
         method: 'POST',
