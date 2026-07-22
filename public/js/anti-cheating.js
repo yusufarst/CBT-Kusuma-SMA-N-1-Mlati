@@ -1,12 +1,13 @@
-// Anti-Cheating & Kiosk Student Engine - CBT Kusuma (SMAN 1 Mlati)
+// Anti-Cheating & CBT CPNS Student Engine - CBT Kusuma (SMAN 1 Mlati)
 let currentUser = null;
 let currentSession = null;
 let questions = [];
 let currentIndex = 0;
 let studentAnswers = {};
+let studentRagu = {};
 let isExamStarted = false;
 let socket = null;
-let currentZoom = 100;
+let timerSeconds = 3600; // 60 minutes countdown
 
 document.addEventListener('DOMContentLoaded', async () => {
   const userStr = localStorage.getItem('cbt_user');
@@ -19,9 +20,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('studentName').innerText = currentUser.name;
   document.getElementById('studentNis').innerText = `NIS: ${currentUser.nis || '-'}`;
   document.getElementById('studentRoomBadge').innerText = currentUser.room_name || `Ruang ${currentUser.room_id}`;
-
-  // Start System Clock & Battery Status
-  initKusumaKioskBar();
 
   // Connect Socket.io
   socket = io();
@@ -42,58 +40,25 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Fetch session & questions
   await fetchSession();
   await fetchQuestions();
+  startCPNSTimer();
 });
 
-function initKusumaKioskBar() {
-  // 1. Digital Clock
+function startCPNSTimer() {
   setInterval(() => {
-    const now = new Date();
-    const clockStr = now.toLocaleTimeString('id-ID', { hour12: false });
-    const clockEl = document.getElementById('kusumaClock');
-    if (clockEl) clockEl.innerText = `${clockStr} WIB`;
+    if (!isExamStarted || currentSession?.status === 'LOCKED') return;
+
+    if (timerSeconds > 0) {
+      timerSeconds--;
+      const hrs = String(Math.floor(timerSeconds / 3600)).padStart(2, '0');
+      const mins = String(Math.floor((timerSeconds % 3600) / 60)).padStart(2, '0');
+      const secs = String(timerSeconds % 60).padStart(2, '0');
+      const timerEl = document.getElementById('cpnsTimer');
+      if (timerEl) timerEl.innerText = `${hrs}:${mins}:${secs}`;
+    } else {
+      alert('Waktu Ujian Telah Habis! Sistem akan mengumpulkan jawaban Anda secara otomatis.');
+      submitExamAuto();
+    }
   }, 1000);
-
-  // 2. Battery Status API
-  if (navigator.getBattery) {
-    navigator.getBattery().then(battery => {
-      updateBatteryUI(battery.level, battery.charging);
-      battery.addEventListener('levelchange', () => updateBatteryUI(battery.level, battery.charging));
-      battery.addEventListener('chargingchange', () => updateBatteryUI(battery.level, battery.charging));
-    });
-  }
-
-  // 3. Online/Offline Network Status
-  window.addEventListener('online', () => {
-    const el = document.getElementById('netStatus');
-    if (el) el.innerHTML = '<i class="fa-solid fa-wifi" style="color: #4ade80;"></i> Online';
-  });
-  window.addEventListener('offline', () => {
-    const el = document.getElementById('netStatus');
-    if (el) el.innerHTML = '<i class="fa-solid fa-plane-slash" style="color: #f87171;"></i> Terputus';
-  });
-}
-
-function updateBatteryUI(level, charging) {
-  const percent = Math.round(level * 100);
-  const batEl = document.getElementById('batteryStatus');
-  if (batEl) {
-    const icon = charging ? 'fa-battery-charging' : percent > 50 ? 'fa-battery-three-quarters' : 'fa-battery-quarter';
-    batEl.innerHTML = `<i class="fa-solid ${icon}" style="color: ${percent < 20 ? '#ef4444' : '#10b981'};"></i> ${percent}%`;
-  }
-}
-
-function changeZoom(direction) {
-  currentZoom += direction * 10;
-  if (currentZoom < 80) currentZoom = 80;
-  if (currentZoom > 140) currentZoom = 140;
-  document.getElementById('examContainer').style.zoom = `${currentZoom}%`;
-}
-
-function quitExam() {
-  if (confirm('Apakah Anda yakin ingin keluar dari sesi Ujian SMAN 1 Mlati? Sesi ujian akan diakhiri.')) {
-    localStorage.clear();
-    window.location.href = '/index.html';
-  }
 }
 
 async function fetchSession() {
@@ -120,6 +85,7 @@ async function fetchQuestions() {
     const data = await res.json();
     if (data.success) {
       questions = data.questions;
+      document.getElementById('totalQCount').innerText = `${questions.length} Soal`;
       renderQuestionGrid();
     }
   } catch (err) {
@@ -128,7 +94,6 @@ async function fetchQuestions() {
 }
 
 function startExamWithFullscreen() {
-  // Request Fullscreen
   const docEl = document.documentElement;
   if (docEl.requestFullscreen) {
     docEl.requestFullscreen().catch(err => console.log('Fullscreen rejected:', err));
@@ -137,7 +102,6 @@ function startExamWithFullscreen() {
   }
 
   document.getElementById('preExamModal').classList.remove('active');
-  document.getElementById('examContainer').style.display = 'block';
   isExamStarted = true;
 
   initCheatingProtection();
@@ -278,6 +242,7 @@ function renderCurrentQuestion() {
   document.getElementById('subjectName').innerText = `Mata Pelajaran: ${q.subject}`;
   document.getElementById('questionText').innerHTML = q.question_text;
 
+  // Options rendering (CPNS Radio Style)
   const optionsContainer = document.getElementById('optionsList');
   optionsContainer.innerHTML = '';
 
@@ -285,16 +250,26 @@ function renderCurrentQuestion() {
   q.options.forEach((optText, idx) => {
     const isSelected = studentAnswers[q.id] === idx;
     const item = document.createElement('div');
-    item.className = `option-item ${isSelected ? 'selected' : ''}`;
+    item.className = `cpns-option-item ${isSelected ? 'selected' : ''}`;
     item.onclick = () => selectOption(q.id, idx);
 
     item.innerHTML = `
-      <div class="opt-prefix">${letters[idx]}</div>
-      <div style="font-size: 0.95rem;">${optText}</div>
+      <div class="radio-indicator"></div>
+      <div class="opt-letter-badge">${letters[idx]}.</div>
+      <div class="opt-text">${optText}</div>
     `;
     optionsContainer.appendChild(item);
   });
 
+  // Ragu-Ragu button state
+  const btnRagu = document.getElementById('btnRagu');
+  if (studentRagu[q.id]) {
+    btnRagu.className = 'btn btn-ragu active';
+  } else {
+    btnRagu.className = 'btn btn-ragu';
+  }
+
+  // Navigation Buttons
   document.getElementById('btnPrev').disabled = currentIndex === 0;
   if (currentIndex === questions.length - 1) {
     document.getElementById('btnNext').style.display = 'none';
@@ -330,12 +305,20 @@ async function selectOption(questionId, selectedIdx) {
       setTimeout(() => {
         saveBadge.className = 'badge badge-success';
         saveBadge.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Jawaban Tersimpan';
-      }, 300);
+      }, 250);
     }
   } catch (err) {
     saveBadge.className = 'badge badge-danger';
     saveBadge.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Gagal Simpan';
   }
+}
+
+function toggleRaguRagu() {
+  const q = questions[currentIndex];
+  if (!q) return;
+
+  studentRagu[q.id] = !studentRagu[q.id];
+  renderCurrentQuestion();
 }
 
 function navigateQuestion(direction) {
@@ -346,11 +329,6 @@ function navigateQuestion(direction) {
   }
 }
 
-function toggleQuestionSheet() {
-  const sheet = document.getElementById('questionSheet');
-  sheet.style.display = sheet.style.display === 'none' ? 'block' : 'none';
-}
-
 function renderQuestionGrid() {
   const grid = document.getElementById('questionGridButtons');
   grid.innerHTML = '';
@@ -359,38 +337,51 @@ function renderQuestionGrid() {
     const btn = document.createElement('button');
     const isCurrent = idx === currentIndex;
     const isAnswered = studentAnswers[q.id] !== undefined;
+    const isRagu = studentRagu[q.id];
 
-    let cls = 'q-btn';
+    let cls = 'cpns-grid-btn';
+    if (isRagu) cls += ' ragu';
+    else if (isAnswered) cls += ' answered';
+
     if (isCurrent) cls += ' active';
-    if (isAnswered) cls += ' answered';
 
     btn.className = cls;
     btn.innerText = idx + 1;
     btn.onclick = () => {
       currentIndex = idx;
       renderCurrentQuestion();
-      document.getElementById('questionSheet').style.display = 'none';
     };
     grid.appendChild(btn);
   });
 }
 
+function quitExam() {
+  if (confirm('Apakah Anda yakin ingin keluar dari Ujian SMAN 1 Mlati? Sesi ujian Anda akan diakhiri.')) {
+    localStorage.clear();
+    window.location.href = '/index.html';
+  }
+}
+
 async function submitExam() {
-  if (confirm('Apakah Anda yakin ingin mengumpulkan ujian? Sesi Ujian SMAN 1 Mlati akan diakhiri.')) {
-    try {
-      const res = await fetch('/api/exam/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ studentId: currentUser.id })
-      });
-      const data = await res.json();
-      if (data.success) {
-        alert(data.message);
-        localStorage.clear();
-        window.location.href = '/index.html';
-      }
-    } catch (err) {
-      alert('Gagal mengumpulkan ujian.');
+  if (confirm('Apakah Anda yakin ingin mengumpulkan seluruh lembar ujian? Jawaban akan dihitung secara final.')) {
+    submitExamAuto();
+  }
+}
+
+async function submitExamAuto() {
+  try {
+    const res = await fetch('/api/exam/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ studentId: currentUser.id })
+    });
+    const data = await res.json();
+    if (data.success) {
+      alert(data.message);
+      localStorage.clear();
+      window.location.href = '/index.html';
     }
+  } catch (err) {
+    alert('Gagal mengumpulkan ujian.');
   }
 }
