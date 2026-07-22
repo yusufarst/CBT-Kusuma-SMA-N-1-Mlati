@@ -1,7 +1,7 @@
 # CBT KUSUMA - Computer Based Test Platform
 **SMA Negeri 1 Mlati, Sleman — Daerah Istimewa Yogyakarta**
 
-Platform Ujian Berbasis Komputer & Mobile (BYOD) yang dilengkapi dengan **Anti-Cheating Engine**, **Screen Lock Engine**, serta **Dashboard Pengawas Ujian berbasis Ruangan (Real-time Proctoring)**.
+Platform Ujian Digital Terproteksi Berbasis Komputer & Mobile (BYOD) yang dilengkapi dengan **Anti-Cheating Engine**, **Screen Lock Engine**, serta **Dashboard Pengawas Ujian berbasis Ruangan (Real-time Proctoring)**.
 
 ---
 
@@ -11,7 +11,7 @@ Platform Ujian Berbasis Komputer & Mobile (BYOD) yang dilengkapi dengan **Anti-C
 - 🛡️ **Anti-Cheating Engine:** Deteksi pindah tab/aplikasi, keluar *fullscreen*, DevTools, & pintasan keyboard dilarang.
 - 🔒 **Screen Lock Engine & Kode Unlock 6-Digit:** Penguncian layar otomatis di level server ketika pelanggaran melampaui batas (3x). Pembukaan kunci via Kode 6-Digit Harian atau Dashboard Pengawas.
 - 👨‍🏫 **Dashboard Pengawas Per Ruangan:** Monitoring status siswa per ruang ujian secara real-time via WebSocket dengan notifikasi suara/visual instant.
-- 🔒 **Safe Exam Browser (SEB) Ready:** Dilengkapi file konfigurasi `.seb` terintegrasi.
+- 🏛️ **Branding Resmi SMAN 1 Mlati:** Tampilan ujian bersih, elegan, dan profesional khusus SMA Negeri 1 Mlati.
 
 ---
 
