@@ -37,6 +37,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
+  socket.on('battery-update', (data) => {
+    const student = studentsData.find(s => s.student_id == data.studentId);
+    if (student) {
+      student.battery_level = data.batteryLevel;
+      student.is_charging = data.isCharging ? 1 : 0;
+      renderStudentGrid(studentsData);
+
+      if (data.batteryLevel <= 15 && !data.isCharging) {
+        appendCheatingFeed({
+          studentName: student.name,
+          eventType: 'LOW_BATTERY',
+          description: `⚠️ Baterai HP/Tablet Siswa Lemah (${data.batteryLevel}%). Perlu Charger Segera!`,
+          violationsCount: student.violations_count,
+          isLocked: false,
+          timestamp: new Date().toLocaleTimeString('id-ID')
+        });
+      }
+    }
+  });
+
   await fetchRooms();
 
   if (currentUser.room_id) {
@@ -144,6 +164,21 @@ function renderStudentGrid(students) {
       statusBadge = `<span class="badge badge-neutral">Belum Mulai</span>`;
     }
 
+    let batteryBadge = '';
+    if (s.battery_level !== undefined && s.battery_level !== null) {
+      const batPct = s.battery_level;
+      const isChar = s.is_charging == 1;
+      if (isChar) {
+        batteryBadge = `<span class="badge badge-success" style="font-size:0.7rem; padding:0.2rem 0.5rem;"><i class="fa-solid fa-bolt"></i> ⚡ ${batPct}%</span>`;
+      } else if (batPct <= 15) {
+        batteryBadge = `<span class="badge badge-danger" style="font-size:0.7rem; padding:0.2rem 0.5rem;"><i class="fa-solid fa-battery-quarter fa-bounce"></i> 🪫 ${batPct}% (Lemah!)</span>`;
+      } else if (batPct <= 35) {
+        batteryBadge = `<span class="badge badge-warning" style="font-size:0.7rem; padding:0.2rem 0.5rem;"><i class="fa-solid fa-battery-half"></i> 🔋 ${batPct}%</span>`;
+      } else {
+        batteryBadge = `<span class="badge badge-success" style="font-size:0.7rem; padding:0.2rem 0.5rem;"><i class="fa-solid fa-battery-full"></i> 🔋 ${batPct}%</span>`;
+      }
+    }
+
     card.className = cardCls;
     card.innerHTML = `
       <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.85rem;">
@@ -153,7 +188,10 @@ function renderStudentGrid(students) {
           </div>
           <div>
             <h4 style="font-size: 0.95rem; font-weight: 800; color: #0f172a; margin-bottom: 0.1rem;">${s.name}</h4>
-            <span style="font-size: 0.75rem; color: #64748b; font-weight: 600;">NIS: ${s.nis || '-'}</span>
+            <div style="display:flex; align-items:center; gap:0.4rem; font-size: 0.75rem; color: #64748b; font-weight: 600;">
+              <span>NIS: ${s.nis || '-'}</span>
+              ${batteryBadge}
+            </div>
           </div>
         </div>
         ${statusBadge}
