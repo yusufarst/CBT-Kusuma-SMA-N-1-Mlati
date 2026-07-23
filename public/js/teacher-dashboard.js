@@ -10,7 +10,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
-  document.getElementById('teacherName').innerText = user.name;
+  const setElText = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.innerText = val;
+  };
+
+  setElText('teacherName', user.name);
+  setElText('sidebarTeacherName', user.name);
+  setElText('infoTeacherName', user.name);
+  setElText('infoTeacherEmail', user.username);
   await loadQuestions();
 });
 
