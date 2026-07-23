@@ -99,23 +99,23 @@
         </form>
 
         <!-- Quick Demo Login Buttons -->
-        <div style="margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px solid var(--border-color);">
+        <div style="margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px solid var(--slate-200);">
           <p style="font-size: 0.8rem; color: #64748b; font-weight: 700; text-align: center; margin-bottom: 0.75rem;">
-            <i class="fa-solid fa-bolt" style="color: #d97706;"></i> Quick Demo Login (@sman1mlati.sch.id):
+            <i class="fa-solid fa-bolt" style="color: #d97706;"></i> Quick Demo Login 4 Role (@sman1mlati.sch.id):
           </p>
           
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
-            <button class="btn btn-outline" onclick="quickLogin('siswa001@sman1mlati.sch.id', '123456')" style="font-size: 0.725rem; padding: 0.45rem;">
-              <i class="fa-solid fa-user-graduate" style="color: #2563eb;"></i> Siswa R.01
+            <button class="btn btn-outline" onclick="quickLogin('siswa3725@sman1mlati.sch.id', '123456')" style="font-size: 0.725rem; padding: 0.45rem;">
+              <i class="fa-solid fa-user-graduate" style="color: #2563eb;"></i> Siswa (Galih)
             </button>
-            <button class="btn btn-outline" onclick="quickLogin('siswa003@sman1mlati.sch.id', '123456')" style="font-size: 0.725rem; padding: 0.45rem;">
-              <i class="fa-solid fa-user-graduate" style="color: #4f46e5;"></i> Siswa R.02
-            </button>
-            <button class="btn btn-outline" onclick="quickLogin('guru001@sman1mlati.sch.id', '123456')" style="font-size: 0.725rem; padding: 0.45rem;">
-              <i class="fa-solid fa-user-tie" style="color: #16a34a;"></i> Guru R.01
+            <button class="btn btn-outline" onclick="quickLogin('yusuf@sman1mlati.sch.id', '123456')" style="font-size: 0.725rem; padding: 0.45rem;">
+              <i class="fa-solid fa-chalkboard-user" style="color: #16a34a;"></i> Guru (Pak Yusuf)
             </button>
             <button class="btn btn-outline" onclick="quickLogin('operator@sman1mlati.sch.id', 'admin123')" style="font-size: 0.725rem; padding: 0.45rem;">
               <i class="fa-solid fa-sliders" style="color: #d97706;"></i> Operator
+            </button>
+            <button class="btn btn-outline" onclick="quickLogin('admin@sman1mlati.sch.id', 'superadmin123')" style="font-size: 0.725rem; padding: 0.45rem;">
+              <i class="fa-solid fa-user-gear" style="color: #dc2626;"></i> Super Admin
             </button>
           </div>
         </div>
@@ -127,7 +127,7 @@
   </main>
 
   <!-- Institutional Footer -->
-  <footer style="background: #ffffff; border-top: 1px solid var(--border-color); padding: 0.85rem 1.5rem; font-size: 0.8rem; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;">
+  <footer style="background: #ffffff; border-top: 1px solid var(--slate-200); padding: 0.85rem 1.5rem; font-size: 0.8rem; color: var(--slate-600); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;">
     <div>Hak Cipta © 2026 <strong>SMA Negeri 1 Mlati, Sleman — DIY</strong>. All rights reserved.</div>
     <div>Versi 1.0 (Production Ready)</div>
   </footer>
@@ -160,10 +160,16 @@
             localStorage.setItem('cbt_session', JSON.stringify(data.session));
           }
 
-          if (data.user.role === 'student') {
-            window.location.href = '/student.html';
+          if (data.redirectUrl) {
+            window.location.href = data.redirectUrl;
+          } else if (data.user.role === 'student') {
+            window.location.href = '/student-dashboard.html';
+          } else if (data.user.role === 'teacher') {
+            window.location.href = '/teacher-dashboard.html';
+          } else if (data.user.role === 'operator') {
+            window.location.href = '/operator-dashboard.html';
           } else {
-            window.location.href = '/proctor.html';
+            window.location.href = '/admin-dashboard.html';
           }
         } else {
           errDiv.innerText = data.message;
