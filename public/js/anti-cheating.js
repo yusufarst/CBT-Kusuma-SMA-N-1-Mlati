@@ -76,20 +76,22 @@ function updateBatteryStatus() {
   const batteryBadge = document.getElementById('batteryBadge');
 
   if (batteryText && batteryIcon && batteryBadge) {
-    batteryText.innerText = `${levelPct}%${isCharging ? ' ⚡' : ''}`;
-
     if (isCharging) {
       batteryBadge.className = 'badge badge-success';
-      batteryIcon.className = 'fa-solid fa-battery-charging';
+      batteryIcon.className = 'fa-solid fa-bolt';
+      batteryText.innerText = `${levelPct}% (Charging)`;
     } else if (levelPct <= 15) {
       batteryBadge.className = 'badge badge-danger';
-      batteryIcon.className = 'fa-solid fa-battery-quarter fa-bounce';
+      batteryIcon.className = 'fa-solid fa-battery-empty fa-bounce';
+      batteryText.innerText = `${levelPct}% (Baterai Lemah)`;
     } else if (levelPct <= 35) {
       batteryBadge.className = 'badge badge-warning';
       batteryIcon.className = 'fa-solid fa-battery-half';
+      batteryText.innerText = `${levelPct}%`;
     } else {
       batteryBadge.className = 'badge badge-success';
       batteryIcon.className = 'fa-solid fa-battery-full';
+      batteryText.innerText = `${levelPct}%`;
     }
   }
 
