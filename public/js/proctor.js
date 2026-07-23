@@ -169,13 +169,13 @@ function renderStudentGrid(students) {
       const batPct = s.battery_level;
       const isChar = s.is_charging == 1;
       if (isChar) {
-        batteryBadge = `<span class="badge badge-success" style="font-size:0.7rem; padding:0.2rem 0.5rem;"><i class="fa-solid fa-bolt"></i> ⚡ ${batPct}%</span>`;
+        batteryBadge = `<span class="badge badge-success" style="font-size:0.7rem; padding:0.15rem 0.45rem; line-height:1;"><i class="fa-solid fa-bolt" style="font-size:0.75rem;"></i> ${batPct}%</span>`;
       } else if (batPct <= 15) {
-        batteryBadge = `<span class="badge badge-danger" style="font-size:0.7rem; padding:0.2rem 0.5rem;"><i class="fa-solid fa-battery-quarter fa-bounce"></i> 🪫 ${batPct}% (Lemah!)</span>`;
+        batteryBadge = `<span class="badge badge-danger" style="font-size:0.7rem; padding:0.15rem 0.45rem; line-height:1;"><i class="fa-solid fa-battery-empty fa-bounce" style="font-size:0.75rem;"></i> ${batPct}% Lemah</span>`;
       } else if (batPct <= 35) {
-        batteryBadge = `<span class="badge badge-warning" style="font-size:0.7rem; padding:0.2rem 0.5rem;"><i class="fa-solid fa-battery-half"></i> 🔋 ${batPct}%</span>`;
+        batteryBadge = `<span class="badge badge-warning" style="font-size:0.7rem; padding:0.15rem 0.45rem; line-height:1;"><i class="fa-solid fa-battery-half" style="font-size:0.75rem;"></i> ${batPct}%</span>`;
       } else {
-        batteryBadge = `<span class="badge badge-success" style="font-size:0.7rem; padding:0.2rem 0.5rem;"><i class="fa-solid fa-battery-full"></i> 🔋 ${batPct}%</span>`;
+        batteryBadge = `<span class="badge badge-success" style="font-size:0.7rem; padding:0.15rem 0.45rem; line-height:1;"><i class="fa-solid fa-battery-full" style="font-size:0.75rem;"></i> ${batPct}%</span>`;
       }
     }
 
