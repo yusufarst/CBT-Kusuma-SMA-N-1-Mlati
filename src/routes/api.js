@@ -5,16 +5,6 @@ const db = require('../database/db');
 // Max violation before locking
 const MAX_THRESHOLD = parseInt(process.env.MAX_VIOLATION_THRESHOLD || '3');
 
-function getRoleRedirect(role) {
-  switch (role) {
-    case 'student': return '/student-dashboard.html';
-    case 'teacher': return '/teacher-dashboard.html';
-    case 'operator': return '/operator-dashboard.html';
-    case 'superadmin': return '/admin-dashboard.html';
-    default: return '/index.html';
-  }
-}
-
 // 1. Auth Login
 router.post('/auth/login', (req, res) => {
   const { username, password } = req.body;
@@ -24,8 +14,6 @@ router.post('/auth/login', (req, res) => {
     if (!user || user.password !== password) {
       return res.status(401).json({ success: false, message: "Username atau password salah!" });
     }
-
-    const redirectUrl = getRoleRedirect(user.role);
 
     // If user is a student, ensure exam session exists
     if (user.role === 'student') {
@@ -38,8 +26,7 @@ router.post('/auth/login', (req, res) => {
               return res.json({
                 success: true,
                 user: { id: user.id, username: user.username, name: user.name, role: user.role, room_id: user.room_id, room_name: user.room_name, nis: user.nis },
-                session: { id: this.lastID, status: 'IN_PROGRESS', violations_count: 0, answers: '{}' },
-                redirectUrl
+                session: { id: this.lastID, status: 'IN_PROGRESS', violations_count: 0, answers: '{}' }
               });
             }
           );
@@ -47,16 +34,14 @@ router.post('/auth/login', (req, res) => {
           return res.json({
             success: true,
             user: { id: user.id, username: user.username, name: user.name, role: user.role, room_id: user.room_id, room_name: user.room_name, nis: user.nis },
-            session,
-            redirectUrl
+            session
           });
         }
       });
     } else {
       return res.json({
         success: true,
-        user: { id: user.id, username: user.username, name: user.name, role: user.role, room_id: user.room_id, room_name: user.room_name },
-        redirectUrl
+        user: { id: user.id, username: user.username, name: user.name, role: user.role, room_id: user.room_id, room_name: user.room_name }
       });
     }
   });
@@ -313,70 +298,6 @@ router.post('/proctor/unlock-student', (req, res) => {
         );
       }
     );
-  });
-});
-
-// 11. Teacher Dashboard: Add Question to Question Bank
-router.post('/teacher/question', (req, res) => {
-  const { subject, questionText, options, correctAnswer } = req.body;
-  db.run(
-    "INSERT INTO questions (subject, question_text, options, correct_answer) VALUES (?, ?, ?, ?)",
-    [subject || 'Ekonomi X', questionText, JSON.stringify(options), correctAnswer || 0],
-    function(err) {
-      if (err) return res.status(500).json({ success: false, message: "Gagal menambah soal" });
-      res.json({ success: true, id: this.lastID, message: "Soal berhasil ditambahkan ke Bank Soal!" });
-    }
-  );
-});
-
-// 12. Operator Dashboard: Get Master Student Data
-router.get('/operator/students', (req, res) => {
-  db.all("SELECT u.id, u.name, u.username, u.nis, u.role, u.room_id, r.name as room_name FROM users u LEFT JOIN rooms r ON u.room_id = r.id WHERE u.role = 'student' ORDER BY u.name ASC", [], (err, students) => {
-    if (err) return res.status(500).json({ success: false, message: "Database error" });
-    res.json({ success: true, students });
-  });
-});
-
-// 13. Operator Dashboard: Add New Student
-router.post('/operator/student', (req, res) => {
-  const { username, password, name, room_id, nis } = req.body;
-  db.run(
-    "INSERT INTO users (username, password, name, role, room_id, nis) VALUES (?, ?, ?, 'student', ?, ?)",
-    [username, password || '123456', name, room_id || 1, nis],
-    function(err) {
-      if (err) return res.status(400).json({ success: false, message: "Username/NIS sudah terdaftar atau tidak valid!" });
-      res.json({ success: true, id: this.lastID, message: "Siswa berhasil ditambahkan!" });
-    }
-  );
-});
-
-// 14. Super Admin Dashboard: User Management List
-router.get('/admin/users', (req, res) => {
-  db.all("SELECT u.id, u.username, u.name, u.role, u.nis, u.room_id, r.name as room_name FROM users u LEFT JOIN rooms r ON u.room_id = r.id ORDER BY u.id ASC", [], (err, users) => {
-    if (err) return res.status(500).json({ success: false, message: "Database error" });
-    res.json({ success: true, users });
-  });
-});
-
-// 15. Super Admin Dashboard: Create Any User
-router.post('/admin/user', (req, res) => {
-  const { username, password, name, role, room_id, nis } = req.body;
-  db.run(
-    "INSERT INTO users (username, password, name, role, room_id, nis) VALUES (?, ?, ?, ?, ?, ?)",
-    [username, password || '123456', name, role || 'student', room_id || null, nis || null],
-    function(err) {
-      if (err) return res.status(400).json({ success: false, message: "Username sudah terpakai!" });
-      res.json({ success: true, id: this.lastID, message: "User baru berhasil dibuat!" });
-    }
-  );
-});
-
-// 16. Super Admin Dashboard: Delete User
-router.delete('/admin/user/:id', (req, res) => {
-  const { id } = req.params;
-  db.run("DELETE FROM users WHERE id = ?", [id], function(err) {
-    if (err) return res.status(500).json({ success: false, message: "Gagal menghapus user" });
-    res.json({ success: true, message: "User berhasil dihapus!" });
   });
 });
 
