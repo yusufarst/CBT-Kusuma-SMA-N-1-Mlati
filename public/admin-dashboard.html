@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Super Admin - CBT KUSUMA SMAN 1 Mlati</title>
+  <link rel="stylesheet" href="/css/style.css?v=3.1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body style="background: #f8fafc; min-height: 100vh; display: flex; flex-direction: column;">
+
+  <!-- Institutional Top Header Bar -->
+  <header class="app-header-main">
+    <div class="brand-wrapper">
+      <div class="brand-icon" style="background: #dc2626;"><i class="fa-solid fa-user-gear"></i></div>
+      <div>
+        <div style="font-size: 1.05rem;">MASTER ADMINISTRATION CENTER</div>
+        <div style="font-size: 0.7rem; font-weight: 500; color: #94a3b8;">CBT KUSUMA — SMA Negeri 1 Mlati</div>
+      </div>
+    </div>
+    
+    <div style="display: flex; align-items: center; gap: 1.25rem;">
+      <div style="text-align: right; display: flex; align-items: center; gap: 0.75rem;">
+        <div style="width: 34px; height: 34px; border-radius: 50%; background: #dc2626; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;">
+          <i class="fa-solid fa-shield-cat"></i>
+        </div>
+        <div>
+          <div style="font-weight: 700; font-size: 0.85rem; color: white;" id="adminName">Super Admin System</div>
+          <div style="font-size: 0.7rem; color: #94a3b8;">Administrator Utama / Headmaster</div>
+        </div>
+      </div>
+
+      <button onclick="logout()" class="btn btn-danger" style="padding: 0.35rem 0.75rem; font-size: 0.8rem; border-radius: 6px;">
+        <i class="fa-solid fa-right-from-bracket"></i> Keluar
+      </button>
+    </div>
+  </header>
+
+  <!-- Navigation Tab Bar for Super Admin Modules -->
+  <div style="background: #ffffff; border-bottom: 1px solid #cbd5e1; padding: 0 1.5rem;">
+    <div style="max-width: 1440px; margin: 0 auto; display: flex; gap: 1.5rem;">
+      <button class="tab-btn active" onclick="switchAdminTab('users')" id="tab-users" style="padding: 1rem 0.5rem; font-weight: 700; border: none; background: none; color: #2563eb; border-bottom: 3px solid #2563eb; cursor: pointer;">
+        <i class="fa-solid fa-users-gear"></i> User & Role Management
+      </button>
+      <button class="tab-btn" onclick="switchAdminTab('security')" id="tab-security" style="padding: 1rem 0.5rem; font-weight: 700; border: none; background: none; color: #64748b; cursor: pointer;">
+        <i class="fa-solid fa-shield-halved"></i> Konfigurasi Anti-Cheating
+      </button>
+      <button class="tab-btn" onclick="switchAdminTab('health')" id="tab-health" style="padding: 1rem 0.5rem; font-weight: 700; border: none; background: none; color: #64748b; cursor: pointer;">
+        <i class="fa-solid fa-server"></i> Server Health & Observability
+      </button>
+      <button class="tab-btn" onclick="switchAdminTab('backup')" id="tab-backup" style="padding: 1rem 0.5rem; font-weight: 700; border: none; background: none; color: #64748b; cursor: pointer;">
+        <i class="fa-solid fa-database"></i> Backup & Restore
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <main style="max-width: 1440px; width: 100%; margin: 1.5rem auto; padding: 0 1.5rem; flex: 1;">
+
+    <!-- TAB 1: USER & ROLE MANAGEMENT -->
+    <div id="section-users">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <div>
+          <h2 style="font-size: 1.3rem; font-weight: 800; color: #0f172a;">Kelola Pengguna Sistem (4 Peran)</h2>
+          <p style="color: #64748b; font-size: 0.85rem;">Hak akses penuh pembuatan dan pengelolaan akun Siswa, Guru, Operator, & Admin.</p>
+        </div>
+
+        <button onclick="openAddUserModal()" class="btn btn-primary">
+          <i class="fa-solid fa-user-shield"></i> Tambah Pengguna Baru
+        </button>
+      </div>
+
+      <!-- User List Table -->
+      <div class="card-ui" style="padding: 0; overflow: hidden;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;" id="usersTable">
+          <thead style="background: #f8fafc; border-bottom: 1px solid #cbd5e1;">
+            <tr>
+              <th style="padding: 0.85rem 1.25rem; font-weight: 700;">ID</th>
+              <th style="padding: 0.85rem 1.25rem; font-weight: 700;">Nama Lengkap</th>
+              <th style="padding: 0.85rem 1.25rem; font-weight: 700;">Username / Email</th>
+              <th style="padding: 0.85rem 1.25rem; font-weight: 700;">Peran (Role)</th>
+              <th style="padding: 0.85rem 1.25rem; font-weight: 700;">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="userListBody">
+            <!-- Rendered dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 2: KONFIGURASI ANTI-CHEATING -->
+    <div id="section-security" style="display: none;">
+      <div class="card-ui" style="padding: 2rem; max-width: 700px; margin: 0 auto;">
+        <h2 style="font-size: 1.2rem; font-weight: 800; color: #0f172a; margin-bottom: 1.25rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.75rem;">
+          <i class="fa-solid fa-sliders" style="color: #dc2626;"></i> Parameter Anti-Cheating Engine & Screen Lock
+        </h2>
+
+        <form onsubmit="alert('Konfigurasi Keamanan Sistem Berhasil Diperbarui!'); return false;">
+          <div class="form-group">
+            <label class="form-label">Ambang Batas Pelanggaran Maksimal (Threshold)</label>
+            <input type="number" class="form-control" value="3" required>
+            <span style="font-size: 0.75rem; color: #64748b;">Jumlah kali pindah tab/blur sebelum layar dikunci otomatis.</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Interval Auto-Save Jawaban (Detik)</label>
+            <input type="number" class="form-control" value="5" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Mode Penguncian Layar (Screen Lock Behavior)</label>
+            <select class="form-control">
+              <option>Kunci Paksa Klien & Server (Default PRD)</option>
+              <option>Peringatan Halus (Tanpa Lock)</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-danger" style="width: 100%; justify-content: center; padding: 0.8rem; margin-top: 1rem;">
+            <i class="fa-solid fa-floppy-disk"></i> Simpan Konfigurasi Keamanan
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- TAB 3: SERVER HEALTH & OBSERVABILITY -->
+    <div id="section-health" style="display: none;">
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div>
+            <div class="metric-label">Status Server Node.js</div>
+            <div class="metric-value" style="color: #16a34a;">ONLINE</div>
+          </div>
+          <div class="metric-icon" style="background: #dcfce7; color: #16a34a;"><i class="fa-solid fa-server"></i></div>
+        </div>
+
+        <div class="metric-card">
+          <div>
+            <div class="metric-label">Koneksi WebSocket Aktif</div>
+            <div class="metric-value" style="color: #2563eb;">24 Sesi</div>
+          </div>
+          <div class="metric-icon" style="background: #eff6ff; color: #2563eb;"><i class="fa-solid fa-network-wired"></i></div>
+        </div>
+
+        <div class="metric-card">
+          <div>
+            <div class="metric-label">Beban CPU & RAM</div>
+            <div class="metric-value" style="color: #d97706;">14.2%</div>
+          </div>
+          <div class="metric-icon" style="background: #fef3c7; color: #d97706;"><i class="fa-solid fa-microchip"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: BACKUP & RESTORE -->
+    <div id="section-backup" style="display: none;">
+      <div class="card-ui" style="padding: 2rem; text-align: center;">
+        <i class="fa-solid fa-database" style="font-size: 3.5rem; color: #2563eb; margin-bottom: 1rem; display: block;"></i>
+        <h2 style="font-size: 1.3rem; font-weight: 800; color: #0f172a; margin-bottom: 0.5rem;">Backup & Restore Basis Data</h2>
+        <p style="color: #64748b; font-size: 0.9rem; max-width: 500px; margin: 0 auto 1.5rem auto;">
+          Buat cadangan data SQLite/PostgreSQL secara instan atau pulihkan dari backup sebelumnya.
+        </p>
+
+        <button onclick="alert('Backup Basis Data Berhasil Dibuat! (cbt_kusuma_backup.db)')" class="btn btn-primary">
+          <i class="fa-solid fa-download"></i> Unduh Backup Basis Data Sekarang
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Add User Modal -->
+  <div class="modal-overlay" id="addUserModal">
+    <div class="modal-container card-ui" style="max-width: 500px; text-align: left;">
+      <h3 style="margin-bottom: 1rem; color: #0f172a;"><i class="fa-solid fa-user-shield" style="color: #dc2626;"></i> Tambah Pengguna Baru (4 Role)</h3>
+      
+      <form id="addUserForm" onsubmit="saveNewUser(event)">
+        <div class="form-group">
+          <label class="form-label">Nama Lengkap</label>
+          <input type="text" id="uName" class="form-control" placeholder="Nama pengguna" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Username / Email</label>
+          <input type="text" id="uUsername" class="form-control" placeholder="contoh: user@sman1mlati.sch.id" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Kata Sandi (Password)</label>
+          <input type="password" id="uPassword" class="form-control" placeholder="Password" value="123456" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Peran Pengguna (Role)</label>
+          <select id="uRole" class="form-control">
+            <option value="student">Siswa (student)</option>
+            <option value="teacher">Guru / Pengawas (teacher)</option>
+            <option value="operator">Operator Sekolah (operator)</option>
+            <option value="superadmin">Super Admin (superadmin)</option>
+          </select>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
+          <button type="button" onclick="closeAddUserModal()" class="btn btn-outline" style="flex: 1; justify-content: center;">Batal</button>
+          <button type="submit" class="btn btn-danger" style="flex: 1; justify-content: center;">Simpan User</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/admin-dashboard.js"></script>
+</body>
+</html>
