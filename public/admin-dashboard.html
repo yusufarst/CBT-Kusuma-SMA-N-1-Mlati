@@ -39,7 +39,10 @@
   <!-- Navigation Tab Bar for Super Admin Modules -->
   <div style="background: #ffffff; border-bottom: 1px solid #cbd5e1; padding: 0 1.5rem;">
     <div style="max-width: 1440px; margin: 0 auto; display: flex; gap: 1.5rem;">
-      <button class="tab-btn active" onclick="switchAdminTab('users')" id="tab-users" style="padding: 1rem 0.5rem; font-weight: 700; border: none; background: none; color: #2563eb; border-bottom: 3px solid #2563eb; cursor: pointer;">
+      <button class="tab-btn active" onclick="switchAdminTab('command-center')" id="tab-command-center" style="padding: 1rem 0.5rem; font-weight: 700; border: none; background: none; color: #2563eb; border-bottom: 3px solid #2563eb; cursor: pointer;">
+        <i class="fa-solid fa-eye"></i> Master Command Center (Pengawasan Seluruh Sekolah)
+      </button>
+      <button class="tab-btn" onclick="switchAdminTab('users')" id="tab-users" style="padding: 1rem 0.5rem; font-weight: 700; border: none; background: none; color: #64748b; cursor: pointer;">
         <i class="fa-solid fa-users-gear"></i> User & Role Management
       </button>
       <button class="tab-btn" onclick="switchAdminTab('security')" id="tab-security" style="padding: 1rem 0.5rem; font-weight: 700; border: none; background: none; color: #64748b; cursor: pointer;">
@@ -57,8 +60,31 @@
   <!-- Main Container -->
   <main style="max-width: 1440px; width: 100%; margin: 1.5rem auto; padding: 0 1.5rem; flex: 1;">
 
-    <!-- TAB 1: USER & ROLE MANAGEMENT -->
-    <div id="section-users">
+    <!-- TAB 1: MASTER COMMAND CENTER -->
+    <div id="section-command-center">
+      <div class="card-ui" style="padding: 1.25rem 1.5rem; margin-bottom: 1.25rem; background: linear-gradient(135deg, #7f1d1d 0%, #0f172a 100%); color: white; border: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <span class="badge badge-danger" style="margin-bottom: 0.5rem; background: rgba(220,38,38,0.3); color: #fca5a5; border: 1px solid rgba(252,165,165,0.3);">
+              <i class="fa-solid fa-shield-cat"></i> Master Control Room
+            </span>
+            <h2 style="font-size: 1.35rem; font-weight: 800; color: white;">Master Command Center — Pengawasan Lintas Seluruh Ruangan</h2>
+            <p style="color: #cbd5e1; font-size: 0.85rem;">Pengawasan eksekutif real-time seluruh sesi ujian, ambang batas pelanggaran, dan kunci master rilis cepat.</p>
+          </div>
+          <div style="display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.08); padding: 0.6rem 1.25rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15);">
+            <div>
+              <div style="font-size: 0.725rem; color: #fca5a5; font-weight: 700;">Kode Unlock Master Utama:</div>
+              <div style="font-size: 1.4rem; font-weight: 800; color: #f59e0b; letter-spacing: 4px; font-family: monospace;">999999</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <iframe src="/proctor.html" style="width: 100%; height: 780px; border: none; border-radius: 12px; box-shadow: var(--shadow-md);"></iframe>
+    </div>
+
+    <!-- TAB 2: USER & ROLE MANAGEMENT -->
+    <div id="section-users" style="display: none;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
         <div>
           <h2 style="font-size: 1.3rem; font-weight: 800; color: #0f172a;">Kelola Pengguna Sistem (4 Peran)</h2>
