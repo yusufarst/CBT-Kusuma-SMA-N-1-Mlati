@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Operator - CBT KUSUMA SMAN 1 Mlati</title>
+  <link rel="stylesheet" href="/css/style.css?v=3.1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body style="background: #f8fafc; min-height: 100vh; display: flex; flex-direction: column;">
+
+  <!-- Institutional Top Header Bar -->
+  <header class="app-header-main">
+    <div class="brand-wrapper">
+      <div class="brand-icon" style="background: #d97706;"><i class="fa-solid fa-sliders"></i></div>
+      <div>
+        <div style="font-size: 1.05rem;">DASHBOARD OPERATOR SEKOLAH</div>
+        <div style="font-size: 0.7rem; font-weight: 500; color: #94a3b8;">CBT KUSUMA — SMA Negeri 1 Mlati</div>
+      </div>
+    </div>
+    
+    <div style="display: flex; align-items: center; gap: 1.25rem;">
+      <div style="text-align: right; display: flex; align-items: center; gap: 0.75rem;">
+        <div style="width: 34px; height: 34px; border-radius: 50%; background: #d97706; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;">
+          <i class="fa-solid fa-user-gear"></i>
+        </div>
+        <div>
+          <div style="font-weight: 700; font-size: 0.85rem; color: white;" id="operatorName">Operator CBT</div>
+          <div style="font-size: 0.7rem; color: #94a3b8;">Operator IT / Tim Kurikulum</div>
+        </div>
+      </div>
+
+      <button onclick="logout()" class="btn btn-danger" style="padding: 0.35rem 0.75rem; font-size: 0.8rem; border-radius: 6px;">
+        <i class="fa-solid fa-right-from-bracket"></i> Keluar
+      </button>
+    </div>
+  </header>
+
+  <!-- Navigation Tab Bar for Operator Modules -->
+  <div style="background: #ffffff; border-bottom: 1px solid #cbd5e1; padding: 0 1.5rem;">
+    <div style="max-width: 1440px; margin: 0 auto; display: flex; gap: 1.5rem;">
+      <button class="tab-btn active" onclick="switchOpTab('data-induk')" id="tab-data-induk" style="padding: 1rem 0.5rem; font-weight: 700; border: none; background: none; color: #2563eb; border-bottom: 3px solid #2563eb; cursor: pointer;">
+        <i class="fa-solid fa-users-rectangle"></i> Data Induk (Siswa & Guru)
+      </button>
+      <button class="tab-btn" onclick="switchOpTab('jadwal-sesi')" id="tab-jadwal-sesi" style="padding: 1rem 0.5rem; font-weight: 700; border: none; background: none; color: #64748b; cursor: pointer;">
+        <i class="fa-solid fa-calendar-days"></i> Penjadwalan & Sesi Ujian
+      </button>
+      <button class="tab-btn" onclick="switchOpTab('rekap-nilai')" id="tab-rekap-nilai" style="padding: 1rem 0.5rem; font-weight: 700; border: none; background: none; color: #64748b; cursor: pointer;">
+        <i class="fa-solid fa-file-invoice-dollar"></i> Laporan & Rekapitulasi Nilai
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <main style="max-width: 1440px; width: 100%; margin: 1.5rem auto; padding: 0 1.5rem; flex: 1;">
+
+    <!-- TAB 1: DATA INDUK SISWA & GURU -->
+    <div id="section-data-induk">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <div>
+          <h2 style="font-size: 1.3rem; font-weight: 800; color: #0f172a;">Kelola Data Induk Siswa & Guru</h2>
+          <p style="color: #64748b; font-size: 0.85rem;">Master data peserta ujian, kelas, dan akun login siswa sekolah.</p>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem;">
+          <button onclick="alert('Pilih file Excel Data Siswa (.xlsx) untuk diimpor secara massal.')" class="btn btn-outline">
+            <i class="fa-solid fa-file-excel" style="color: #16a34a;"></i> Import Data Excel
+          </button>
+          <button onclick="openAddStudentModal()" class="btn btn-primary">
+            <i class="fa-solid fa-user-plus"></i> Tambah Siswa Baru
+          </button>
+        </div>
+      </div>
+
+      <!-- Student Data List Table -->
+      <div class="card-ui" style="padding: 0; overflow: hidden;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;" id="studentsTable">
+          <thead style="background: #f8fafc; border-bottom: 1px solid #cbd5e1;">
+            <tr>
+              <th style="padding: 0.85rem 1.25rem; font-weight: 700;">No</th>
+              <th style="padding: 0.85rem 1.25rem; font-weight: 700;">Nama Siswa</th>
+              <th style="padding: 0.85rem 1.25rem; font-weight: 700;">NIS</th>
+              <th style="padding: 0.85rem 1.25rem; font-weight: 700;">Username / Email</th>
+              <th style="padding: 0.85rem 1.25rem; font-weight: 700;">Ruang Ujian</th>
+            </tr>
+          </thead>
+          <tbody id="studentListBody">
+            <!-- Rendered dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 2: PENJADWALAN & SESI UJIAN -->
+    <div id="section-jadwal-sesi" style="display: none;">
+      <div class="card-ui" style="padding: 1.5rem;">
+        <h2 style="font-size: 1.2rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem;">
+          <i class="fa-solid fa-door-open" style="color: #2563eb;"></i> Alokasi Sesi & Ruang Ujian SMAN 1 Mlati
+        </h2>
+        <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 1.5rem;">
+          Penyusunan sesi dan pembagian ruang ujian dilakukan secara otomatis atau per kelas.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+          <div class="card-ui" style="padding: 1.25rem; border-left: 4px solid #2563eb;">
+            <h3 style="font-size: 1rem; font-weight: 800; color: #0f172a;">Ruang 01 (X MIPA 1)</h3>
+            <p style="color: #64748b; font-size: 0.8rem; margin-top: 0.25rem;">Kapasitas: 32 Peserta | Kode Sesi: RUANG-01</p>
+          </div>
+          <div class="card-ui" style="padding: 1.25rem; border-left: 4px solid #16a34a;">
+            <h3 style="font-size: 1rem; font-weight: 800; color: #0f172a;">Ruang 02 (X MIPA 2)</h3>
+            <p style="color: #64748b; font-size: 0.8rem; margin-top: 0.25rem;">Kapasitas: 32 Peserta | Kode Sesi: RUANG-02</p>
+          </div>
+          <div class="card-ui" style="padding: 1.25rem; border-left: 4px solid #d97706;">
+            <h3 style="font-size: 1rem; font-weight: 800; color: #0f172a;">Lab Komputer Utama</h3>
+            <p style="color: #64748b; font-size: 0.8rem; margin-top: 0.25rem;">Kapasitas: 40 Peserta | Kode Sesi: LAB-KOMP-1</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: LAPORAN & REKAPITULASI NILAI -->
+    <div id="section-rekap-nilai" style="display: none;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <div>
+          <h2 style="font-size: 1.3rem; font-weight: 800; color: #0f172a;">Rekapitulasi Nilai & Laporan Kehadiran</h2>
+          <p style="color: #64748b; font-size: 0.85rem;">Laporan hasil ujian sekolah dan ekspor ke Excel/PDF.</p>
+        </div>
+
+        <button onclick="alert('Mengekspor Rekapitulasi Nilai Sekolah ke Excel (.xlsx)...')" class="btn btn-success">
+          <i class="fa-solid fa-file-excel"></i> Ekspor Nilai ke Excel
+        </button>
+      </div>
+
+      <div class="card-ui" style="padding: 1.5rem; text-align: center; color: #64748b;">
+        <i class="fa-solid fa-file-contract" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 0.5rem; display: block;"></i>
+        Laporan rekapitulasi nilai sekolah siap diunduh oleh Tim Kurikulum / Kepala Sekolah.
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Add Student Modal -->
+  <div class="modal-overlay" id="addStudentModal">
+    <div class="modal-container card-ui" style="max-width: 500px; text-align: left;">
+      <h3 style="margin-bottom: 1rem; color: #0f172a;"><i class="fa-solid fa-user-plus" style="color: #2563eb;"></i> Tambah Data Siswa Baru</h3>
+      
+      <form id="addStudentForm" onsubmit="saveNewStudent(event)">
+        <div class="form-group">
+          <label class="form-label">Nama Lengkap Siswa</label>
+          <input type="text" id="sName" class="form-control" placeholder="Nama siswa" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">NIS (Nomor Induk Siswa)</label>
+          <input type="text" id="sNis" class="form-control" placeholder="contoh: 20261010" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Username / Email Sekolah</label>
+          <input type="email" id="sUsername" class="form-control" placeholder="contoh: siswa010@sman1mlati.sch.id" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Ruang Ujian</label>
+          <select id="sRoom" class="form-control">
+            <option value="1">Ruang 01 (X MIPA 1)</option>
+            <option value="2">Ruang 02 (X MIPA 2)</option>
+            <option value="3">Lab Komputer Utama</option>
+          </select>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
+          <button type="button" onclick="closeAddStudentModal()" class="btn btn-outline" style="flex: 1; justify-content: center;">Batal</button>
+          <button type="submit" class="btn btn-primary" style="flex: 1; justify-content: center;">Simpan Data</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/operator-dashboard.js"></script>
+</body>
+</html>
