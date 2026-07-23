@@ -104,9 +104,7 @@ async function fetchRoomStatus() {
 
     if (data.success) {
       studentsData = data.students;
-      const code = data.activeCode || '705326';
-      if (document.getElementById('activeCodeDisplay')) document.getElementById('activeCodeDisplay').innerText = code;
-      if (document.getElementById('unlockCodeText')) document.getElementById('unlockCodeText').innerText = code;
+      document.getElementById('activeCodeDisplay').innerText = data.activeCode || '------';
 
       renderStats(studentsData);
       renderStudentGrid(studentsData);
@@ -126,17 +124,10 @@ function renderStats(students) {
   const warning = students.filter(s => s.violations_count > 0 && s.status !== 'LOCKED').length;
   const locked = students.filter(s => s.status === 'LOCKED').length;
 
-  const setElText = (id, val) => {
-    const el = document.getElementById(id);
-    if (el) el.innerText = val;
-  };
-
-  setElText('statTotal', total);
-  setElText('statActive', active);
-  setElText('statInProgress', active);
-  setElText('statWarning', warning);
-  setElText('statWarnings', warning);
-  setElText('statLocked', locked);
+  document.getElementById('statTotal').innerText = total;
+  document.getElementById('statActive').innerText = active;
+  document.getElementById('statWarning').innerText = warning;
+  document.getElementById('statLocked').innerText = locked;
 }
 
 function renderStudentGrid(students) {
