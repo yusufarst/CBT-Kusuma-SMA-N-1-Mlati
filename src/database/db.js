@@ -1,5 +1,6 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const fs = require('fs');
 
 const dbPath = path.join(__dirname, 'cbt_kusuma.db');
 const db = new sqlite3.Database(dbPath);
@@ -75,9 +76,7 @@ db.serialize(() => {
   // --- SEED 12 OFFICIAL CLASSES & 29 OFFICIAL TEACHERS OF SMAN 1 MLATI ---
   db.get("SELECT COUNT(*) as count FROM rooms WHERE code LIKE 'KLS-%'", (err, row) => {
     if (!row || row.count < 12) {
-      console.log("Seeding 12 Official Classes & 29 Official Teachers of SMA Negeri 1 Mlati...");
-
-      // Clear old demo rooms & users
+      console.log("Seeding 12 Official Classes...");
       db.run("DELETE FROM rooms");
 
       const stmtRoom = db.prepare("INSERT INTO rooms (name, code) VALUES (?, ?)");
@@ -98,7 +97,7 @@ db.serialize(() => {
     }
   });
 
-  // Seed / Upsert Official Users (Super Admin, Operator, 29 Teachers, & Students)
+  // Seed / Upsert Official Users (Super Admin, Operator, 29 Teachers)
   const teachersList = [
     { username: "guru01@sman1mlati.sch.id", name: "Eko Yuliyanto, S.Pd., M.Pd. (BK)", pass: "123456" },
     { username: "guru02@sman1mlati.sch.id", name: "Dra. Retno Endah Sawitri, M.Ag. (PAI)", pass: "123456" },
@@ -140,19 +139,22 @@ db.serialize(() => {
     db.run("INSERT OR IGNORE INTO users (username, password, name, role, room_id, nis) VALUES (?, ?, ?, 'teacher', 1, null)", [t.username, t.pass, t.name]);
   });
 
-  // Sample Students
-  const studentsList = [
-    { username: "siswa001@sman1mlati.sch.id", name: "Ahmad Fauzi", nis: "20261001", room_id: 1 },
-    { username: "siswa002@sman1mlati.sch.id", name: "Bella Anggraini", nis: "20261002", room_id: 1 },
-    { username: "siswa003@sman1mlati.sch.id", name: "Candra Wijaya", nis: "20261003", room_id: 2 },
-    { username: "siswa004@sman1mlati.sch.id", name: "Dina Mariana", nis: "20261004", room_id: 2 },
-    { username: "siswa005@sman1mlati.sch.id", name: "Eko Prasetyo", nis: "20261005", room_id: 5 },
-    { username: "siswa006@sman1mlati.sch.id", name: "Fajar Hidayat", nis: "20261006", room_id: 9 }
-  ];
+  // Seed 287 Official Students from students_data.json
+  const studentsJsonPath = path.join(__dirname, '../../students_data.json');
+  if (fs.existsSync(studentsJsonPath)) {
+    const studentsData = JSON.parse(fs.readFileSync(studentsJsonPath, 'utf8'));
+    console.log(`Seeding ${studentsData.length} official SMAN 1 Mlati students into database...`);
 
-  studentsList.forEach(s => {
-    db.run("INSERT OR IGNORE INTO users (username, password, name, role, room_id, nis) VALUES (?, '123456', ?, 'student', ?, ?)", [s.username, s.name, s.room_id, s.nis]);
-  });
+    const stmtStudent = db.prepare("INSERT OR IGNORE INTO users (username, password, name, role, room_id, nis) VALUES (?, '123456', ?, 'student', ?, ?)");
+    
+    // Quick Demo alias for first student
+    db.run("INSERT OR IGNORE INTO users (username, password, name, role, room_id, nis) VALUES ('siswa001@sman1mlati.sch.id', '123456', 'Achmad Galih Indrayanto (Demo Siswa)', 'student', 1, '3725')");
+
+    studentsData.forEach(s => {
+      stmtStudent.run(s.username, s.name, s.room_id, s.nis);
+    });
+    stmtStudent.finalize();
+  }
 
   // Seed Sample Questions if empty
   db.get("SELECT COUNT(*) as count FROM questions", (err, row) => {
