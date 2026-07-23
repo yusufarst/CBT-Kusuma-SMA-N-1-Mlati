@@ -12,7 +12,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
-  document.getElementById('operatorName').innerText = user.name;
+  const setElText = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.innerText = val;
+  };
+
+  setElText('operatorName', user.name);
+  setElText('sidebarOperatorName', user.name);
+  setElText('infoOpName', user.name);
   await loadStudents();
 });
 
