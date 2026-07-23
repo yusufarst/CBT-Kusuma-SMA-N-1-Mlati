@@ -4,225 +4,308 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Guru - CBT KUSUMA SMAN 1 Mlati</title>
-  <link rel="stylesheet" href="/css/style.css?v=4.0.0">
+  <link rel="stylesheet" href="/css/style.css?v=5.0.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="/socket.io/socket.io.js"></script>
 </head>
-<body style="background: var(--slate-50); min-height: 100vh; display: flex; flex-direction: column;">
+<body>
 
-  <!-- Institutional Top Header Bar -->
-  <header class="app-header-main">
-    <div class="brand-wrapper">
-      <div class="brand-icon" style="background: var(--emerald-600);"><i class="fa-solid fa-chalkboard-user"></i></div>
-      <div>
-        <div style="font-size: 1.05rem; font-weight: 800;">DASHBOARD GURU & PENGAWAS UJIAN</div>
-        <div style="font-size: 0.7rem; font-weight: 500; color: #94a3b8;">CBT KUSUMA — SMA Negeri 1 Mlati</div>
-      </div>
-    </div>
+  <div class="app-wrapper">
     
-    <div style="display: flex; align-items: center; gap: 1.25rem;">
-      <div style="text-align: right; display: flex; align-items: center; gap: 0.75rem;">
-        <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--emerald-600); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;">
-          <i class="fa-solid fa-user-tie"></i>
-        </div>
-        <div>
-          <div style="font-weight: 700; font-size: 0.875rem; color: white;" id="teacherName">Yusuf Arif Setiawan, S.Pd., M.M.</div>
-          <div style="font-size: 0.725rem; color: #94a3b8;">Guru Pengampu Ekonomi / Pengawas</div>
-        </div>
-      </div>
-
-      <button onclick="logout()" class="btn btn-danger" style="padding: 0.4rem 0.85rem; font-size: 0.8rem;">
-        <i class="fa-solid fa-right-from-bracket"></i> Keluar
-      </button>
-    </div>
-  </header>
-
-  <!-- Modern Navigation Tab Bar -->
-  <div class="nav-tab-bar">
-    <div class="nav-tab-container">
-      <button class="tab-btn active" onclick="switchTeacherTab('bank-soal')" id="tab-bank-soal">
-        <i class="fa-solid fa-database"></i> Bank Soal & Import Excel
-      </button>
-      <button class="tab-btn" onclick="switchTeacherTab('buat-ujian')" id="tab-buat-ujian">
-        <i class="fa-solid fa-calendar-plus"></i> Buat & Jadwalkan Ujian
-      </button>
-      <button class="tab-btn" onclick="switchTeacherTab('pengawasan')" id="tab-pengawasan">
-        <i class="fa-solid fa-key"></i> Generator Kode Unlock & Pengawasan
-      </button>
-      <button class="tab-btn" onclick="switchTeacherTab('analisis')" id="tab-analisis">
-        <i class="fa-solid fa-chart-pie"></i> Koreksi Esai & Analisis Soal
-      </button>
-    </div>
-  </div>
-
-  <!-- Main Container -->
-  <main style="max-width: 1440px; width: 100%; margin: 1.75rem auto; padding: 0 1.75rem; flex: 1;">
-
-    <!-- TAB 1: BANK SOAL & IMPORT EXCEL -->
-    <div id="section-bank-soal">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
-        <div>
-          <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--navy-900);">Bank Soal & Pengelolaan Butir Soal</h2>
-          <p style="color: var(--slate-600); font-size: 0.875rem;">Kelola koleksi soal ujian pilihan ganda (A-E), benar-salah, dan esai.</p>
-        </div>
-
-        <div style="display: flex; gap: 0.75rem;">
-          <button onclick="openImportModal()" class="btn btn-outline">
-            <i class="fa-solid fa-file-excel" style="color: var(--emerald-600);"></i> Import Excel (.xlsx)
-          </button>
-          <button onclick="openAddQuestionModal()" class="btn btn-primary">
-            <i class="fa-solid fa-plus"></i> Tambah Soal Manual
-          </button>
+    <!-- LEFT VERTICAL SIDEBAR NAVIGATION (UNY Style) -->
+    <aside class="sidebar-main">
+      <!-- Brand Header -->
+      <div class="sidebar-brand">
+        <div class="sidebar-logo-icon" style="background: var(--emerald-600);"><i class="fa-solid fa-chalkboard-user"></i></div>
+        <div class="sidebar-brand-text">
+          <div>CBT KUSUMA</div>
+          <div style="font-size: 0.65rem; color: #94a3b8; font-weight: 500;">SMA N 1 MLATI</div>
         </div>
       </div>
 
-      <!-- Question List Table Card -->
-      <div class="card-ui" style="overflow: hidden;">
-        <div class="table-responsive">
-          <table class="table-modern" id="questionsTable">
-            <thead>
-              <tr>
-                <th style="width: 50px;">No</th>
-                <th style="width: 140px;">Mata Pelajaran</th>
-                <th>Teks Pertanyaan Soal</th>
-                <th>Pilihan Jawaban (A-E)</th>
-                <th style="width: 110px;">Kunci Benar</th>
-              </tr>
-            </thead>
-            <tbody id="questionListBody">
-              <!-- Rendered dynamically -->
-            </tbody>
-          </table>
+      <!-- User Info Avatar Box -->
+      <div class="sidebar-user-box">
+        <div class="sidebar-user-avatar" style="background: var(--emerald-600);"><i class="fa-solid fa-user-tie"></i></div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name" id="sidebarTeacherName">Yusuf Arif Setiawan, S.Pd., M.M.</div>
+          <div class="sidebar-user-role">Guru / Pengawas Ruangan</div>
         </div>
       </div>
-    </div>
 
-    <!-- TAB 2: BUAT & JADWALKAN UJIAN -->
-    <div id="section-buat-ujian" style="display: none;">
-      <div class="card-ui" style="padding: 2rem; max-width: 800px; margin: 0 auto;">
-        <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--navy-900); margin-bottom: 1.25rem; border-bottom: 2px solid var(--slate-200); padding-bottom: 0.75rem;">
-          <i class="fa-solid fa-pen-ruler" style="color: var(--blue-600);"></i> Form Penyusunan & Penjadwalan Ujian Baru
-        </h2>
+      <!-- Sidebar Menu Items -->
+      <nav class="sidebar-menu">
+        <button class="sidebar-menu-item active" onclick="switchTeacherTab('dasbor')" id="side-dasbor">
+          <i class="fa-solid fa-house"></i> Dasbor Utama
+        </button>
+        <button class="sidebar-menu-item" onclick="switchTeacherTab('bank-soal')" id="side-bank-soal">
+          <i class="fa-solid fa-database"></i> Bank Soal Terpusat
+        </button>
+        <button class="sidebar-menu-item" onclick="switchTeacherTab('buat-ujian')" id="side-buat-ujian">
+          <i class="fa-solid fa-calendar-plus"></i> Manajemen Ujian & Jadwal
+        </button>
+        <button class="sidebar-menu-item" onclick="switchTeacherTab('pengawasan')" id="side-pengawasan">
+          <i class="fa-solid fa-key"></i> Kode Unlock & Pengawasan
+        </button>
+        <button class="sidebar-menu-item" onclick="switchTeacherTab('analisis')" id="side-analisis">
+          <i class="fa-solid fa-chart-pie"></i> Koreksi Esai & Analisis Soal
+        </button>
+      </nav>
+    </aside>
 
-        <form id="createExamForm">
-          <div class="form-group">
-            <label class="form-label">Nama / Judul Ujian</label>
-            <input type="text" class="form-control" placeholder="Contoh: PAS Ekonomi Kelas X MIPA" required value="PAS Ekonomi X MIPA">
-          </div>
-
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-            <div class="form-group">
-              <label class="form-label">Mata Pelajaran</label>
-              <select class="form-control">
-                <option>Ekonomi X</option>
-                <option>Matematika XI</option>
-                <option>Bahasa Indonesia XII</option>
-                <option>Fisika X</option>
-                <option>Biologi XI</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Durasi Ujian (Menit)</label>
-              <input type="number" class="form-control" value="60" required>
-            </div>
-          </div>
-
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-            <div class="form-group">
-              <label class="form-label">Mode Randomisasi Soal & Opsi</label>
-              <select class="form-control">
-                <option>Acak Soal & Acak Pilihan Jawaban (Rekomendasi PRD)</option>
-                <option>Acak Soal Saja</option>
-                <option>Urutan Tetap (Standard)</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Kelas Target (12 Rombel SMAN 1 Mlati)</label>
-              <select class="form-control">
-                <option>Kelas X A & X B</option>
-                <option>Kelas X C & X D</option>
-                <option>Kelas XI A & XI B</option>
-                <option>Kelas XII A & XII B</option>
-                <option>Seluruh Kelas X (A-D)</option>
-              </select>
-            </div>
-          </div>
-
-          <button type="button" onclick="alert('Jadwal Ujian Berhasil Dibuat & Diterbitkan!')" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.85rem; margin-top: 1rem;">
-            <i class="fa-solid fa-paper-plane"></i> Simpan & Terbitkan Jadwal Ujian
-          </button>
-        </form>
-      </div>
-    </div>
-
-    <!-- TAB 3: KODE UNLOCK 6-DIGIT & PENGAWASAN -->
-    <div id="section-pengawasan" style="display: none;">
+    <!-- RIGHT MAIN CONTENT WRAPPER -->
+    <div class="main-content-wrapper">
       
-      <!-- Generator Kode Unlock Harian Widget -->
-      <div class="card-ui" style="padding: 1.5rem; margin-bottom: 1.5rem; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; border: none;">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;">
-          <div>
-            <span class="badge badge-warning" style="margin-bottom: 0.5rem; background: rgba(245,158,11,0.25); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3);">
-              <i class="fa-solid fa-key"></i> Generator Kode Unlock Harian (FR-AUTH-03)
-            </span>
-            <h2 style="font-size: 1.35rem; font-weight: 800; color: white;">Kode Unlock Layar Siswa Terkunci</h2>
-            <p style="color: #94a3b8; font-size: 0.875rem;">Gunakan kode 6-digit harian ini pada perangkat siswa untuk membuka kunci layar akibat pelanggaran teknis.</p>
-          </div>
+      <!-- Top Header Bar -->
+      <header class="top-header-bar">
+        <div class="top-header-left">
+          <button class="toggle-sidebar-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+          <div class="top-header-title">DASHBOARD GURU CBT KUSUMA SMAN 1 MLATI</div>
+        </div>
 
-          <div style="display: flex; align-items: center; gap: 1.25rem; background: rgba(255,255,255,0.08); padding: 0.85rem 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.15);">
-            <div>
-              <div style="font-size: 0.725rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Kode Unlock Hari Ini:</div>
-              <div style="font-size: 1.85rem; font-weight: 800; color: #f59e0b; letter-spacing: 6px; font-family: var(--font-mono);" id="dailyUnlockCode">849201</div>
+        <div class="top-header-right">
+          <div style="font-size: 0.85rem; font-weight: 700; color: var(--slate-600);"><i class="fa-solid fa-globe"></i> ID</div>
+          <button onclick="logout()" class="btn btn-danger" style="padding: 0.4rem 0.85rem; font-size: 0.8rem;">
+            <i class="fa-solid fa-right-from-bracket"></i> Keluar
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Body Container -->
+      <div class="dashboard-body-container">
+
+        <!-- TAB 1: DASBOR UTAMA GURU -->
+        <div id="section-dasbor">
+          <!-- Profile Academic Info Card (UNY Style Teal Header) -->
+          <div class="card-ui" style="margin-bottom: 1.75rem; border: none; overflow: hidden;">
+            <div class="card-header-banner card-header-teal">
+              <div><i class="fa-solid fa-user-tie"></i> Profil Pengajar & Status Pengawasan Ujian</div>
+              <span class="badge" style="background: rgba(255,255,255,0.2); color: white;">TA 2026/2027</span>
             </div>
-            <button onclick="generateNewLockCode()" class="btn btn-warning" style="padding: 0.5rem 0.85rem; font-size: 0.8rem;">
-              <i class="fa-solid fa-rotate"></i> Acak Ulang
-            </button>
+
+            <div style="padding: 1.5rem; background: #ffffff;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                <tbody>
+                  <tr style="border-bottom: 1px solid var(--slate-200);">
+                    <td style="width: 180px; font-weight: 700; color: var(--slate-600); padding: 0.65rem 0;">Nama Lengkap Pengajar</td>
+                    <td style="width: 20px;">:</td>
+                    <td style="font-weight: 800; color: var(--navy-900);" id="infoTeacherName">Yusuf Arif Setiawan, S.Pd., M.M.</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--slate-200);">
+                    <td style="font-weight: 700; color: var(--slate-600); padding: 0.65rem 0;">Username / Email Demo</td>
+                    <td>:</td>
+                    <td style="font-weight: 800; color: var(--blue-600);" id="infoTeacherEmail">yusuf@sman1mlati.sch.id</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--slate-200);">
+                    <td style="font-weight: 700; color: var(--slate-600); padding: 0.65rem 0;">Mata Pelajaran Utama</td>
+                    <td>:</td>
+                    <td style="font-weight: 800; color: var(--navy-900);">Ekonomi (Tingkat X, XI, XII)</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: 700; color: var(--slate-600); padding: 0.65rem 0;">Ruang Pengawasan Aktif</td>
+                    <td>:</td>
+                    <td><span class="badge badge-success"><i class="fa-solid fa-circle" style="font-size: 0.5rem;"></i> Ruang 01 (Kelas X A)</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Quick Access Cards Grid -->
+          <div class="metrics-grid">
+            <div class="metric-card" onclick="switchTeacherTab('bank-soal')" style="cursor: pointer;">
+              <div>
+                <div class="metric-label">Bank Soal Terpusat</div>
+                <div class="metric-value" style="color: var(--blue-600);">5 Soal Aktif</div>
+              </div>
+              <div class="metric-icon" style="background: #eff6ff; color: var(--blue-600);"><i class="fa-solid fa-database"></i></div>
+            </div>
+
+            <div class="metric-card" onclick="switchTeacherTab('pengawasan')" style="cursor: pointer;">
+              <div>
+                <div class="metric-label">Kode Unlock Hari Ini</div>
+                <div class="metric-value" style="color: var(--amber-600);" id="quickLockCode">849201</div>
+              </div>
+              <div class="metric-icon" style="background: #fef3c7; color: var(--amber-600);"><i class="fa-solid fa-key"></i></div>
+            </div>
+
+            <div class="metric-card" onclick="switchTeacherTab('analisis')" style="cursor: pointer;">
+              <div>
+                <div class="metric-label">Rata-Rata Nilai Class</div>
+                <div class="metric-value" style="color: var(--emerald-600);">84.5</div>
+              </div>
+              <div class="metric-icon" style="background: #dcfce7; color: var(--emerald-600);"><i class="fa-solid fa-chart-line"></i></div>
+            </div>
           </div>
         </div>
+
+        <!-- TAB 2: BANK SOAL TERPUSAT -->
+        <div id="section-bank-soal" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--navy-900);">Bank Soal Terpusat & Butir Soal</h2>
+              <p style="color: var(--slate-600); font-size: 0.875rem;">Kelola koleksi soal ujian pilihan ganda (A-E), benar-salah, dan esai.</p>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem;">
+              <button onclick="openImportModal()" class="btn btn-outline">
+                <i class="fa-solid fa-file-excel" style="color: var(--emerald-600);"></i> Import Excel (.xlsx)
+              </button>
+              <button onclick="openAddQuestionModal()" class="btn btn-primary">
+                <i class="fa-solid fa-plus"></i> Tambah Soal Manual
+              </button>
+            </div>
+          </div>
+
+          <div class="card-ui" style="overflow: hidden;">
+            <div class="table-responsive">
+              <table class="table-modern" id="questionsTable">
+                <thead>
+                  <tr>
+                    <th style="width: 50px;">No</th>
+                    <th style="width: 140px;">Mata Pelajaran</th>
+                    <th>Teks Pertanyaan Soal</th>
+                    <th>Pilihan Jawaban (A-E)</th>
+                    <th style="width: 110px;">Kunci Benar</th>
+                  </tr>
+                </thead>
+                <tbody id="questionListBody">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: MANAJEMEN UJIAN & JADWAL -->
+        <div id="section-buat-ujian" style="display: none;">
+          <div class="card-ui" style="padding: 2rem; max-width: 800px; margin: 0 auto;">
+            <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--navy-900); margin-bottom: 1.25rem; border-bottom: 2px solid var(--slate-200); padding-bottom: 0.75rem;">
+              <i class="fa-solid fa-pen-ruler" style="color: var(--blue-600);"></i> Form Penyusunan & Penjadwalan Ujian Baru
+            </h2>
+
+            <form id="createExamForm">
+              <div class="form-group">
+                <label class="form-label">Nama / Judul Ujian</label>
+                <input type="text" class="form-control" placeholder="Contoh: PAS Ekonomi Kelas X MIPA" required value="PAS Ekonomi X MIPA">
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                  <label class="form-label">Mata Pelajaran</label>
+                  <select class="form-control">
+                    <option>Ekonomi X</option>
+                    <option>Matematika XI</option>
+                    <option>Bahasa Indonesia XII</option>
+                    <option>Fisika X</option>
+                    <option>Biologi XI</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Durasi Ujian (Menit)</label>
+                  <input type="number" class="form-control" value="60" required>
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                  <label class="form-label">Mode Randomisasi Soal & Opsi</label>
+                  <select class="form-control">
+                    <option>Acak Soal & Acak Pilihan Jawaban (Rekomendasi PRD)</option>
+                    <option>Acak Soal Saja</option>
+                    <option>Urutan Tetap (Standard)</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Kelas Target (12 Rombel SMAN 1 Mlati)</label>
+                  <select class="form-control">
+                    <option>Kelas X A & X B</option>
+                    <option>Kelas X C & X D</option>
+                    <option>Kelas XI A & XI B</option>
+                    <option>Kelas XII A & XII B</option>
+                    <option>Seluruh Kelas X (A-D)</option>
+                  </select>
+                </div>
+              </div>
+
+              <button type="button" onclick="alert('Jadwal Ujian Berhasil Dibuat & Diterbitkan!')" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.85rem; margin-top: 1rem;">
+                <i class="fa-solid fa-paper-plane"></i> Simpan & Terbitkan Jadwal Ujian
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- TAB 4: KODE UNLOCK & PENGAWASAN -->
+        <div id="section-pengawasan" style="display: none;">
+          
+          <!-- Generator Kode Unlock Harian Widget -->
+          <div class="card-ui" style="padding: 1.5rem; margin-bottom: 1.5rem; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; border: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;">
+              <div>
+                <span class="badge badge-warning" style="margin-bottom: 0.5rem; background: rgba(245,158,11,0.25); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3);">
+                  <i class="fa-solid fa-key"></i> Generator Kode Unlock Harian (FR-AUTH-03)
+                </span>
+                <h2 style="font-size: 1.35rem; font-weight: 800; color: white;">Kode Unlock Layar Siswa Terkunci</h2>
+                <p style="color: #94a3b8; font-size: 0.875rem;">Gunakan kode 6-digit harian ini pada perangkat siswa untuk membuka kunci layar akibat pelanggaran teknis.</p>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 1.25rem; background: rgba(255,255,255,0.08); padding: 0.85rem 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.15);">
+                <div>
+                  <div style="font-size: 0.725rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Kode Unlock Hari Ini:</div>
+                  <div style="font-size: 1.85rem; font-weight: 800; color: #f59e0b; letter-spacing: 6px; font-family: var(--font-mono);" id="dailyUnlockCode">849201</div>
+                </div>
+                <button onclick="generateNewLockCode()" class="btn btn-warning" style="padding: 0.5rem 0.85rem; font-size: 0.8rem;">
+                  <i class="fa-solid fa-rotate"></i> Acak Ulang
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Embedded Proctoring Monitor -->
+          <iframe src="/proctor.html" style="width: 100%; height: 750px; border: none; border-radius: 14px; box-shadow: var(--shadow-md);"></iframe>
+        </div>
+
+        <!-- TAB 5: KOREKSI ESAI & ANALISIS SOAL -->
+        <div id="section-analisis" style="display: none;">
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <div>
+                <div class="metric-label">Total Soal Teruji</div>
+                <div class="metric-value" style="color: var(--blue-600);">5 Soal</div>
+              </div>
+              <div class="metric-icon" style="background: #eff6ff; color: var(--blue-600);"><i class="fa-solid fa-list-check"></i></div>
+            </div>
+
+            <div class="metric-card">
+              <div>
+                <div class="metric-label">Rata-Rata Nilai Siswa</div>
+                <div class="metric-value" style="color: var(--emerald-600);">84.5</div>
+              </div>
+              <div class="metric-icon" style="background: #dcfce7; color: var(--emerald-600);"><i class="fa-solid fa-chart-line"></i></div>
+            </div>
+
+            <div class="metric-card">
+              <div>
+                <div class="metric-label">Tingkat Kesukaran Soal</div>
+                <div class="metric-value" style="color: var(--amber-600);">Sedang (0.62)</div>
+              </div>
+              <div class="metric-icon" style="background: #fef3c7; color: var(--amber-600);"><i class="fa-solid fa-gauge-high"></i></div>
+            </div>
+          </div>
+
+          <div class="card-ui" style="padding: 2rem; text-align: center; color: var(--slate-600);">
+            <i class="fa-solid fa-square-poll-vertical" style="font-size: 3.5rem; color: var(--slate-300); margin-bottom: 0.75rem; display: block;"></i>
+            <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--navy-900); margin-bottom: 0.35rem;">Analisis Butir Soal & Koreksi Terotomatisasi</h3>
+            <p style="font-size: 0.875rem;">Seluruh esai pilihan ganda dan objektif telah terkoreksi otomatis oleh sistem CBT Kusuma.</p>
+          </div>
+        </div>
+
       </div>
 
-      <!-- Embedded Proctoring Monitor -->
-      <iframe src="/proctor.html" style="width: 100%; height: 750px; border: none; border-radius: 14px; box-shadow: var(--shadow-md);"></iframe>
     </div>
 
-    <!-- TAB 4: KOREKSI ESAI & ANALISIS SOAL -->
-    <div id="section-analisis" style="display: none;">
-      <div class="metrics-grid">
-        <div class="metric-card">
-          <div>
-            <div class="metric-label">Total Soal Teruji</div>
-            <div class="metric-value" style="color: var(--blue-600);">5 Soal</div>
-          </div>
-          <div class="metric-icon" style="background: #eff6ff; color: var(--blue-600);"><i class="fa-solid fa-list-check"></i></div>
-        </div>
-
-        <div class="metric-card">
-          <div>
-            <div class="metric-label">Rata-Rata Nilai Siswa</div>
-            <div class="metric-value" style="color: var(--emerald-600);">84.5</div>
-          </div>
-          <div class="metric-icon" style="background: #dcfce7; color: var(--emerald-600);"><i class="fa-solid fa-chart-line"></i></div>
-        </div>
-
-        <div class="metric-card">
-          <div>
-            <div class="metric-label">Tingkat Kesukaran Soal</div>
-            <div class="metric-value" style="color: var(--amber-600);">Sedang (0.62)</div>
-          </div>
-          <div class="metric-icon" style="background: #fef3c7; color: var(--amber-600);"><i class="fa-solid fa-gauge-high"></i></div>
-        </div>
-      </div>
-
-      <div class="card-ui" style="padding: 2rem; text-align: center; color: var(--slate-600);">
-        <i class="fa-solid fa-square-poll-vertical" style="font-size: 3.5rem; color: var(--slate-300); margin-bottom: 0.75rem; display: block;"></i>
-        <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--navy-900); margin-bottom: 0.35rem;">Analisis Butir Soal & Koreksi Terotomatisasi</h3>
-        <p style="font-size: 0.875rem;">Seluruh esai pilihan ganda dan objektif telah terkoreksi otomatis oleh sistem CBT Kusuma.</p>
-      </div>
-    </div>
-
-  </main>
+  </div>
 
   <!-- Add Question Modal -->
   <div class="modal-overlay" id="addQuestionModal">
@@ -271,5 +354,11 @@
   </div>
 
   <script src="/js/teacher-dashboard.js"></script>
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.querySelector('.sidebar-main');
+      sidebar.classList.toggle('open');
+    }
+  </script>
 </body>
 </html>
