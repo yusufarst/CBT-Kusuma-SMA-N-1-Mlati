@@ -84,22 +84,22 @@ db.serialize(() => {
 
       // Seed Users
       const stmtUser = db.prepare("INSERT INTO users (username, password, name, role, room_id, nis) VALUES (?, ?, ?, ?, ?, ?)");
-      // Pengawas & Operator
-      stmtUser.run("pengawas1", "123456", "Dra. Ani Suryani (Pengawas)", "teacher", 1, null);
-      stmtUser.run("pengawas2", "123456", "Budi Santoso, S.Pd. (Pengawas)", "teacher", 2, null);
-      stmtUser.run("operator", "admin123", "Operator CBT (Mas Yusuf)", "operator", null, null);
+      // Pengawas (Guru) & Operator
+      stmtUser.run("guru001@sman1mlati.sch.id", "123456", "Dra. Ani Suryani (Guru/Pengawas)", "teacher", 1, null);
+      stmtUser.run("guru002@sman1mlati.sch.id", "123456", "Budi Santoso, S.Pd. (Guru/Pengawas)", "teacher", 2, null);
+      stmtUser.run("operator@sman1mlati.sch.id", "admin123", "Operator CBT (Mas Yusuf)", "operator", null, null);
 
       // Siswa Ruang 01
-      stmtUser.run("siswa101", "123456", "Ahmad Fauzi", "student", 1, "20261001");
-      stmtUser.run("siswa102", "123456", "Bella Anggraini", "student", 1, "20261002");
-      stmtUser.run("siswa103", "123456", "Candra Wijaya", "student", 1, "20261003");
-      stmtUser.run("siswa104", "123456", "Dina Mariana", "student", 1, "20261004");
-      stmtUser.run("siswa105", "123456", "Eko Prasetyo", "student", 1, "20261005");
+      stmtUser.run("siswa001@sman1mlati.sch.id", "123456", "Ahmad Fauzi", "student", 1, "20261001");
+      stmtUser.run("siswa002@sman1mlati.sch.id", "123456", "Bella Anggraini", "student", 1, "20261002");
+      stmtUser.run("siswa103@sman1mlati.sch.id", "123456", "Candra Wijaya", "student", 1, "20261003");
+      stmtUser.run("siswa104@sman1mlati.sch.id", "123456", "Dina Mariana", "student", 1, "20261004");
+      stmtUser.run("siswa105@sman1mlati.sch.id", "123456", "Eko Prasetyo", "student", 1, "20261005");
 
       // Siswa Ruang 02
-      stmtUser.run("siswa201", "123456", "Fajar Hidayat", "student", 2, "20262001");
-      stmtUser.run("siswa202", "123456", "Gita Gutawa", "student", 2, "20262002");
-      stmtUser.run("siswa203", "123456", "Hendra Setiawan", "student", 2, "20262003");
+      stmtUser.run("siswa003@sman1mlati.sch.id", "123456", "Fajar Hidayat", "student", 2, "20262001");
+      stmtUser.run("siswa202@sman1mlati.sch.id", "123456", "Gita Gutawa", "student", 2, "20262002");
+      stmtUser.run("siswa203@sman1mlati.sch.id", "123456", "Hendra Setiawan", "student", 2, "20262003");
       stmtUser.finalize();
 
       // Seed Questions (Ekonomi / Pengetahuan Umum High School)
@@ -172,6 +172,14 @@ db.serialize(() => {
 
       console.log("Seeding completed successfully.");
     }
+
+    // Auto-migrate any existing database records to use @sman1mlati.sch.id email domain
+    db.run("UPDATE users SET username = 'guru001@sman1mlati.sch.id' WHERE username IN ('pengawas1', 'guru001')");
+    db.run("UPDATE users SET username = 'guru002@sman1mlati.sch.id' WHERE username IN ('pengawas2', 'guru002')");
+    db.run("UPDATE users SET username = 'operator@sman1mlati.sch.id' WHERE username = 'operator'");
+    db.run("UPDATE users SET username = 'siswa001@sman1mlati.sch.id' WHERE username IN ('siswa101', 'siswa001')");
+    db.run("UPDATE users SET username = 'siswa002@sman1mlati.sch.id' WHERE username IN ('siswa102', 'siswa002')");
+    db.run("UPDATE users SET username = 'siswa003@sman1mlati.sch.id' WHERE username IN ('siswa201', 'siswa003')");
   });
 });
 
