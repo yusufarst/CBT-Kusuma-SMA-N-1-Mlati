@@ -1,5 +1,6 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const fs = require('fs');
 
 const dbPath = path.join(__dirname, 'cbt_kusuma.db');
 const db = new sqlite3.Database(dbPath);
@@ -18,7 +19,7 @@ db.serialize(() => {
     username TEXT UNIQUE NOT NULL,
     password TEXT NOT NULL,
     name TEXT NOT NULL,
-    role TEXT NOT NULL, -- 'student', 'teacher', 'operator'
+    role TEXT NOT NULL, -- 'student', 'teacher', 'operator', 'superadmin'
     room_id INTEGER,
     nis TEXT,
     FOREIGN KEY(room_id) REFERENCES rooms(id)
@@ -72,39 +73,60 @@ db.serialize(() => {
     FOREIGN KEY(room_id) REFERENCES rooms(id)
   )`);
 
-  // --- SEED INITIAL DEMO DATA ---
+  // --- SEED OFFICIAL INSTITUTIONAL DATA ---
   db.get("SELECT COUNT(*) as count FROM rooms", (err, row) => {
     if (row && row.count === 0) {
-      console.log("Seeding initial CBT Kusuma demo data...");
-
-      // Seed Rooms
+      console.log("Seeding 12 Official SMAN 1 Mlati Classes...");
+      const rooms = [
+        "Ruang 01 (Kelas X A)", "Ruang 02 (Kelas X B)", "Ruang 03 (Kelas X C)", "Ruang 04 (Kelas X D)",
+        "Ruang 05 (Kelas XI A)", "Ruang 06 (Kelas XI B)", "Ruang 07 (Kelas XI C)", "Ruang 08 (Kelas XI D)",
+        "Ruang 09 (Kelas XII A)", "Ruang 10 (Kelas XII B)", "Ruang 11 (Kelas XII C)", "Ruang 12 (Kelas XII D)"
+      ];
       const stmtRoom = db.prepare("INSERT INTO rooms (name, code) VALUES (?, ?)");
-      stmtRoom.run("Ruang 01 (X MIPA 1)", "RUANG-01");
-      stmtRoom.run("Ruang 02 (X MIPA 2)", "RUANG-02");
-      stmtRoom.run("Lab Komputer Utama", "LAB-KOMP-1");
+      rooms.forEach((rName, idx) => {
+        stmtRoom.run(rName, `KLS-RM-${idx + 1}`);
+      });
       stmtRoom.finalize();
+    }
+  });
 
-      // Seed Users
-      const stmtUser = db.prepare("INSERT INTO users (username, password, name, role, room_id, nis) VALUES (?, ?, ?, ?, ?, ?)");
-      // Pengawas (Guru) & Operator
-      stmtUser.run("guru001@sman1mlati.sch.id", "123456", "Dra. Ani Suryani (Guru/Pengawas)", "teacher", 1, null);
-      stmtUser.run("guru002@sman1mlati.sch.id", "123456", "Budi Santoso, S.Pd. (Guru/Pengawas)", "teacher", 2, null);
-      stmtUser.run("operator@sman1mlati.sch.id", "admin123", "Operator CBT (Mas Yusuf)", "operator", null, null);
+  // Seed Core Accounts (Pak Yusuf, Operator, Super Admin, Demo Students)
+  db.get("SELECT COUNT(*) as count FROM users WHERE username = 'yusuf@sman1mlati.sch.id'", (err, row) => {
+    if (!row || row.count === 0) {
+      console.log("Seeding Official Staff & Teacher Accounts...");
+      db.run("INSERT INTO users (username, password, name, role, room_id) VALUES ('yusuf@sman1mlati.sch.id', '123456', 'Yusuf Arif Setiawan, S.Pd., M.M.', 'teacher', 1)");
+      db.run("INSERT INTO users (username, password, name, role) VALUES ('operator@sman1mlati.sch.id', 'admin123', 'Operator CBT (Mas Yusuf)', 'operator')");
+      db.run("INSERT INTO users (username, password, name, role) VALUES ('admin@sman1mlati.sch.id', 'superadmin123', 'Super Admin System', 'superadmin')");
+      db.run("INSERT INTO users (username, password, name, role, room_id, nis) VALUES ('siswa001@sman1mlati.sch.id', '123456', 'Ahmad Fauzi', 'student', 1, '20261001')");
+      db.run("INSERT INTO users (username, password, name, role, room_id, nis) VALUES ('guru001@sman1mlati.sch.id', '123456', 'Dra. Ani Suryani (Guru/Pengawas)', 'teacher', 1)");
+    }
+  });
 
-      // Siswa Ruang 01
-      stmtUser.run("siswa001@sman1mlati.sch.id", "123456", "Ahmad Fauzi", "student", 1, "20261001");
-      stmtUser.run("siswa002@sman1mlati.sch.id", "123456", "Bella Anggraini", "student", 1, "20261002");
-      stmtUser.run("siswa103@sman1mlati.sch.id", "123456", "Candra Wijaya", "student", 1, "20261003");
-      stmtUser.run("siswa104@sman1mlati.sch.id", "123456", "Dina Mariana", "student", 1, "20261004");
-      stmtUser.run("siswa105@sman1mlati.sch.id", "123456", "Eko Prasetyo", "student", 1, "20261005");
+  // Seed 287 Official Students from students_data.json
+  const jsonPath = path.join(__dirname, '..', '..', 'students_data.json');
+  if (fs.existsSync(jsonPath)) {
+    db.get("SELECT COUNT(*) as count FROM users WHERE role = 'student'", (err, row) => {
+      if (row && row.count < 10) {
+        console.log("Seeding 287 Official SMAN 1 Mlati Students...");
+        try {
+          const studentsList = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+          const stmtStudent = db.prepare("INSERT OR IGNORE INTO users (username, password, name, role, room_id, nis) VALUES (?, '123456', ?, 'student', ?, ?)");
+          studentsList.forEach(s => {
+            stmtStudent.run(s.username, s.name, s.room_id || 1, s.nis);
+          });
+          stmtStudent.finalize();
+          console.log(`Successfully seeded ${studentsList.length} official students.`);
+        } catch (e) {
+          console.error("Error seeding students_data.json:", e);
+        }
+      }
+    });
+  }
 
-      // Siswa Ruang 02
-      stmtUser.run("siswa003@sman1mlati.sch.id", "123456", "Fajar Hidayat", "student", 2, "20262001");
-      stmtUser.run("siswa202@sman1mlati.sch.id", "123456", "Gita Gutawa", "student", 2, "20262002");
-      stmtUser.run("siswa203@sman1mlati.sch.id", "123456", "Hendra Setiawan", "student", 2, "20262003");
-      stmtUser.finalize();
-
-      // Seed Questions (Ekonomi / Pengetahuan Umum High School)
+  // Seed Demo Questions
+  db.get("SELECT COUNT(*) as count FROM questions", (err, row) => {
+    if (row && row.count === 0) {
+      console.log("Seeding Demo Questions...");
       const stmtQ = db.prepare("INSERT INTO questions (subject, question_text, options, correct_answer) VALUES (?, ?, ?, ?)");
       stmtQ.run(
         "Ekonomi X",
@@ -167,26 +189,20 @@ db.serialize(() => {
         1
       );
       stmtQ.finalize();
-
-      // Seed Initial Active Code for Room 1
-      db.run("INSERT INTO unlock_codes (room_id, code) VALUES (1, '849201')");
-      db.run("INSERT INTO unlock_codes (room_id, code) VALUES (2, '512934')");
-
-      console.log("Seeding completed successfully.");
     }
-
-    // Auto-migrate any existing database records to use @sman1mlati.sch.id email domain
-    db.run("UPDATE users SET username = 'guru001@sman1mlati.sch.id' WHERE username IN ('pengawas1', 'guru001')");
-    db.run("UPDATE users SET username = 'guru002@sman1mlati.sch.id' WHERE username IN ('pengawas2', 'guru002')");
-    db.run("UPDATE users SET username = 'operator@sman1mlati.sch.id' WHERE username = 'operator'");
-    db.run("UPDATE users SET username = 'siswa001@sman1mlati.sch.id' WHERE username IN ('siswa101', 'siswa001')");
-    db.run("UPDATE users SET username = 'siswa002@sman1mlati.sch.id' WHERE username IN ('siswa102', 'siswa002')");
-    db.run("UPDATE users SET username = 'siswa003@sman1mlati.sch.id' WHERE username IN ('siswa201', 'siswa003')");
-
-    // Safe migration for battery columns
-    db.run("ALTER TABLE exam_sessions ADD COLUMN battery_level INTEGER DEFAULT 100", () => {});
-    db.run("ALTER TABLE exam_sessions ADD COLUMN is_charging INTEGER DEFAULT 1", () => {});
   });
+
+  // Seed Initial Unlock Codes
+  db.get("SELECT COUNT(*) as count FROM unlock_codes", (err, row) => {
+    if (row && row.count === 0) {
+      db.run("INSERT INTO unlock_codes (room_id, code) VALUES (1, '849201')");
+      db.run("INSERT INTO unlock_codes (room_id, code) VALUES (2, '705326')");
+    }
+  });
+
+  // Safe migrations
+  db.run("ALTER TABLE exam_sessions ADD COLUMN battery_level INTEGER DEFAULT 100", () => {});
+  db.run("ALTER TABLE exam_sessions ADD COLUMN is_charging INTEGER DEFAULT 1", () => {});
 });
 
 module.exports = db;
