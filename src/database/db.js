@@ -41,6 +41,8 @@ db.serialize(() => {
     status TEXT DEFAULT 'IN_PROGRESS', -- 'NOT_STARTED', 'IN_PROGRESS', 'LOCKED', 'SUBMITTED'
     violations_count INTEGER DEFAULT 0,
     answers TEXT DEFAULT '{}', -- JSON object key-value { questionId: selectedIndex }
+    battery_level INTEGER DEFAULT 100,
+    is_charging INTEGER DEFAULT 1,
     start_time DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(student_id) REFERENCES users(id),
@@ -180,6 +182,10 @@ db.serialize(() => {
     db.run("UPDATE users SET username = 'siswa001@sman1mlati.sch.id' WHERE username IN ('siswa101', 'siswa001')");
     db.run("UPDATE users SET username = 'siswa002@sman1mlati.sch.id' WHERE username IN ('siswa102', 'siswa002')");
     db.run("UPDATE users SET username = 'siswa003@sman1mlati.sch.id' WHERE username IN ('siswa201', 'siswa003')");
+
+    // Safe migration for battery columns
+    db.run("ALTER TABLE exam_sessions ADD COLUMN battery_level INTEGER DEFAULT 100", () => {});
+    db.run("ALTER TABLE exam_sessions ADD COLUMN is_charging INTEGER DEFAULT 1", () => {});
   });
 });
 
