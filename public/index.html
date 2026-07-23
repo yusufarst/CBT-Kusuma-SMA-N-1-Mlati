@@ -82,8 +82,8 @@
 
         <form id="loginForm">
           <div class="form-group">
-            <label class="form-label"><i class="fa-solid fa-user"></i> Username / NIS</label>
-            <input type="text" id="username" class="form-control" placeholder="Masukkan username / NIS Anda" required value="siswa101">
+            <label class="form-label"><i class="fa-solid fa-user"></i> Email Sekolah / NIS</label>
+            <input type="text" id="username" class="form-control" placeholder="contoh: siswa001@sman1mlati.sch.id" required value="siswa001@sman1mlati.sch.id">
           </div>
 
           <div class="form-group">
@@ -101,20 +101,20 @@
         <!-- Quick Demo Login Buttons -->
         <div style="margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px solid var(--border-color);">
           <p style="font-size: 0.8rem; color: #64748b; font-weight: 700; text-align: center; margin-bottom: 0.75rem;">
-            <i class="fa-solid fa-bolt" style="color: #d97706;"></i> Quick Demo Login (Uji Coba Langsung):
+            <i class="fa-solid fa-bolt" style="color: #d97706;"></i> Quick Demo Login (@sman1mlati.sch.id):
           </p>
           
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
-            <button class="btn btn-outline" onclick="quickLogin('siswa101', '123456')" style="font-size: 0.75rem; padding: 0.45rem;">
+            <button class="btn btn-outline" onclick="quickLogin('siswa001@sman1mlati.sch.id', '123456')" style="font-size: 0.725rem; padding: 0.45rem;">
               <i class="fa-solid fa-user-graduate" style="color: #2563eb;"></i> Siswa R.01
             </button>
-            <button class="btn btn-outline" onclick="quickLogin('siswa201', '123456')" style="font-size: 0.75rem; padding: 0.45rem;">
+            <button class="btn btn-outline" onclick="quickLogin('siswa003@sman1mlati.sch.id', '123456')" style="font-size: 0.725rem; padding: 0.45rem;">
               <i class="fa-solid fa-user-graduate" style="color: #4f46e5;"></i> Siswa R.02
             </button>
-            <button class="btn btn-outline" onclick="quickLogin('pengawas1', '123456')" style="font-size: 0.75rem; padding: 0.45rem;">
-              <i class="fa-solid fa-user-shield" style="color: #16a34a;"></i> Pengawas R.01
+            <button class="btn btn-outline" onclick="quickLogin('guru001@sman1mlati.sch.id', '123456')" style="font-size: 0.725rem; padding: 0.45rem;">
+              <i class="fa-solid fa-user-tie" style="color: #16a34a;"></i> Guru R.01
             </button>
-            <button class="btn btn-outline" onclick="quickLogin('operator', 'admin123')" style="font-size: 0.75rem; padding: 0.45rem;">
+            <button class="btn btn-outline" onclick="quickLogin('operator@sman1mlati.sch.id', 'admin123')" style="font-size: 0.725rem; padding: 0.45rem;">
               <i class="fa-solid fa-sliders" style="color: #d97706;"></i> Operator
             </button>
           </div>
