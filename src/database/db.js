@@ -18,7 +18,7 @@ db.serialize(() => {
     username TEXT UNIQUE NOT NULL,
     password TEXT NOT NULL,
     name TEXT NOT NULL,
-    role TEXT NOT NULL, -- 'student', 'teacher', 'operator'
+    role TEXT NOT NULL, -- 'student', 'teacher', 'operator', 'superadmin'
     room_id INTEGER,
     nis TEXT,
     FOREIGN KEY(room_id) REFERENCES rooms(id)
@@ -54,8 +54,8 @@ db.serialize(() => {
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     student_id INTEGER NOT NULL,
     room_id INTEGER NOT NULL,
-    event_type TEXT NOT NULL, -- 'TAB_SWITCH', 'BLUR', 'FULLSCREEN_EXIT', 'DEVTOOLS', 'COPY_PASTE'
-    severity TEXT DEFAULT 'WARNING', -- 'WARNING', 'CRITICAL'
+    event_type TEXT NOT NULL,
+    severity TEXT DEFAULT 'WARNING',
     description TEXT,
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(student_id) REFERENCES users(id),
@@ -72,40 +72,91 @@ db.serialize(() => {
     FOREIGN KEY(room_id) REFERENCES rooms(id)
   )`);
 
-  // --- SEED INITIAL DEMO DATA ---
-  db.get("SELECT COUNT(*) as count FROM rooms", (err, row) => {
-    if (row && row.count === 0) {
-      console.log("Seeding initial CBT Kusuma demo data...");
+  // --- SEED 12 OFFICIAL CLASSES & 29 OFFICIAL TEACHERS OF SMAN 1 MLATI ---
+  db.get("SELECT COUNT(*) as count FROM rooms WHERE code LIKE 'KLS-%'", (err, row) => {
+    if (!row || row.count < 12) {
+      console.log("Seeding 12 Official Classes & 29 Official Teachers of SMA Negeri 1 Mlati...");
 
-      // Seed Rooms
+      // Clear old demo rooms & users
+      db.run("DELETE FROM rooms");
+
       const stmtRoom = db.prepare("INSERT INTO rooms (name, code) VALUES (?, ?)");
-      stmtRoom.run("Ruang 01 (X MIPA 1)", "RUANG-01");
-      stmtRoom.run("Ruang 02 (X MIPA 2)", "RUANG-02");
+      stmtRoom.run("Kelas X A", "KLS-XA");
+      stmtRoom.run("Kelas X B", "KLS-XB");
+      stmtRoom.run("Kelas X C", "KLS-XC");
+      stmtRoom.run("Kelas X D", "KLS-XD");
+      stmtRoom.run("Kelas XI A", "KLS-XIA");
+      stmtRoom.run("Kelas XI B", "KLS-XIB");
+      stmtRoom.run("Kelas XI C", "KLS-XIC");
+      stmtRoom.run("Kelas XI D", "KLS-XID");
+      stmtRoom.run("Kelas XII A", "KLS-XIIA");
+      stmtRoom.run("Kelas XII B", "KLS-XIIB");
+      stmtRoom.run("Kelas XII C", "KLS-XIIC");
+      stmtRoom.run("Kelas XII D", "KLS-XIID");
       stmtRoom.run("Lab Komputer Utama", "LAB-KOMP-1");
       stmtRoom.finalize();
+    }
+  });
 
-      // Seed Users
-      const stmtUser = db.prepare("INSERT INTO users (username, password, name, role, room_id, nis) VALUES (?, ?, ?, ?, ?, ?)");
-      // Super Admin, Operator, & Pengawas (Guru)
-      stmtUser.run("admin@sman1mlati.sch.id", "superadmin123", "Super Admin System (Bpk. Drs. Headmaster)", "superadmin", null, null);
-      stmtUser.run("operator@sman1mlati.sch.id", "admin123", "Operator CBT (Mas Yusuf)", "operator", null, null);
-      stmtUser.run("guru001@sman1mlati.sch.id", "123456", "Dra. Ani Suryani (Guru/Pengawas)", "teacher", 1, null);
-      stmtUser.run("guru002@sman1mlati.sch.id", "123456", "Budi Santoso, S.Pd. (Guru/Pengawas)", "teacher", 2, null);
+  // Seed / Upsert Official Users (Super Admin, Operator, 29 Teachers, & Students)
+  const teachersList = [
+    { username: "guru01@sman1mlati.sch.id", name: "Eko Yuliyanto, S.Pd., M.Pd. (BK)", pass: "123456" },
+    { username: "guru02@sman1mlati.sch.id", name: "Dra. Retno Endah Sawitri, M.Ag. (PAI)", pass: "123456" },
+    { username: "guru03@sman1mlati.sch.id", name: "Yoga Aditya Sumantri, S.Pd., M.Pd. (PAI)", pass: "123456" },
+    { username: "guru04@sman1mlati.sch.id", name: "Teresia Kus Margaritawati, S.Pd. (Katolik)", pass: "123456" },
+    { username: "guru05@sman1mlati.sch.id", name: "Alfa Apriliani, S.Pd.K (Kristen)", pass: "123456" },
+    { username: "guru06@sman1mlati.sch.id", name: "Trida Purwa Maduria, S.Pd.H (Hindu)", pass: "123456" },
+    { username: "guru07@sman1mlati.sch.id", name: "Ervin Iswandayani, S.Pd. (Pancasila)", pass: "123456" },
+    { username: "guru08@sman1mlati.sch.id", name: "Suparwanto, S.Pd. (B. Indonesia)", pass: "123456" },
+    { username: "guru09@sman1mlati.sch.id", name: "Dra. Suwarni (B. Indonesia)", pass: "123456" },
+    { username: "guru10@sman1mlati.sch.id", name: "Janti Ikawati, S.Pd.Si. (Matematika)", pass: "123456" },
+    { username: "guru11@sman1mlati.sch.id", name: "Dian Tri Handayani, S.Si. (Matematika)", pass: "123456" },
+    { username: "guru12@sman1mlati.sch.id", name: "Endra Prasetyana, S.Pd., M.Pd. (B. Inggris Lanjut)", pass: "123456" },
+    { username: "guru13@sman1mlati.sch.id", name: "Dra. Sulismiyani (B. Inggris)", pass: "123456" },
+    { username: "guru14@sman1mlati.sch.id", name: "Dyah Astrianita, S.Pd. (Seni Budaya)", pass: "123456" },
+    { username: "guru15@sman1mlati.sch.id", name: "Rizka Restuningjati, S.Pd. (PJOK)", pass: "123456" },
+    { username: "guru16@sman1mlati.sch.id", name: "Abdul Afif Rosyidi, S.Pd. (B. Jawa)", pass: "123456" },
+    { username: "guru17@sman1mlati.sch.id", name: "Kuswantini, S.Pd. (Fisika)", pass: "123456" },
+    { username: "guru18@sman1mlati.sch.id", name: "Ratika Nur Jasmin, S.Pd. (Fisika / PKWU)", pass: "123456" },
+    { username: "guru19@sman1mlati.sch.id", name: "Sri Suprapti, S.Pd. (Biologi)", pass: "123456" },
+    { username: "guru20@sman1mlati.sch.id", name: "Permani Try Wijiarti, S.Pd. (Kimia)", pass: "123456" },
+    { username: "guru21@sman1mlati.sch.id", name: "Sukarni, S.Pd. (Geografi)", pass: "123456" },
+    { username: "guru22@sman1mlati.sch.id", name: "Sutrisni, S.Pd. (Sosiologi)", pass: "123456" },
+    { username: "guru23@sman1mlati.sch.id", name: "Suryanto, S.Pd. (Ekonomi)", pass: "123456" },
+    { username: "guru24@sman1mlati.sch.id", name: "Anantyas Kusuma Dewi, S.Pd. (Informatika)", pass: "123456" },
+    { username: "guru25@sman1mlati.sch.id", name: "Sri Ati Ati, S.Pd. (Sejarah)", pass: "123456" },
+    { username: "yusuf@sman1mlati.sch.id", name: "Yusuf Arif Setiawan, S.Pd., M.M. (Ekonomi)", pass: "123456" },
+    { username: "guru27@sman1mlati.sch.id", name: "Whyni Ariani, S.Pd. (BK)", pass: "123456" },
+    { username: "guru28@sman1mlati.sch.id", name: "Dian Sih Febriani, S.Psi. (BK)", pass: "123456" },
+    { username: "guru29@sman1mlati.sch.id", name: "Gabriella Laras Anggitaningtyas, S.Pd. (BK)", pass: "123456" }
+  ];
 
-      // Siswa Ruang 01
-      stmtUser.run("siswa001@sman1mlati.sch.id", "123456", "Ahmad Fauzi", "student", 1, "20261001");
-      stmtUser.run("siswa002@sman1mlati.sch.id", "123456", "Bella Anggraini", "student", 1, "20261002");
-      stmtUser.run("siswa103@sman1mlati.sch.id", "123456", "Candra Wijaya", "student", 1, "20261003");
-      stmtUser.run("siswa104@sman1mlati.sch.id", "123456", "Dina Mariana", "student", 1, "20261004");
-      stmtUser.run("siswa105@sman1mlati.sch.id", "123456", "Eko Prasetyo", "student", 1, "20261005");
+  // Super Admin & Operator
+  db.run("INSERT OR IGNORE INTO users (username, password, name, role, room_id, nis) VALUES ('admin@sman1mlati.sch.id', 'superadmin123', 'Super Admin System (Bpk. Drs. Headmaster)', 'superadmin', null, null)");
+  db.run("INSERT OR IGNORE INTO users (username, password, name, role, room_id, nis) VALUES ('operator@sman1mlati.sch.id', 'admin123', 'Operator CBT (Mas Yusuf)', 'operator', null, null)");
 
-      // Siswa Ruang 02
-      stmtUser.run("siswa003@sman1mlati.sch.id", "123456", "Fajar Hidayat", "student", 2, "20262001");
-      stmtUser.run("siswa202@sman1mlati.sch.id", "123456", "Gita Gutawa", "student", 2, "20262002");
-      stmtUser.run("siswa203@sman1mlati.sch.id", "123456", "Hendra Setiawan", "student", 2, "20262003");
-      stmtUser.finalize();
+  // Insert 29 Teachers
+  teachersList.forEach(t => {
+    db.run("INSERT OR IGNORE INTO users (username, password, name, role, room_id, nis) VALUES (?, ?, ?, 'teacher', 1, null)", [t.username, t.pass, t.name]);
+  });
 
-      // Seed Questions (Ekonomi / Pengetahuan Umum High School)
+  // Sample Students
+  const studentsList = [
+    { username: "siswa001@sman1mlati.sch.id", name: "Ahmad Fauzi", nis: "20261001", room_id: 1 },
+    { username: "siswa002@sman1mlati.sch.id", name: "Bella Anggraini", nis: "20261002", room_id: 1 },
+    { username: "siswa003@sman1mlati.sch.id", name: "Candra Wijaya", nis: "20261003", room_id: 2 },
+    { username: "siswa004@sman1mlati.sch.id", name: "Dina Mariana", nis: "20261004", room_id: 2 },
+    { username: "siswa005@sman1mlati.sch.id", name: "Eko Prasetyo", nis: "20261005", room_id: 5 },
+    { username: "siswa006@sman1mlati.sch.id", name: "Fajar Hidayat", nis: "20261006", room_id: 9 }
+  ];
+
+  studentsList.forEach(s => {
+    db.run("INSERT OR IGNORE INTO users (username, password, name, role, room_id, nis) VALUES (?, '123456', ?, 'student', ?, ?)", [s.username, s.name, s.room_id, s.nis]);
+  });
+
+  // Seed Sample Questions if empty
+  db.get("SELECT COUNT(*) as count FROM questions", (err, row) => {
+    if (row && row.count === 0) {
       const stmtQ = db.prepare("INSERT INTO questions (subject, question_text, options, correct_answer) VALUES (?, ?, ?, ?)");
       stmtQ.run(
         "Ekonomi X",
@@ -132,63 +183,24 @@ db.serialize(() => {
         2
       );
       stmtQ.run(
-        "Ekonomi X",
-        "Manakah dari berikut ini yang merupakan contoh dari kebijakan moneter yang dilakukan oleh Bank Sentral?",
+        "Informatika X",
+        "Manakah di antara berikut ini yang merupakan fondasi berpikir komputasional (Computational Thinking)?",
         JSON.stringify([
-          "Menaikkan tarif pajak penghasilan",
-          "Mengatur jumlah uang yang beredar melalui operasi pasar terbuka",
-          "Mengurangi pengeluaran belanja negara",
-          "Memberikan subsidi bahan pokok",
-          "Membangun infrastruktur jalan tol"
+          "Dekomposisi, Pengenalan Pola, Abstraksi, dan Algoritma",
+          "Pengodean, Kompilasi, Debugging, dan Testing",
+          "Desain Grafis, Animasi, Pengolahan Data, dan Jaringan",
+          "Hardware, Software, Brainware, dan Firmware",
+          "Internet, Intranet, Bluetooth, dan Wi-Fi"
         ]),
-        1
-      );
-      stmtQ.run(
-        "Ekonomi X",
-        "Pasar di mana terdapat banyak penjual dan pembeli, serta barang yang diperjualbelikan bersifat homogen disebut...",
-        JSON.stringify([
-          "Pasar Monopoli",
-          "Pasar Oligopoli",
-          "Pasar Persaingan Sempurna",
-          "Pasar Monopolistik",
-          "Pasar Monopsoni"
-        ]),
-        2
-      );
-      stmtQ.run(
-        "Ekonomi X",
-        "Sistem ekonomi di mana pemerintah memegang kendali penuh atas semua kegiatan ekonomi disebut...",
-        JSON.stringify([
-          "Sistem Ekonomi Pasar / Kapitalis",
-          "Sistem Ekonomi Komando / Terpusat",
-          "Sistem Ekonomi Campuran",
-          "Sistem Ekonomi Tradisional",
-          "Sistem Ekonomi Syariah"
-        ]),
-        1
+        0
       );
       stmtQ.finalize();
-
-      // Seed Initial Active Code for Room 1
-      db.run("INSERT INTO unlock_codes (room_id, code) VALUES (1, '849201')");
-      db.run("INSERT INTO unlock_codes (room_id, code) VALUES (2, '512934')");
-
-      console.log("Seeding completed successfully.");
     }
-
-    // Auto-migrate any existing database records to use @sman1mlati.sch.id email domain
-    db.run("UPDATE users SET username = 'guru001@sman1mlati.sch.id' WHERE username IN ('pengawas1', 'guru001')");
-    db.run("UPDATE users SET username = 'guru002@sman1mlati.sch.id' WHERE username IN ('pengawas2', 'guru002')");
-    db.run("UPDATE users SET username = 'operator@sman1mlati.sch.id' WHERE username = 'operator'");
-    db.run("UPDATE users SET username = 'siswa001@sman1mlati.sch.id' WHERE username IN ('siswa101', 'siswa001')");
-    db.run("UPDATE users SET username = 'siswa002@sman1mlati.sch.id' WHERE username IN ('siswa102', 'siswa002')");
-    db.run("UPDATE users SET username = 'siswa003@sman1mlati.sch.id' WHERE username IN ('siswa201', 'siswa003')");
-    db.run("INSERT OR IGNORE INTO users (username, password, name, role, room_id, nis) VALUES ('admin@sman1mlati.sch.id', 'superadmin123', 'Super Admin System (Bpk. Drs. Headmaster)', 'superadmin', null, null)");
-
-    // Safe migration for battery columns
-    db.run("ALTER TABLE exam_sessions ADD COLUMN battery_level INTEGER DEFAULT 100", () => {});
-    db.run("ALTER TABLE exam_sessions ADD COLUMN is_charging INTEGER DEFAULT 1", () => {});
   });
+
+  // Unlock codes default
+  db.run("INSERT OR IGNORE INTO unlock_codes (room_id, code) VALUES (1, '849201')");
+  db.run("INSERT OR IGNORE INTO unlock_codes (room_id, code) VALUES (2, '512934')");
 });
 
 module.exports = db;
