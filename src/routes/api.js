@@ -172,6 +172,28 @@ router.post('/exam/submit', (req, res) => {
   });
 });
 
+// 7b. Battery Status Heartbeat Update
+router.post('/exam/battery', (req, res) => {
+  const { studentId, roomId, batteryLevel, isCharging } = req.body;
+  const io = req.app.get('io');
+
+  db.run(
+    "UPDATE exam_sessions SET battery_level = ?, is_charging = ?, updated_at = CURRENT_TIMESTAMP WHERE student_id = ?",
+    [batteryLevel, isCharging ? 1 : 0, studentId],
+    function(err) {
+      if (io && roomId) {
+        io.to(`room-${roomId}`).emit('battery-update', {
+          studentId,
+          batteryLevel,
+          isCharging: !!isCharging,
+          roomId
+        });
+      }
+      res.json({ success: true });
+    }
+  );
+});
+
 // 8. Proctor: Get Room Status (All Assigned Students in a Room)
 router.get('/proctor/room-status/:roomId', (req, res) => {
   const { roomId } = req.params;
@@ -185,6 +207,8 @@ router.get('/proctor/room-status/:roomId', (req, res) => {
       COALESCE(es.status, 'NOT_STARTED') as status,
       COALESCE(es.violations_count, 0) as violations_count,
       COALESCE(es.answers, '{}') as answers,
+      COALESCE(es.battery_level, 100) as battery_level,
+      COALESCE(es.is_charging, 1) as is_charging,
       es.updated_at
     FROM users u
     LEFT JOIN exam_sessions es ON u.id = es.student_id
