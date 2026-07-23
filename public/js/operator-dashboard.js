@@ -1,3 +1,5 @@
+let allStudentsData = [];
+
 document.addEventListener('DOMContentLoaded', async () => {
   const userStr = localStorage.getItem('cbt_user');
   if (!userStr) {
@@ -21,14 +23,10 @@ function switchOpTab(tabName) {
     const sec = document.getElementById(`section-${t}`);
     if (btn && sec) {
       if (t === tabName) {
-        btn.className = 'tab-btn active';
-        btn.style.color = '#2563eb';
-        btn.style.borderBottom = '3px solid #2563eb';
+        btn.classList.add('active');
         sec.style.display = 'block';
       } else {
-        btn.className = 'tab-btn';
-        btn.style.color = '#64748b';
-        btn.style.borderBottom = 'none';
+        btn.classList.remove('active');
         sec.style.display = 'none';
       }
     }
@@ -41,26 +39,48 @@ async function loadStudents() {
     const data = await res.json();
 
     if (data.success) {
-      const tbody = document.getElementById('studentListBody');
-      tbody.innerHTML = '';
-
-      data.students.forEach((s, index) => {
-        const tr = document.createElement('tr');
-        tr.style.borderBottom = '1px solid #e2e8f0';
-
-        tr.innerHTML = `
-          <td style="padding: 0.85rem 1.25rem; font-weight: 700;">${index + 1}</td>
-          <td style="padding: 0.85rem 1.25rem; font-weight: 700; color: #0f172a;">${s.name}</td>
-          <td style="padding: 0.85rem 1.25rem; color: #475569;">${s.nis || '-'}</td>
-          <td style="padding: 0.85rem 1.25rem; color: #2563eb; font-weight: 600;">${s.username}</td>
-          <td style="padding: 0.85rem 1.25rem;"><span class="badge badge-primary">${s.room_name || `Ruang ${s.room_id}`}</span></td>
-        `;
-        tbody.appendChild(tr);
-      });
+      allStudentsData = data.students;
+      renderStudentsTable(allStudentsData);
     }
   } catch (e) {
     console.error("Gagal memuat data siswa:", e);
   }
+}
+
+function renderStudentsTable(students) {
+  const tbody = document.getElementById('studentListBody');
+  tbody.innerHTML = '';
+
+  if (students.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 2rem; color: var(--slate-600);">Tidak ada data siswa yang cocok dengan filter.</td></tr>`;
+    return;
+  }
+
+  students.forEach((s, index) => {
+    const tr = document.createElement('tr');
+
+    tr.innerHTML = `
+      <td style="font-weight: 700;">${index + 1}</td>
+      <td style="font-weight: 700; color: var(--navy-900);">${s.name}</td>
+      <td style="color: var(--slate-600); font-family: var(--font-mono);">${s.nis || '-'}</td>
+      <td style="color: var(--blue-600); font-weight: 600;">${s.username}</td>
+      <td><span class="badge badge-primary">${s.room_name || `Ruang ${s.room_id}`}</span></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function filterStudentList() {
+  const query = document.getElementById('studentSearchInput').value.toLowerCase().trim();
+  const selectedRoom = document.getElementById('classFilterSelect').value;
+
+  const filtered = allStudentsData.filter(s => {
+    const matchesSearch = (s.name.toLowerCase().includes(query) || (s.nis && s.nis.includes(query)) || s.username.toLowerCase().includes(query));
+    const matchesRoom = (selectedRoom === 'ALL' || s.room_id == selectedRoom);
+    return matchesSearch && matchesRoom;
+  });
+
+  renderStudentsTable(filtered);
 }
 
 function openAddStudentModal() {
