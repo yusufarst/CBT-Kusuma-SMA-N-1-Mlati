@@ -15,9 +15,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function switchTeacherTab(tabName) {
-  const tabs = ['bank-soal', 'buat-ujian', 'pengawasan', 'analisis'];
+  const tabs = ['dasbor', 'bank-soal', 'buat-ujian', 'pengawasan', 'analisis'];
   tabs.forEach(t => {
-    const btn = document.getElementById(`tab-${t}`);
+    const btn = document.getElementById(`side-${t}`);
     const sec = document.getElementById(`section-${t}`);
     if (btn && sec) {
       if (t === tabName) {
