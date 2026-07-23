@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function switchAdminTab(tabName) {
-  const tabs = ['users', 'security', 'health', 'backup'];
+  const tabs = ['command-center', 'users', 'security', 'health', 'backup'];
   tabs.forEach(t => {
     const btn = document.getElementById(`tab-${t}`);
     const sec = document.getElementById(`section-${t}`);
