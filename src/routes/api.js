@@ -16,13 +16,6 @@ router.post('/auth/login', (req, res) => {
     }
 
     // If user is a student, ensure exam session exists
-    const getRedirectUrl = (role) => {
-      if (role === 'student') return '/student-dashboard.html';
-      if (role === 'teacher') return '/teacher-dashboard.html';
-      if (role === 'operator') return '/operator-dashboard.html';
-      return '/admin-dashboard.html';
-    };
-
     if (user.role === 'student') {
       db.get("SELECT * FROM exam_sessions WHERE student_id = ?", [user.id], (err, session) => {
         if (!session) {
@@ -33,8 +26,7 @@ router.post('/auth/login', (req, res) => {
               return res.json({
                 success: true,
                 user: { id: user.id, username: user.username, name: user.name, role: user.role, room_id: user.room_id, room_name: user.room_name, nis: user.nis },
-                session: { id: this.lastID, status: 'IN_PROGRESS', violations_count: 0, answers: '{}' },
-                redirectUrl: getRedirectUrl(user.role)
+                session: { id: this.lastID, status: 'IN_PROGRESS', violations_count: 0, answers: '{}' }
               });
             }
           );
@@ -42,16 +34,14 @@ router.post('/auth/login', (req, res) => {
           return res.json({
             success: true,
             user: { id: user.id, username: user.username, name: user.name, role: user.role, room_id: user.room_id, room_name: user.room_name, nis: user.nis },
-            session,
-            redirectUrl: getRedirectUrl(user.role)
+            session
           });
         }
       });
     } else {
       return res.json({
         success: true,
-        user: { id: user.id, username: user.username, name: user.name, role: user.role, room_id: user.room_id, room_name: user.room_name },
-        redirectUrl: getRedirectUrl(user.role)
+        user: { id: user.id, username: user.username, name: user.name, role: user.role, room_id: user.room_id, room_name: user.room_name }
       });
     }
   });
@@ -308,77 +298,6 @@ router.post('/proctor/unlock-student', (req, res) => {
         );
       }
     );
-  });
-});
-
-// 11. Teacher: Add New Question
-router.post('/teacher/question', (req, res) => {
-  const { subject, questionText, options, correctAnswer } = req.body;
-  db.run(
-    "INSERT INTO questions (subject, question_text, options, correct_answer) VALUES (?, ?, ?, ?)",
-    [subject, questionText, JSON.stringify(options), correctAnswer],
-    function(err) {
-      if (err) return res.status(500).json({ success: false, message: "Gagal menyimpan soal baru" });
-      res.json({ success: true, id: this.lastID, message: "Soal baru berhasil disimpan ke Bank Soal!" });
-    }
-  );
-});
-
-// 12. Operator: Get All Students List
-router.get('/operator/students', (req, res) => {
-  const query = `
-    SELECT u.id, u.name, u.nis, u.username, u.room_id, r.name as room_name 
-    FROM users u 
-    LEFT JOIN rooms r ON u.room_id = r.id 
-    WHERE u.role = 'student' 
-    ORDER BY u.id ASC
-  `;
-  db.all(query, [], (err, students) => {
-    if (err) return res.status(500).json({ success: false, message: "Database error" });
-    res.json({ success: true, students });
-  });
-});
-
-// 13. Operator: Add New Student
-router.post('/operator/student', (req, res) => {
-  const { name, nis, username, room_id } = req.body;
-  db.run(
-    "INSERT INTO users (username, password, role, name, nis, room_id) VALUES (?, '123456', 'student', ?, ?, ?)",
-    [username, name, nis, room_id],
-    function(err) {
-      if (err) return res.status(500).json({ success: false, message: "Gagal menambahkan siswa (Email/NIS mungkin sudah ada)" });
-      res.json({ success: true, id: this.lastID, message: "Siswa baru berhasil ditambahkan!" });
-    }
-  );
-});
-
-// 14. Admin: Get All Users List
-router.get('/admin/users', (req, res) => {
-  db.all("SELECT id, username, role, name, nis, room_id FROM users ORDER BY id ASC", [], (err, users) => {
-    if (err) return res.status(500).json({ success: false, message: "Database error" });
-    res.json({ success: true, users });
-  });
-});
-
-// 15. Admin: Add New User
-router.post('/admin/user', (req, res) => {
-  const { name, username, password, role } = req.body;
-  db.run(
-    "INSERT INTO users (username, password, role, name) VALUES (?, ?, ?, ?)",
-    [username, password || '123456', role, name],
-    function(err) {
-      if (err) return res.status(500).json({ success: false, message: "Gagal membuat akun user baru" });
-      res.json({ success: true, id: this.lastID, message: "Pengguna baru berhasil ditambahkan!" });
-    }
-  );
-});
-
-// 16. Admin: Delete User
-router.delete('/admin/user/:id', (req, res) => {
-  const { id } = req.params;
-  db.run("DELETE FROM users WHERE id = ?", [id], (err) => {
-    if (err) return res.status(500).json({ success: false, message: "Gagal menghapus pengguna" });
-    res.json({ success: true, message: "Pengguna berhasil dihapus!" });
   });
 });
 
