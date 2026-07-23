@@ -55,6 +55,7 @@
     <div style="display: flex; align-items: center; gap: 0.85rem;">
       <span id="studentRoomBadge" class="badge badge-neutral">Ruang --</span>
       <span id="saveStatus" class="badge badge-success"><i class="fa-solid fa-cloud-arrow-up"></i> Jawaban Tersimpan</span>
+      <span id="batteryBadge" class="badge badge-success"><i id="batteryIcon" class="fa-solid fa-battery-full"></i> <span id="batteryText">--%</span></span>
     </div>
     <div>
       <span id="violationBadge" class="badge badge-neutral">
@@ -202,6 +203,25 @@
           <i class="fa-solid fa-key"></i> Buka Kunci Sesi
         </button>
       </form>
+    </div>
+  </div>
+
+  <!-- Low Battery Warning Modal -->
+  <div class="modal-overlay" id="batteryWarningModal">
+    <div class="modal-container" style="border: 2px solid #ef4444;">
+      <div style="font-size: 3rem; color: #dc2626; margin-bottom: 0.5rem;">
+        <i class="fa-solid fa-battery-quarter fa-bounce"></i>
+      </div>
+      <h2 style="color: #b91c1c; margin-bottom: 0.5rem; font-size: 1.25rem;">PERINGATAN BATERAI LEMAH!</h2>
+      <p style="font-size: 0.95rem; margin-bottom: 1rem; line-height: 1.5; color: #334155;">
+        Baterai perangkat Anda tersisa <strong id="modalBatteryPct" style="color: #dc2626;">15%</strong> dan belum terhubung ke charger.
+      </p>
+      <div style="background: #fef2f2; border: 1px solid #fecaca; padding: 0.85rem; border-radius: 10px; margin-bottom: 1.25rem; font-size: 0.85rem; color: #991b1b; text-align: left;">
+        <i class="fa-solid fa-plug" style="margin-right: 0.4rem;"></i> Segera colokkan charger / powerbank agar HP/Tablet Anda tidak mati saat ujian.
+      </div>
+      <button onclick="closeBatteryModal()" class="btn btn-danger" style="width: 100%; justify-content: center;">
+        Saya Mengerti & Segera Mengisi Daya
+      </button>
     </div>
   </div>
 
