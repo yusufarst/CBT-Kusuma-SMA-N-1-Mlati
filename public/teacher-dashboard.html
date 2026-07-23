@@ -4,71 +4,71 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Guru - CBT KUSUMA SMAN 1 Mlati</title>
-  <link rel="stylesheet" href="/css/style.css?v=3.1.0">
+  <link rel="stylesheet" href="/css/style.css?v=4.0.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="/socket.io/socket.io.js"></script>
 </head>
-<body style="background: #f8fafc; min-height: 100vh; display: flex; flex-direction: column;">
+<body style="background: var(--slate-50); min-height: 100vh; display: flex; flex-direction: column;">
 
   <!-- Institutional Top Header Bar -->
   <header class="app-header-main">
     <div class="brand-wrapper">
-      <div class="brand-icon" style="background: #16a34a;"><i class="fa-solid fa-chalkboard-user"></i></div>
+      <div class="brand-icon" style="background: var(--emerald-600);"><i class="fa-solid fa-chalkboard-user"></i></div>
       <div>
-        <div style="font-size: 1.05rem;">DASHBOARD GURU & PENGAWAS UJIAN</div>
+        <div style="font-size: 1.05rem; font-weight: 800;">DASHBOARD GURU & PENGAWAS UJIAN</div>
         <div style="font-size: 0.7rem; font-weight: 500; color: #94a3b8;">CBT KUSUMA — SMA Negeri 1 Mlati</div>
       </div>
     </div>
     
     <div style="display: flex; align-items: center; gap: 1.25rem;">
       <div style="text-align: right; display: flex; align-items: center; gap: 0.75rem;">
-        <div style="width: 34px; height: 34px; border-radius: 50%; background: #16a34a; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;">
+        <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--emerald-600); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;">
           <i class="fa-solid fa-user-tie"></i>
         </div>
         <div>
-          <div style="font-weight: 700; font-size: 0.85rem; color: white;" id="teacherName">Dra. Ani Suryani</div>
-          <div style="font-size: 0.7rem; color: #94a3b8;">Guru Pengampu / Pengawas Ruangan</div>
+          <div style="font-weight: 700; font-size: 0.875rem; color: white;" id="teacherName">Yusuf Arif Setiawan, S.Pd., M.M.</div>
+          <div style="font-size: 0.725rem; color: #94a3b8;">Guru Pengampu Ekonomi / Pengawas</div>
         </div>
       </div>
 
-      <button onclick="logout()" class="btn btn-danger" style="padding: 0.35rem 0.75rem; font-size: 0.8rem; border-radius: 6px;">
+      <button onclick="logout()" class="btn btn-danger" style="padding: 0.4rem 0.85rem; font-size: 0.8rem;">
         <i class="fa-solid fa-right-from-bracket"></i> Keluar
       </button>
     </div>
   </header>
 
-  <!-- Navigation Tab Bar for Teacher Modules -->
-  <div style="background: #ffffff; border-bottom: 1px solid #cbd5e1; padding: 0 1.5rem;">
-    <div style="max-width: 1440px; margin: 0 auto; display: flex; gap: 1.5rem;">
-      <button class="tab-btn active" onclick="switchTeacherTab('bank-soal')" id="tab-bank-soal" style="padding: 1rem 0.5rem; font-weight: 700; border: none; background: none; color: #2563eb; border-bottom: 3px solid #2563eb; cursor: pointer;">
+  <!-- Modern Navigation Tab Bar -->
+  <div class="nav-tab-bar">
+    <div class="nav-tab-container">
+      <button class="tab-btn active" onclick="switchTeacherTab('bank-soal')" id="tab-bank-soal">
         <i class="fa-solid fa-database"></i> Bank Soal & Import Excel
       </button>
-      <button class="tab-btn" onclick="switchTeacherTab('buat-ujian')" id="tab-buat-ujian" style="padding: 1rem 0.5rem; font-weight: 700; border: none; background: none; color: #64748b; cursor: pointer;">
+      <button class="tab-btn" onclick="switchTeacherTab('buat-ujian')" id="tab-buat-ujian">
         <i class="fa-solid fa-calendar-plus"></i> Buat & Jadwalkan Ujian
       </button>
-      <button class="tab-btn" onclick="switchTeacherTab('pengawasan')" id="tab-pengawasan" style="padding: 1rem 0.5rem; font-weight: 700; border: none; background: none; color: #64748b; cursor: pointer;">
-        <i class="fa-solid fa-eye"></i> Pengawasan & Kode Unlock
+      <button class="tab-btn" onclick="switchTeacherTab('pengawasan')" id="tab-pengawasan">
+        <i class="fa-solid fa-key"></i> Generator Kode Unlock & Pengawasan
       </button>
-      <button class="tab-btn" onclick="switchTeacherTab('analisis')" id="tab-analisis" style="padding: 1rem 0.5rem; font-weight: 700; border: none; background: none; color: #64748b; cursor: pointer;">
+      <button class="tab-btn" onclick="switchTeacherTab('analisis')" id="tab-analisis">
         <i class="fa-solid fa-chart-pie"></i> Koreksi Esai & Analisis Soal
       </button>
     </div>
   </div>
 
   <!-- Main Container -->
-  <main style="max-width: 1440px; width: 100%; margin: 1.5rem auto; padding: 0 1.5rem; flex: 1;">
+  <main style="max-width: 1440px; width: 100%; margin: 1.75rem auto; padding: 0 1.75rem; flex: 1;">
 
     <!-- TAB 1: BANK SOAL & IMPORT EXCEL -->
     <div id="section-bank-soal">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
         <div>
-          <h2 style="font-size: 1.3rem; font-weight: 800; color: #0f172a;">Bank Soal & Pengelolaan Butir Soal</h2>
-          <p style="color: #64748b; font-size: 0.85rem;">Kelola koleksi soal ujian pilihan ganda, benar-salah, dan esai.</p>
+          <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--navy-900);">Bank Soal & Pengelolaan Butir Soal</h2>
+          <p style="color: var(--slate-600); font-size: 0.875rem;">Kelola koleksi soal ujian pilihan ganda (A-E), benar-salah, dan esai.</p>
         </div>
 
         <div style="display: flex; gap: 0.75rem;">
           <button onclick="openImportModal()" class="btn btn-outline">
-            <i class="fa-solid fa-file-excel" style="color: #16a34a;"></i> Import Soal dari Excel
+            <i class="fa-solid fa-file-excel" style="color: var(--emerald-600);"></i> Import Excel (.xlsx)
           </button>
           <button onclick="openAddQuestionModal()" class="btn btn-primary">
             <i class="fa-solid fa-plus"></i> Tambah Soal Manual
@@ -76,30 +76,32 @@
         </div>
       </div>
 
-      <!-- Question List Table -->
-      <div class="card-ui" style="padding: 0; overflow: hidden;">
-        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;" id="questionsTable">
-          <thead style="background: #f8fafc; border-bottom: 1px solid #cbd5e1;">
-            <tr>
-              <th style="padding: 0.85rem 1.25rem; font-weight: 700;">No</th>
-              <th style="padding: 0.85rem 1.25rem; font-weight: 700;">Mata Pelajaran</th>
-              <th style="padding: 0.85rem 1.25rem; font-weight: 700;">Teks Soal</th>
-              <th style="padding: 0.85rem 1.25rem; font-weight: 700;">Opsi Jawaban</th>
-              <th style="padding: 0.85rem 1.25rem; font-weight: 700;">Kunci</th>
-            </tr>
-          </thead>
-          <tbody id="questionListBody">
-            <!-- Rendered dynamically -->
-          </tbody>
-        </table>
+      <!-- Question List Table Card -->
+      <div class="card-ui" style="overflow: hidden;">
+        <div class="table-responsive">
+          <table class="table-modern" id="questionsTable">
+            <thead>
+              <tr>
+                <th style="width: 50px;">No</th>
+                <th style="width: 140px;">Mata Pelajaran</th>
+                <th>Teks Pertanyaan Soal</th>
+                <th>Pilihan Jawaban (A-E)</th>
+                <th style="width: 110px;">Kunci Benar</th>
+              </tr>
+            </thead>
+            <tbody id="questionListBody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
     <!-- TAB 2: BUAT & JADWALKAN UJIAN -->
     <div id="section-buat-ujian" style="display: none;">
       <div class="card-ui" style="padding: 2rem; max-width: 800px; margin: 0 auto;">
-        <h2 style="font-size: 1.3rem; font-weight: 800; color: #0f172a; margin-bottom: 1.25rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.75rem;">
-          <i class="fa-solid fa-pen-ruler" style="color: #2563eb;"></i> Form Penyusunan & Penjadwalan Ujian Baru
+        <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--navy-900); margin-bottom: 1.25rem; border-bottom: 2px solid var(--slate-200); padding-bottom: 0.75rem;">
+          <i class="fa-solid fa-pen-ruler" style="color: var(--blue-600);"></i> Form Penyusunan & Penjadwalan Ujian Baru
         </h2>
 
         <form id="createExamForm">
@@ -115,6 +117,8 @@
                 <option>Ekonomi X</option>
                 <option>Matematika XI</option>
                 <option>Bahasa Indonesia XII</option>
+                <option>Fisika X</option>
+                <option>Biologi XI</option>
               </select>
             </div>
 
@@ -126,32 +130,61 @@
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
             <div class="form-group">
-              <label class="form-label">Mode Randomisasi Soal</label>
+              <label class="form-label">Mode Randomisasi Soal & Opsi</label>
               <select class="form-control">
-                <option>Acak Soal & Acak Pilihan Jawaban</option>
+                <option>Acak Soal & Acak Pilihan Jawaban (Rekomendasi PRD)</option>
+                <option>Acak Soal Saja</option>
                 <option>Urutan Tetap (Standard)</option>
               </select>
             </div>
 
             <div class="form-group">
-              <label class="form-label">Kelas Target</label>
+              <label class="form-label">Kelas Target (12 Rombel SMAN 1 Mlati)</label>
               <select class="form-control">
-                <option>X MIPA 1 & X MIPA 2</option>
-                <option>XI IPS 1</option>
+                <option>Kelas X A & X B</option>
+                <option>Kelas X C & X D</option>
+                <option>Kelas XI A & XI B</option>
+                <option>Kelas XII A & XII B</option>
+                <option>Seluruh Kelas X (A-D)</option>
               </select>
             </div>
           </div>
 
-          <button type="button" onclick="alert('Jadwal Ujian Berhasil Dibuat dan Diterbitkan ke Siswa!')" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.8rem; margin-top: 1rem;">
+          <button type="button" onclick="alert('Jadwal Ujian Berhasil Dibuat & Diterbitkan!')" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.85rem; margin-top: 1rem;">
             <i class="fa-solid fa-paper-plane"></i> Simpan & Terbitkan Jadwal Ujian
           </button>
         </form>
       </div>
     </div>
 
-    <!-- TAB 3: PENGAWASAN RUANGAN & KODE UNLOCK -->
+    <!-- TAB 3: KODE UNLOCK 6-DIGIT & PENGAWASAN -->
     <div id="section-pengawasan" style="display: none;">
-      <iframe src="/proctor.html" style="width: 100%; height: 750px; border: none; border-radius: 12px; box-shadow: var(--shadow-md);"></iframe>
+      
+      <!-- Generator Kode Unlock Harian Widget -->
+      <div class="card-ui" style="padding: 1.5rem; margin-bottom: 1.5rem; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; border: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;">
+          <div>
+            <span class="badge badge-warning" style="margin-bottom: 0.5rem; background: rgba(245,158,11,0.25); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3);">
+              <i class="fa-solid fa-key"></i> Generator Kode Unlock Harian (FR-AUTH-03)
+            </span>
+            <h2 style="font-size: 1.35rem; font-weight: 800; color: white;">Kode Unlock Layar Siswa Terkunci</h2>
+            <p style="color: #94a3b8; font-size: 0.875rem;">Gunakan kode 6-digit harian ini pada perangkat siswa untuk membuka kunci layar akibat pelanggaran teknis.</p>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 1.25rem; background: rgba(255,255,255,0.08); padding: 0.85rem 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.15);">
+            <div>
+              <div style="font-size: 0.725rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Kode Unlock Hari Ini:</div>
+              <div style="font-size: 1.85rem; font-weight: 800; color: #f59e0b; letter-spacing: 6px; font-family: var(--font-mono);" id="dailyUnlockCode">849201</div>
+            </div>
+            <button onclick="generateNewLockCode()" class="btn btn-warning" style="padding: 0.5rem 0.85rem; font-size: 0.8rem;">
+              <i class="fa-solid fa-rotate"></i> Acak Ulang
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Embedded Proctoring Monitor -->
+      <iframe src="/proctor.html" style="width: 100%; height: 750px; border: none; border-radius: 14px; box-shadow: var(--shadow-md);"></iframe>
     </div>
 
     <!-- TAB 4: KOREKSI ESAI & ANALISIS SOAL -->
@@ -160,31 +193,32 @@
         <div class="metric-card">
           <div>
             <div class="metric-label">Total Soal Teruji</div>
-            <div class="metric-value" style="color: #2563eb;">5 Soal</div>
+            <div class="metric-value" style="color: var(--blue-600);">5 Soal</div>
           </div>
-          <div class="metric-icon" style="background: #eff6ff; color: #2563eb;"><i class="fa-solid fa-list-check"></i></div>
+          <div class="metric-icon" style="background: #eff6ff; color: var(--blue-600);"><i class="fa-solid fa-list-check"></i></div>
         </div>
 
         <div class="metric-card">
           <div>
             <div class="metric-label">Rata-Rata Nilai Siswa</div>
-            <div class="metric-value" style="color: #16a34a;">84.5</div>
+            <div class="metric-value" style="color: var(--emerald-600);">84.5</div>
           </div>
-          <div class="metric-icon" style="background: #dcfce7; color: #16a34a;"><i class="fa-solid fa-chart-line"></i></div>
+          <div class="metric-icon" style="background: #dcfce7; color: var(--emerald-600);"><i class="fa-solid fa-chart-line"></i></div>
         </div>
 
         <div class="metric-card">
           <div>
-            <div class="metric-label">Tingkat Kesukaran</div>
-            <div class="metric-value" style="color: #d97706;">Sedang</div>
+            <div class="metric-label">Tingkat Kesukaran Soal</div>
+            <div class="metric-value" style="color: var(--amber-600);">Sedang (0.62)</div>
           </div>
-          <div class="metric-icon" style="background: #fef3c7; color: #d97706;"><i class="fa-solid fa-gauge-high"></i></div>
+          <div class="metric-icon" style="background: #fef3c7; color: var(--amber-600);"><i class="fa-solid fa-gauge-high"></i></div>
         </div>
       </div>
 
-      <div class="card-ui" style="padding: 1.5rem; text-align: center; color: #64748b;">
-        <i class="fa-solid fa-square-poll-vertical" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 0.5rem; display: block;"></i>
-        Seluruh esai pilihan ganda dan objektif telah terkoreksi otomatis oleh sistem.
+      <div class="card-ui" style="padding: 2rem; text-align: center; color: var(--slate-600);">
+        <i class="fa-solid fa-square-poll-vertical" style="font-size: 3.5rem; color: var(--slate-300); margin-bottom: 0.75rem; display: block;"></i>
+        <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--navy-900); margin-bottom: 0.35rem;">Analisis Butir Soal & Koreksi Terotomatisasi</h3>
+        <p style="font-size: 0.875rem;">Seluruh esai pilihan ganda dan objektif telah terkoreksi otomatis oleh sistem CBT Kusuma.</p>
       </div>
     </div>
 
@@ -192,8 +226,10 @@
 
   <!-- Add Question Modal -->
   <div class="modal-overlay" id="addQuestionModal">
-    <div class="modal-container card-ui" style="max-width: 600px; text-align: left;">
-      <h3 style="margin-bottom: 1rem; color: #0f172a;"><i class="fa-solid fa-plus-circle" style="color: #2563eb;"></i> Tambah Soal Baru</h3>
+    <div class="modal-container card-ui" style="max-width: 650px; padding: 1.75rem;">
+      <h3 style="margin-bottom: 1.25rem; color: var(--navy-900); font-size: 1.2rem; font-weight: 800;">
+        <i class="fa-solid fa-plus-circle" style="color: var(--blue-600);"></i> Tambah Butir Soal Baru
+      </h3>
       
       <form id="addQForm" onsubmit="saveNewQuestion(event)">
         <div class="form-group">
@@ -203,16 +239,16 @@
 
         <div class="form-group">
           <label class="form-label">Teks Pertanyaan Soal</label>
-          <textarea id="qText" class="form-control" rows="3" placeholder="Tuliskan pertanyaan soal..." required></textarea>
+          <textarea id="qText" class="form-control" rows="3" placeholder="Tuliskan teks pertanyaan..." required></textarea>
         </div>
 
         <div class="form-group">
-          <label class="form-label">Opsi Jawaban (A, B, C, D, E)</label>
-          <input type="text" id="opt0" class="form-control" placeholder="Opsi A" style="margin-bottom: 0.4rem;" required>
-          <input type="text" id="opt1" class="form-control" placeholder="Opsi B" style="margin-bottom: 0.4rem;" required>
-          <input type="text" id="opt2" class="form-control" placeholder="Opsi C" style="margin-bottom: 0.4rem;" required>
-          <input type="text" id="opt3" class="form-control" placeholder="Opsi D" style="margin-bottom: 0.4rem;" required>
-          <input type="text" id="opt4" class="form-control" placeholder="Opsi E" style="margin-bottom: 0.4rem;" required>
+          <label class="form-label">Opsi Jawaban (Pilihan A s.d. E)</label>
+          <input type="text" id="opt0" class="form-control" placeholder="Opsi A" style="margin-bottom: 0.5rem;" required>
+          <input type="text" id="opt1" class="form-control" placeholder="Opsi B" style="margin-bottom: 0.5rem;" required>
+          <input type="text" id="opt2" class="form-control" placeholder="Opsi C" style="margin-bottom: 0.5rem;" required>
+          <input type="text" id="opt3" class="form-control" placeholder="Opsi D" style="margin-bottom: 0.5rem;" required>
+          <input type="text" id="opt4" class="form-control" placeholder="Opsi E" style="margin-bottom: 0.5rem;" required>
         </div>
 
         <div class="form-group">
