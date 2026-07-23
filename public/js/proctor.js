@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         appendCheatingFeed({
           studentName: student.name,
           eventType: 'LOW_BATTERY',
-          description: `⚠️ Baterai HP/Tablet Siswa Lemah (${data.batteryLevel}%). Perlu Charger Segera!`,
+          description: `Baterai HP/Tablet Siswa Lemah (${data.batteryLevel}%). Perlu Charger Segera!`,
           violationsCount: student.violations_count,
           isLocked: false,
           timestamp: new Date().toLocaleTimeString('id-ID')
