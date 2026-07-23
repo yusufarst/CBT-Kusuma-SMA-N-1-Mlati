@@ -10,7 +10,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
-  document.getElementById('adminName').innerText = user.name;
+  const setElText = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.innerText = val;
+  };
+
+  setElText('adminName', user.name);
+  setElText('sidebarAdminName', user.name);
   await loadUsers();
 });
 
