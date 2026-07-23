@@ -3,174 +3,257 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portal Siswa - CBT KUSUMA SMAN 1 Mlati</title>
-  <link rel="stylesheet" href="/css/style.css?v=4.0.0">
+  <title>Dasbor Siswa - CBT KUSUMA SMAN 1 Mlati</title>
+  <link rel="stylesheet" href="/css/style.css?v=5.0.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body style="background: var(--slate-50); min-height: 100vh; display: flex; flex-direction: column;">
+<body>
 
-  <!-- Institutional Top Header Bar -->
-  <header class="app-header-main">
-    <div class="brand-wrapper">
-      <div class="brand-icon"><i class="fa-solid fa-graduation-cap"></i></div>
-      <div>
-        <div style="font-size: 1.05rem; font-weight: 800;">PORTAL SISWA CBT KUSUMA</div>
-        <div style="font-size: 0.7rem; font-weight: 500; color: #94a3b8;">SMA Negeri 1 Mlati, Sleman — DIY</div>
-      </div>
-    </div>
+  <div class="app-wrapper">
     
-    <div style="display: flex; align-items: center; gap: 1.25rem;">
-      <div style="text-align: right; display: flex; align-items: center; gap: 0.75rem;">
-        <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--blue-600); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;">
-          <i class="fa-solid fa-user-graduate"></i>
-        </div>
-        <div>
-          <div style="font-weight: 700; font-size: 0.875rem; color: white;" id="studentName">Achmad Galih Indrayanto</div>
-          <div style="font-size: 0.725rem; color: #94a3b8;" id="studentNis">NIS: 3725 | Kelas X A</div>
+    <!-- LEFT VERTICAL SIDEBAR NAVIGATION (UNY Style) -->
+    <aside class="sidebar-main">
+      <!-- Brand Header -->
+      <div class="sidebar-brand">
+        <div class="sidebar-logo-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+        <div class="sidebar-brand-text">
+          <div>CBT KUSUMA</div>
+          <div style="font-size: 0.65rem; color: #94a3b8; font-weight: 500;">SMA N 1 MLATI</div>
         </div>
       </div>
 
-      <button onclick="logout()" class="btn btn-danger" style="padding: 0.4rem 0.85rem; font-size: 0.8rem;">
-        <i class="fa-solid fa-right-from-bracket"></i> Keluar
-      </button>
-    </div>
-  </header>
-
-  <!-- Main Showcase Container -->
-  <main style="max-width: 1200px; width: 100%; margin: 2rem auto; padding: 0 1.5rem; flex: 1;">
-
-    <!-- Welcome Hero Banner -->
-    <div class="card-ui" style="padding: 2rem; margin-bottom: 2rem; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; border: none; box-shadow: var(--shadow-lg);">
-      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;">
-        <div>
-          <span class="badge badge-primary" style="margin-bottom: 0.85rem; background: rgba(37,99,235,0.25); color: #60a5fa; border: 1px solid rgba(96,165,250,0.3);">
-            <i class="fa-solid fa-bell"></i> Sesi Ujian Aktif Hari Ini
-          </span>
-          <h1 style="font-size: 1.75rem; font-weight: 800; margin-bottom: 0.5rem; color: white;">Selamat Datang, <span id="welcomeStudentName">Achmad Galih</span>!</h1>
-          <p style="color: #94a3b8; font-size: 0.95rem; max-width: 600px;">
-            Sistem CBT Kusuma menerapkan <strong>Anti-Cheating Engine & Screen Lock</strong>. Pastikan perangkat Anda terhubung ke Wi-Fi sekolah dan baterai cukup sebelum mulai ujian.
-          </p>
+      <!-- User Info Avatar Box -->
+      <div class="sidebar-user-box">
+        <div class="sidebar-user-avatar"><i class="fa-solid fa-user-graduate"></i></div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name" id="sidebarStudentName">Achmad Galih Indrayanto</div>
+          <div class="sidebar-user-role" id="sidebarStudentNis">NIS: 3725 | Kelas X A</div>
         </div>
+      </div>
 
-        <button onclick="startExamSession()" class="btn btn-primary" style="padding: 0.9rem 1.75rem; font-size: 1rem; border-radius: 12px; font-weight: 800; box-shadow: 0 4px 16px rgba(37,99,235,0.4);">
-          <i class="fa-solid fa-pen-to-square"></i> Mulai Mengerjakan Ujian
+      <!-- Sidebar Menu Items -->
+      <nav class="sidebar-menu">
+        <button class="sidebar-menu-item active" onclick="switchStudentTab('dasbor')" id="side-dasbor">
+          <i class="fa-solid fa-house"></i> Dasbor Utama
         </button>
-      </div>
-    </div>
+        <button class="sidebar-menu-item" onclick="switchStudentTab('ujian-aktif')" id="side-ujian-aktif">
+          <i class="fa-solid fa-pen-to-square"></i> Ujian Aktif Hari Ini
+        </button>
+        <button class="sidebar-menu-item" onclick="switchStudentTab('riwayat')" id="side-riwayat">
+          <i class="fa-solid fa-clock-rotate-left"></i> Hasil & Nilai Ujian
+        </button>
+        <button class="sidebar-menu-item" onclick="switchStudentTab('profil')" id="side-profil">
+          <i class="fa-solid fa-user-gear"></i> Profil Siswa
+        </button>
+      </nav>
+    </aside>
 
-    <!-- Device & System Readiness Diagnostic Card -->
-    <div class="card-ui" style="padding: 1.25rem 1.5rem; margin-bottom: 2rem; border-left: 4px solid var(--blue-600);">
-      <h3 style="font-size: 1rem; font-weight: 800; color: var(--navy-900); margin-bottom: 0.85rem; display: flex; align-items: center; gap: 0.5rem;">
-        <i class="fa-solid fa-laptop-code" style="color: var(--blue-600);"></i> Status Kesediaan Perangkat Ujian (Mobile/PC Diagnostic)
-      </h3>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
-        <div style="background: var(--slate-100); padding: 0.85rem 1rem; border-radius: 8px; display: flex; align-items: center; gap: 0.75rem;">
-          <i class="fa-solid fa-battery-three-quarters" style="font-size: 1.5rem; color: var(--emerald-600);"></i>
-          <div>
-            <div style="font-size: 0.725rem; color: var(--slate-600); font-weight: 700;">Daya Baterai HP</div>
-            <div style="font-weight: 800; font-size: 0.95rem; color: var(--navy-900);" id="diagBattery">85% (Terisi Cukup)</div>
-          </div>
+    <!-- RIGHT MAIN CONTENT WRAPPER -->
+    <div class="main-content-wrapper">
+      
+      <!-- Top Header Bar -->
+      <header class="top-header-bar">
+        <div class="top-header-left">
+          <button class="toggle-sidebar-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+          <div class="top-header-title">DASBOR SISWA CBT KUSUMA SMAN 1 MLATI</div>
         </div>
 
-        <div style="background: var(--slate-100); padding: 0.85rem 1rem; border-radius: 8px; display: flex; align-items: center; gap: 0.75rem;">
-          <i class="fa-solid fa-wifi" style="font-size: 1.5rem; color: var(--blue-600);"></i>
-          <div>
-            <div style="font-size: 0.725rem; color: var(--slate-600); font-weight: 700;">Jaringan Wi-Fi</div>
-            <div style="font-weight: 800; font-size: 0.95rem; color: var(--navy-900);">WIFI-SMAN1MLATI (Terhubung)</div>
-          </div>
-        </div>
-
-        <div style="background: var(--slate-100); padding: 0.85rem 1rem; border-radius: 8px; display: flex; align-items: center; gap: 0.75rem;">
-          <i class="fa-solid fa-expand" style="font-size: 1.5rem; color: var(--amber-600);"></i>
-          <div>
-            <div style="font-size: 0.725rem; color: var(--slate-600); font-weight: 700;">Kesesuaian Fullscreen</div>
-            <div style="font-weight: 800; font-size: 0.95rem; color: var(--navy-900);">Siap Fullscreen (Browser Valid)</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Active Exam Cards Grid -->
-    <div style="margin-bottom: 2rem;">
-      <h2 style="font-size: 1.2rem; font-weight: 800; color: var(--navy-900); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-        <i class="fa-solid fa-clipboard-list" style="color: var(--blue-600);"></i> Daftar Ujian Yang Tersedia Hari Ini
-      </h2>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.25rem;">
-        
-        <!-- Exam Card 1 -->
-        <div class="card-ui" style="padding: 1.5rem; border-left: 4px solid var(--blue-600);">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.85rem;">
-            <span class="badge badge-primary"><i class="fa-solid fa-book"></i> Ekonomi X</span>
-            <span class="badge badge-success"><i class="fa-solid fa-circle" style="font-size: 0.5rem;"></i> Sesi Aktif</span>
-          </div>
-
-          <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--navy-900); margin-bottom: 0.4rem;">Penilaian Akhir Semester (PAS) Ekonomi</h3>
-          <p style="color: var(--slate-600); font-size: 0.85rem; margin-bottom: 1.25rem;">
-            <i class="fa-regular fa-clock"></i> Durasi: 60 Menit | Total: 5 Soal (Pilihan Ganda & Acak)
-          </p>
-
-          <button onclick="startExamSession()" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.75rem;">
-            <i class="fa-solid fa-play"></i> Masuk Lembar Soal Ujian
+        <div class="top-header-right">
+          <div style="font-size: 0.85rem; font-weight: 700; color: var(--slate-600);"><i class="fa-solid fa-globe"></i> ID</div>
+          <button onclick="logout()" class="btn btn-danger" style="padding: 0.4rem 0.85rem; font-size: 0.8rem;">
+            <i class="fa-solid fa-right-from-bracket"></i> Keluar
           </button>
         </div>
+      </header>
 
-        <!-- Exam Card 2 -->
-        <div class="card-ui" style="padding: 1.5rem; border-left: 4px solid var(--slate-300); opacity: 0.85;">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.85rem;">
-            <span class="badge badge-primary"><i class="fa-solid fa-code"></i> Informatika X</span>
-            <span class="badge badge-warning"><i class="fa-solid fa-clock"></i> Jadwal Berikutnya</span>
+      <!-- Main Body Container -->
+      <div class="dashboard-body-container">
+
+        <!-- TAB 1: DASBOR UTAMA -->
+        <div id="section-dasbor">
+          
+          <!-- Profile Academic Info Card (UNY Style Teal Header) -->
+          <div class="card-ui" style="margin-bottom: 1.75rem; border: none; overflow: hidden;">
+            <div class="card-header-banner card-header-teal">
+              <div><i class="fa-solid fa-id-card"></i> Informasi Akademik Siswa Peserta Ujian</div>
+              <span class="badge" style="background: rgba(255,255,255,0.2); color: white;">TA 2026/2027</span>
+            </div>
+
+            <div style="padding: 1.5rem; background: #ffffff;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                <tbody>
+                  <tr style="border-bottom: 1px solid var(--slate-200);">
+                    <td style="width: 160px; font-weight: 700; color: var(--slate-600); padding: 0.65rem 0;">NIS / Username</td>
+                    <td style="width: 20px;">:</td>
+                    <td style="font-weight: 800; color: var(--navy-900);" id="infoNis">3725 (siswa3725@sman1mlati.sch.id)</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--slate-200);">
+                    <td style="font-weight: 700; color: var(--slate-600); padding: 0.65rem 0;">Nama Lengkap</td>
+                    <td>:</td>
+                    <td style="font-weight: 800; color: var(--navy-900);" id="infoName">Achmad Galih Indrayanto</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--slate-200);">
+                    <td style="font-weight: 700; color: var(--slate-600); padding: 0.65rem 0;">Rombongan Belajar</td>
+                    <td>:</td>
+                    <td style="font-weight: 800; color: var(--blue-600);">Kelas X A (Ruang 01)</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: 700; color: var(--slate-600); padding: 0.65rem 0;">Status Kesiapan CBT</td>
+                    <td>:</td>
+                    <td><span class="badge badge-success"><i class="fa-solid fa-check"></i> Aktif Terverifikasi (Siap Ujian)</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
 
-          <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--navy-900); margin-bottom: 0.4rem;">Ulangan Harian Berpikir Komputasional</h3>
-          <p style="color: var(--slate-600); font-size: 0.85rem; margin-bottom: 1.25rem;">
-            <i class="fa-regular fa-clock"></i> Durasi: 45 Menit | Pukul 10:30 WIB
-          </p>
+          <!-- Device & System Readiness Diagnostic Card -->
+          <div class="card-ui" style="padding: 1.25rem 1.5rem; margin-bottom: 1.75rem; border-left: 4px solid var(--blue-600);">
+            <h3 style="font-size: 1rem; font-weight: 800; color: var(--navy-900); margin-bottom: 0.85rem; display: flex; align-items: center; gap: 0.5rem;">
+              <i class="fa-solid fa-laptop-code" style="color: var(--blue-600);"></i> Status Kesediaan Perangkat Ujian (Mobile/PC Diagnostic)
+            </h3>
 
-          <button disabled class="btn btn-outline" style="width: 100%; justify-content: center; padding: 0.75rem; cursor: not-allowed;">
-            <i class="fa-solid fa-lock"></i> Belum Dibuka
-          </button>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+              <div style="background: var(--slate-100); padding: 0.85rem 1rem; border-radius: 8px; display: flex; align-items: center; gap: 0.75rem;">
+                <i class="fa-solid fa-battery-three-quarters" style="font-size: 1.5rem; color: var(--emerald-600);"></i>
+                <div>
+                  <div style="font-size: 0.725rem; color: var(--slate-600); font-weight: 700;">Daya Baterai HP</div>
+                  <div style="font-weight: 800; font-size: 0.95rem; color: var(--navy-900);" id="diagBattery">85% (Terisi Cukup)</div>
+                </div>
+              </div>
+
+              <div style="background: var(--slate-100); padding: 0.85rem 1rem; border-radius: 8px; display: flex; align-items: center; gap: 0.75rem;">
+                <i class="fa-solid fa-wifi" style="font-size: 1.5rem; color: var(--blue-600);"></i>
+                <div>
+                  <div style="font-size: 0.725rem; color: var(--slate-600); font-weight: 700;">Jaringan Wi-Fi</div>
+                  <div style="font-weight: 800; font-size: 0.95rem; color: var(--navy-900);">WIFI-SMAN1MLATI (Terhubung)</div>
+                </div>
+              </div>
+
+              <div style="background: var(--slate-100); padding: 0.85rem 1rem; border-radius: 8px; display: flex; align-items: center; gap: 0.75rem;">
+                <i class="fa-solid fa-expand" style="font-size: 1.5rem; color: var(--amber-600);"></i>
+                <div>
+                  <div style="font-size: 0.725rem; color: var(--slate-600); font-weight: 700;">Kesesuaian Fullscreen</div>
+                  <div style="font-weight: 800; font-size: 0.95rem; color: var(--navy-900);">Siap Fullscreen (Browser Valid)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active Exam Cards Grid -->
+          <div style="margin-bottom: 2rem;">
+            <div class="card-ui" style="border: none; overflow: hidden;">
+              <div class="card-header-banner card-header-blue">
+                <div><i class="fa-solid fa-clipboard-list"></i> Jadwal Ujian Aktif Hari Ini (Wajib Diikuti)</div>
+              </div>
+
+              <div style="padding: 1.5rem;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem;">
+                  
+                  <!-- Exam Card 1 -->
+                  <div class="card-ui" style="padding: 1.5rem; border-left: 4px solid var(--blue-600);">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.85rem;">
+                      <span class="badge badge-primary"><i class="fa-solid fa-book"></i> Ekonomi X</span>
+                      <span class="badge badge-success"><i class="fa-solid fa-circle" style="font-size: 0.5rem;"></i> Sesi Aktif</span>
+                    </div>
+
+                    <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--navy-900); margin-bottom: 0.4rem;">Penilaian Akhir Semester (PAS) Ekonomi</h3>
+                    <p style="color: var(--slate-600); font-size: 0.85rem; margin-bottom: 1.25rem;">
+                      <i class="fa-regular fa-clock"></i> Durasi: 60 Menit | Total: 5 Soal (Pilihan Ganda & Acak)
+                    </p>
+
+                    <button onclick="startExamSession()" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.75rem;">
+                      <i class="fa-solid fa-play"></i> Masuk Lembar Soal Ujian
+                    </button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- TAB 2: UJIAN AKTIF HARI INI -->
+        <div id="section-ujian-aktif" style="display: none;">
+          <div class="card-ui" style="padding: 2rem; max-width: 800px; margin: 0 auto;">
+            <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--navy-900); margin-bottom: 1rem;">
+              <i class="fa-solid fa-pen-to-square" style="color: var(--blue-600);"></i> Sesi Ujian Aktif Terdaftar
+            </h2>
+            <p style="color: var(--slate-600); font-size: 0.9rem; margin-bottom: 1.5rem;">
+              Pastikan Anda menekan tombol di bawah ini saat pengawas ruang menginstruksikan untuk mulai mengerjakan.
+            </p>
+
+            <button onclick="startExamSession()" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 1rem; font-size: 1.05rem;">
+              <i class="fa-solid fa-play"></i> Mulai Mengerjakan Ujian Sekarang
+            </button>
+          </div>
+        </div>
+
+        <!-- TAB 3: HASIL & NILAI UJIAN -->
+        <div id="section-riwayat" style="display: none;">
+          <div class="card-ui" style="overflow: hidden;">
+            <div class="card-header-banner card-header-teal">
+              <div><i class="fa-solid fa-clock-rotate-left"></i> Riwayat & Terbitan Nilai Ujian</div>
+            </div>
+            <div style="padding: 0;">
+              <table class="table-modern">
+                <thead>
+                  <tr>
+                    <th>Mata Pelajaran</th>
+                    <th>Jenis Ujian</th>
+                    <th>Waktu Selesai</th>
+                    <th>Status Verifikasi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="font-weight: 700; color: var(--navy-900);">Ekonomi X</td>
+                    <td style="color: var(--slate-600);">Ulangan Harian 1</td>
+                    <td style="color: var(--slate-600);">20 Juli 2026 09:30 WIB</td>
+                    <td><span class="badge badge-success"><i class="fa-solid fa-check"></i> Selesai (Terverifikasi)</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 4: PROFIL SISWA -->
+        <div id="section-profil" style="display: none;">
+          <div class="card-ui" style="padding: 2rem; max-width: 600px; margin: 0 auto;">
+            <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--navy-900); margin-bottom: 1.25rem;">
+              <i class="fa-solid fa-user-gear" style="color: var(--blue-600);"></i> Pengaturan Profil & Kata Sandi
+            </h2>
+
+            <form onsubmit="alert('Kata Sandi Berhasil Diperbarui!'); return false;">
+              <div class="form-group">
+                <label class="form-label">Nama Lengkap</label>
+                <input type="text" class="form-control" id="profName" readonly value="Achmad Galih Indrayanto">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">NIS (Nomor Induk Siswa)</label>
+                <input type="text" class="form-control" id="profNis" readonly value="3725">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Kata Sandi Baru</label>
+                <input type="password" class="form-control" placeholder="Masukkan password baru..." required>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.75rem;">
+                <i class="fa-solid fa-floppy-disk"></i> Simpan Kata Sandi
+              </button>
+            </form>
+          </div>
         </div>
 
       </div>
+
     </div>
 
-    <!-- Exam History Section -->
-    <div>
-      <h2 style="font-size: 1.2rem; font-weight: 800; color: var(--navy-900); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-        <i class="fa-solid fa-clock-rotate-left" style="color: var(--slate-600);"></i> Riwayat & Hasil Ujian Terkini
-      </h2>
-
-      <div class="card-ui" style="padding: 0; overflow: hidden;">
-        <table class="table-modern">
-          <thead>
-            <tr>
-              <th>Mata Pelajaran</th>
-              <th>Jenis Ujian</th>
-              <th>Tanggal / Waktu Selesai</th>
-              <th>Status Verifikasi</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style="font-weight: 700; color: var(--navy-900);">Ekonomi X</td>
-              <td style="color: var(--slate-600);">Ulangan Harian 1</td>
-              <td style="color: var(--slate-600);">20 Juli 2026 09:30 WIB</td>
-              <td><span class="badge badge-success"><i class="fa-solid fa-check"></i> Selesai (Terverifikasi)</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-  </main>
-
-  <!-- Institutional Footer -->
-  <footer style="background: #ffffff; border-top: 1px solid var(--slate-200); padding: 0.85rem 1.75rem; font-size: 0.8rem; color: var(--slate-600); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; margin-top: 2rem;">
-    <div>Hak Cipta © 2026 <strong>SMA Negeri 1 Mlati, Sleman — DIY</strong>. All rights reserved.</div>
-    <div>CBT KUSUMA Student Portal v4.0</div>
-  </footer>
+  </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -184,17 +267,42 @@
         window.location.href = '/index.html';
         return;
       }
-      document.getElementById('studentName').innerText = user.name;
-      document.getElementById('welcomeStudentName').innerText = user.name.split(' ')[0];
-      document.getElementById('studentNis').innerText = `NIS: ${user.nis || '3725'} | Kelas X A`;
 
-      // Check battery if Battery API available
+      document.getElementById('sidebarStudentName').innerText = user.name;
+      document.getElementById('infoName').innerText = user.name;
+      document.getElementById('profName').value = user.name;
+      document.getElementById('sidebarStudentNis').innerText = `NIS: ${user.nis || '3725'} | Kelas X A`;
+      document.getElementById('infoNis').innerText = `${user.nis || '3725'} (${user.username})`;
+      document.getElementById('profNis').value = user.nis || '3725';
+
       if (navigator.getBattery) {
-        navigator.getBattery().then(battery => {
-          document.getElementById('diagBattery').innerText = `${Math.round(battery.level * 100)}% (${battery.charging ? 'Mengisi' : 'Terisi Cukup'})`;
+        navigator.getBattery().then(b => {
+          document.getElementById('diagBattery').innerText = `${Math.round(b.level * 100)}% (${b.charging ? 'Mengisi' : 'Terisi Cukup'})`;
         });
       }
     });
+
+    function switchStudentTab(tabName) {
+      const tabs = ['dasbor', 'ujian-aktif', 'riwayat', 'profil'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`side-${t}`);
+        const sec = document.getElementById(`section-${t}`);
+        if (btn && sec) {
+          if (t === tabName) {
+            btn.classList.add('active');
+            sec.style.display = 'block';
+          } else {
+            btn.classList.remove('active');
+            sec.style.display = 'none';
+          }
+        }
+      });
+    }
+
+    function toggleSidebar() {
+      const sidebar = document.querySelector('.sidebar-main');
+      sidebar.classList.toggle('open');
+    }
 
     function startExamSession() {
       window.location.href = '/student.html';
