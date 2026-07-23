@@ -21,14 +21,10 @@ function switchTeacherTab(tabName) {
     const sec = document.getElementById(`section-${t}`);
     if (btn && sec) {
       if (t === tabName) {
-        btn.className = 'tab-btn active';
-        btn.style.color = '#2563eb';
-        btn.style.borderBottom = '3px solid #2563eb';
+        btn.classList.add('active');
         sec.style.display = 'block';
       } else {
-        btn.className = 'tab-btn';
-        btn.style.color = '#64748b';
-        btn.style.borderBottom = 'none';
+        btn.classList.remove('active');
         sec.style.display = 'none';
       }
     }
@@ -46,17 +42,16 @@ async function loadQuestions() {
 
       data.questions.forEach((q, index) => {
         const tr = document.createElement('tr');
-        tr.style.borderBottom = '1px solid #e2e8f0';
 
         const optStr = q.options.map((opt, i) => `<div><strong>${String.fromCharCode(65 + i)}:</strong> ${opt}</div>`).join('');
         const correctLetter = String.fromCharCode(65 + q.correct_answer);
 
         tr.innerHTML = `
-          <td style="padding: 1rem 1.25rem; font-weight: 700;">${index + 1}</td>
-          <td style="padding: 1rem 1.25rem;"><span class="badge badge-primary">${q.subject}</span></td>
-          <td style="padding: 1rem 1.25rem; font-weight: 600; color: #0f172a; max-width: 400px;">${q.question_text}</td>
-          <td style="padding: 1rem 1.25rem; font-size: 0.8rem; color: #475569;">${optStr}</td>
-          <td style="padding: 1rem 1.25rem;"><span class="badge badge-success">Opsi ${correctLetter}</span></td>
+          <td style="font-weight: 700;">${index + 1}</td>
+          <td><span class="badge badge-primary">${q.subject}</span></td>
+          <td style="font-weight: 600; color: var(--navy-900); max-width: 380px;">${q.question_text}</td>
+          <td style="font-size: 0.825rem; color: var(--slate-600);">${optStr}</td>
+          <td><span class="badge badge-success">Opsi ${correctLetter}</span></td>
         `;
         tbody.appendChild(tr);
       });
@@ -64,6 +59,12 @@ async function loadQuestions() {
   } catch (e) {
     console.error("Gagal memuat soal:", e);
   }
+}
+
+function generateNewLockCode() {
+  const newCode = Math.floor(100000 + Math.random() * 900000).toString();
+  document.getElementById('dailyUnlockCode').innerText = newCode;
+  alert(`Kode Unlock 6-Digit Harian Diacak Ulang: ${newCode}\nKode ini dapat digunakan untuk melepaskan penguncian siswa.`);
 }
 
 function openAddQuestionModal() {
