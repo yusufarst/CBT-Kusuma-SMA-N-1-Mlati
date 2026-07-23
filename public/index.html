@@ -3,119 +3,123 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portal CBT KUSUMA - SMA Negeri 1 Mlati</title>
-  <link rel="stylesheet" href="/css/style.css?v=3.1.0">
+  <title>CBT KUSUMA - Platform Ujian Digital SMAN 1 Mlati</title>
+  <link rel="stylesheet" href="/css/style.css?v=9.0.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body style="background: #f8fafc; min-height: 100vh; display: flex; flex-direction: column;">
+<body style="background: var(--bg-app); min-height: 100vh; display: flex; flex-direction: column;">
 
-  <!-- Institutional Top Header Bar -->
+  <!-- Institutional Top Header Bar (Landing Page CBT.png Exact Match) -->
   <header class="app-header-main">
     <div class="brand-wrapper">
       <div class="brand-icon"><i class="fa-solid fa-graduation-cap"></i></div>
       <div>
-        <div style="font-size: 1.05rem;">CBT KUSUMA</div>
-        <div style="font-size: 0.7rem; font-weight: 500; color: #94a3b8;">SMA Negeri 1 Mlati, Sleman — DIY</div>
+        <div class="brand-title">CBT KUSUMA</div>
+        <div class="brand-subtitle">SMA Negeri 1 Mlati, Sleman — DIY</div>
       </div>
     </div>
-    <span class="badge badge-primary"><i class="fa-solid fa-shield-halved"></i> System Online & Secure</span>
+    
+    <div class="badge badge-primary" style="background: rgba(37,99,235,0.2); color: #60a5fa; border: 1px solid rgba(96,165,250,0.3); padding: 0.4rem 0.85rem; font-size: 0.8rem;">
+      <i class="fa-solid fa-shield-halved"></i> System Online & Secure
+    </div>
   </header>
 
-  <!-- Main Showcase & Login Container -->
-  <main style="max-width: 1200px; width: 100%; margin: 2rem auto; padding: 0 1.5rem; flex: 1; display: flex; align-items: center;">
-    
-    <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 2.5rem; width: 100%; align-items: center;">
-      
-      <!-- Left Column: School Showcase Banner -->
-      <div>
-        <div class="badge badge-primary" style="margin-bottom: 1rem; font-size: 0.8rem; padding: 0.4rem 0.85rem;">
-          <i class="fa-solid fa-school"></i> Portal Ujian Berbasis Komputer & Mobile
-        </div>
+  <!-- Main Showcase Container -->
+  <main style="max-width: 1280px; width: 100%; margin: 3rem auto; padding: 0 1.5rem; flex: 1; display: flex; align-items: center; justify-content: center;">
 
-        <h1 style="font-size: 2.25rem; font-weight: 800; color: #0f172a; line-height: 1.25; margin-bottom: 1rem;">
-          Platform Ujian Digital Terproteksi <br><span style="color: #2563eb;">SMA Negeri 1 Mlati</span>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 2.5rem; width: 100%; align-items: center;">
+
+      <!-- Left Hero Section (Landing Page CBT.png Exact Match) -->
+      <div>
+        <span class="badge badge-primary" style="margin-bottom: 1.25rem; padding: 0.4rem 0.85rem; font-size: 0.8rem;">
+          <i class="fa-solid fa-laptop"></i> Portal Ujian Berbasis Komputer & Mobile
+        </span>
+
+        <h1 style="font-size: 2.4rem; font-weight: 800; color: var(--slate-900); line-height: 1.25; margin-bottom: 1rem; letter-spacing: -0.02em;">
+          Platform Ujian Digital Terproteksi <br><span style="color: var(--primary-blue);">SMA Negeri 1 Mlati</span>
         </h1>
 
-        <p style="color: #64748b; font-size: 1rem; line-height: 1.6; margin-bottom: 1.75rem;">
-          Sistem penilaian ujian digital yang dilengkapi dengan <strong>Anti-Cheating Engine</strong>, penguncian layar otomatis (*Screen Lock*), serta <strong>Dashboard Pengawas Real-Time</strong> per ruangan untuk menjamin integritas dan kelancaran ujian.
+        <p style="color: var(--slate-600); font-size: 0.95rem; line-height: 1.6; margin-bottom: 2rem; max-width: 540px;">
+          Sistem penilaian ujian digital yang dilengkapi dengan <strong>Anti-Cheating Engine</strong>, penguncian layar otomatis (<em>Screen Lock</em>), serta <strong>Dashboard Pengawas Real-Time</strong> per ruangan untuk menjamin integritas dan kelancaran ujian.
         </p>
 
-        <!-- Features Showcase Grid -->
+        <!-- 4 Grid Feature Cards -->
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-          <div class="card-ui" style="padding: 1rem; border-left: 4px solid #2563eb;">
-            <div style="font-weight: 700; font-size: 0.9rem; color: #0f172a; margin-bottom: 0.2rem;">
-              <i class="fa-solid fa-mobile-screen-button" style="color: #2563eb;"></i> Mobile & PC Ready
+          <div class="card-ui" style="padding: 1rem 1.15rem;">
+            <div style="font-weight: 700; font-size: 0.875rem; color: var(--navy-900); margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.4rem;">
+              <i class="fa-solid fa-mobile-screen-button" style="color: var(--primary-blue);"></i> Mobile & PC Ready
             </div>
-            <div style="font-size: 0.8rem; color: #64748b;">Optimal untuk Smartphone Android, iOS, Tablet, & PC Lab.</div>
+            <div style="font-size: 0.775rem; color: var(--slate-600);">Optimal untuk Smartphone Android, iOS, Tablet, & PC Lab.</div>
           </div>
 
-          <div class="card-ui" style="padding: 1rem; border-left: 4px solid #16a34a;">
-            <div style="font-weight: 700; font-size: 0.9rem; color: #0f172a; margin-bottom: 0.2rem;">
-              <i class="fa-solid fa-cloud-arrow-up" style="color: #16a34a;"></i> Auto-Save Real-time
+          <div class="card-ui" style="padding: 1rem 1.15rem;">
+            <div style="font-weight: 700; font-size: 0.875rem; color: var(--navy-900); margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.4rem;">
+              <i class="fa-solid fa-cloud-arrow-up" style="color: var(--success-green);"></i> Auto-Save Real-time
             </div>
-            <div style="font-size: 0.8rem; color: #64748b;">Jawaban tersimpan otomatis secara berkala di server.</div>
+            <div style="font-size: 0.775rem; color: var(--slate-600);">Jawaban tersimpan otomatis secara berkala di server.</div>
           </div>
 
-          <div class="card-ui" style="padding: 1rem; border-left: 4px solid #d97706;">
-            <div style="font-weight: 700; font-size: 0.9rem; color: #0f172a; margin-bottom: 0.2rem;">
-              <i class="fa-solid fa-shield-halved" style="color: #d97706;"></i> Anti-Cheating Engine
+          <div class="card-ui" style="padding: 1rem 1.15rem;">
+            <div style="font-weight: 700; font-size: 0.875rem; color: var(--navy-900); margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.4rem;">
+              <i class="fa-solid fa-shield-cat" style="color: var(--warning-amber);"></i> Anti-Cheating Engine
             </div>
-            <div style="font-size: 0.8rem; color: #64748b;">Deteksi pindah tab, kelancaran ujian, & penguncian layar.</div>
+            <div style="font-size: 0.775rem; color: var(--slate-600);">Deteksi pindah tab, kelancaran ujian, & penguncian layar.</div>
           </div>
 
-          <div class="card-ui" style="padding: 1rem; border-left: 4px solid #4f46e5;">
-            <div style="font-weight: 700; font-size: 0.9rem; color: #0f172a; margin-bottom: 0.2rem;">
-              <i class="fa-solid fa-user-shield" style="color: #4f46e5;"></i> Dashboard Pengawas
+          <div class="card-ui" style="padding: 1rem 1.15rem;">
+            <div style="font-weight: 700; font-size: 0.875rem; color: var(--navy-900); margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.4rem;">
+              <i class="fa-solid fa-users-viewfinder" style="color: var(--primary-blue);"></i> Dashboard Pengawas
             </div>
-            <div style="font-size: 0.8rem; color: #64748b;">Pemantauan status peserta per ruang ujian live via Socket.io.</div>
+            <div style="font-size: 0.775rem; color: var(--slate-600);">Pemantauan status peserta per ruang ujian live via Socket.io.</div>
           </div>
         </div>
       </div>
 
-      <!-- Right Column: Symmetrical Login Card -->
-      <div class="card-ui" style="padding: 2.25rem 2rem; box-shadow: var(--shadow-lg);">
-        
-        <div style="text-align: center; margin-bottom: 1.75rem;">
-          <h2 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-bottom: 0.25rem;">Masuk Aplikasi</h2>
-          <p style="color: #64748b; font-size: 0.85rem;">Silakan masuk menggunakan akun Siswa atau Pengawas</p>
-        </div>
+      <!-- Right Login Card (Landing Page CBT.png Exact Match) -->
+      <div class="card-ui" style="padding: 2.25rem; max-width: 440px; margin: 0 auto; width: 100%; box-shadow: var(--shadow-hover);">
+        <h2 style="font-size: 1.5rem; font-weight: 800; text-align: center; color: var(--slate-900); margin-bottom: 0.25rem;">
+          Masuk Aplikasi
+        </h2>
+        <p style="font-size: 0.85rem; color: var(--slate-600); text-align: center; margin-bottom: 1.75rem;">
+          Silakan masuk menggunakan akun Siswa atau Pengawas
+        </p>
 
-        <form id="loginForm">
+        <form id="loginForm" onsubmit="handleLogin(event)">
           <div class="form-group">
-            <label class="form-label"><i class="fa-solid fa-user"></i> Email Sekolah / NIS</label>
-            <input type="text" id="username" class="form-control" placeholder="contoh: siswa001@sman1mlati.sch.id" required value="siswa001@sman1mlati.sch.id">
+            <label class="form-label"><i class="fa-solid fa-user"></i> Username / NIS</label>
+            <input type="text" id="usernameInput" class="form-control" placeholder="yusufsetiawan@sman1mlati.sch.id" required value="siswa3725@sman1mlati.sch.id">
           </div>
 
-          <div class="form-group">
+          <div class="form-group" style="margin-bottom: 1.5rem;">
             <label class="form-label"><i class="fa-solid fa-lock"></i> Kata Sandi</label>
-            <input type="password" id="password" class="form-control" placeholder="Masukkan password Anda" required value="123456">
+            <input type="password" id="passwordInput" class="form-control" placeholder="••••••••" required value="123456">
           </div>
 
-          <div id="errorMessage" style="color: #dc2626; font-size: 0.85rem; margin-bottom: 1rem; display: none; text-align: center; font-weight: 700;"></div>
+          <div id="loginErrorMessage" style="color: var(--danger-red); font-size: 0.85rem; margin-bottom: 1rem; display: none; text-align: center; font-weight: 700;"></div>
 
-          <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.8rem; font-size: 0.95rem; border-radius: 8px;">
+          <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.85rem; font-size: 0.95rem; border-radius: var(--radius-md);">
             <i class="fa-solid fa-right-to-bracket"></i> Masuk Sekarang
           </button>
         </form>
 
-        <!-- Quick Demo Login Buttons -->
+        <!-- Quick Demo Login Section (Exact Match) -->
         <div style="margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px solid var(--slate-200);">
-          <p style="font-size: 0.8rem; color: #64748b; font-weight: 700; text-align: center; margin-bottom: 0.75rem;">
-            <i class="fa-solid fa-bolt" style="color: #d97706;"></i> Quick Demo Login 4 Role (@sman1mlati.sch.id):
+          <p style="font-size: 0.775rem; color: var(--slate-600); font-weight: 700; text-align: center; margin-bottom: 0.85rem;">
+            <i class="fa-solid fa-bolt" style="color: var(--warning-amber);"></i> Quick Demo Login (Uji Coba Langsung):
           </p>
           
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
             <button class="btn btn-outline" onclick="quickLogin('siswa3725@sman1mlati.sch.id', '123456')" style="font-size: 0.725rem; padding: 0.45rem;">
-              <i class="fa-solid fa-user-graduate" style="color: #2563eb;"></i> Siswa (Galih)
+              <i class="fa-solid fa-user-graduate" style="color: var(--primary-blue);"></i> Siswa R.01
             </button>
             <button class="btn btn-outline" onclick="quickLogin('yusuf@sman1mlati.sch.id', '123456')" style="font-size: 0.725rem; padding: 0.45rem;">
-              <i class="fa-solid fa-chalkboard-user" style="color: #16a34a;"></i> Guru (Pak Yusuf)
+              <i class="fa-solid fa-chalkboard-user" style="color: var(--success-green);"></i> Guru (Pak Yusuf)
             </button>
             <button class="btn btn-outline" onclick="quickLogin('operator@sman1mlati.sch.id', 'admin123')" style="font-size: 0.725rem; padding: 0.45rem;">
-              <i class="fa-solid fa-sliders" style="color: #d97706;"></i> Operator
+              <i class="fa-solid fa-sliders" style="color: var(--warning-amber);"></i> Operator
             </button>
             <button class="btn btn-outline" onclick="quickLogin('admin@sman1mlati.sch.id', 'superadmin123')" style="font-size: 0.725rem; padding: 0.45rem;">
-              <i class="fa-solid fa-user-gear" style="color: #dc2626;"></i> Super Admin
+              <i class="fa-solid fa-user-gear" style="color: var(--danger-red);"></i> Super Admin
             </button>
           </div>
         </div>
@@ -127,23 +131,17 @@
   </main>
 
   <!-- Institutional Footer -->
-  <footer style="background: #ffffff; border-top: 1px solid var(--slate-200); padding: 0.85rem 1.5rem; font-size: 0.8rem; color: var(--slate-600); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;">
+  <footer style="background: #ffffff; border-top: 1px solid var(--slate-200); padding: 0.85rem 1.75rem; font-size: 0.8rem; color: var(--slate-600); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;">
     <div>Hak Cipta © 2026 <strong>SMA Negeri 1 Mlati, Sleman — DIY</strong>. All rights reserved.</div>
     <div>Versi 1.0 (Production Ready)</div>
   </footer>
 
   <script>
-    function quickLogin(user, pass) {
-      document.getElementById('username').value = user;
-      document.getElementById('password').value = pass;
-      document.getElementById('loginForm').dispatchEvent(new Event('submit'));
-    }
-
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    async function handleLogin(e) {
       e.preventDefault();
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
-      const errDiv = document.getElementById('errorMessage');
+      const username = document.getElementById('usernameInput').value;
+      const password = document.getElementById('passwordInput').value;
+      const errDiv = document.getElementById('loginErrorMessage');
       errDiv.style.display = 'none';
 
       try {
@@ -172,14 +170,20 @@
             window.location.href = '/admin-dashboard.html';
           }
         } else {
-          errDiv.innerText = data.message;
+          errDiv.innerText = data.message || 'Login gagal! Periksa username dan password.';
           errDiv.style.display = 'block';
         }
       } catch (err) {
-        errDiv.innerText = 'Gagal terhubung ke server CBT.';
+        errDiv.innerText = 'Gagal terhubung ke server CBT Kusuma.';
         errDiv.style.display = 'block';
       }
-    });
+    }
+
+    function quickLogin(user, pass) {
+      document.getElementById('usernameInput').value = user;
+      document.getElementById('passwordInput').value = pass;
+      document.getElementById('loginForm').requestSubmit();
+    }
   </script>
 </body>
 </html>
