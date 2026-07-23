@@ -4,252 +4,335 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Super Admin - CBT KUSUMA SMAN 1 Mlati</title>
-  <link rel="stylesheet" href="/css/style.css?v=4.0.0">
+  <link rel="stylesheet" href="/css/style.css?v=5.0.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body style="background: var(--slate-50); min-height: 100vh; display: flex; flex-direction: column;">
+<body>
 
-  <!-- Institutional Top Header Bar -->
-  <header class="app-header-main">
-    <div class="brand-wrapper">
-      <div class="brand-icon" style="background: var(--rose-600);"><i class="fa-solid fa-user-gear"></i></div>
-      <div>
-        <div style="font-size: 1.05rem; font-weight: 800;">MASTER ADMINISTRATION CENTER</div>
-        <div style="font-size: 0.7rem; font-weight: 500; color: #94a3b8;">CBT KUSUMA — SMA Negeri 1 Mlati</div>
-      </div>
-    </div>
+  <div class="app-wrapper">
     
-    <div style="display: flex; align-items: center; gap: 1.25rem;">
-      <div style="text-align: right; display: flex; align-items: center; gap: 0.75rem;">
-        <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--rose-600); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;">
-          <i class="fa-solid fa-shield-cat"></i>
-        </div>
-        <div>
-          <div style="font-weight: 700; font-size: 0.875rem; color: white;" id="adminName">Super Admin System</div>
-          <div style="font-size: 0.725rem; color: #94a3b8;">Administrator Utama / Headmaster</div>
+    <!-- LEFT VERTICAL SIDEBAR NAVIGATION (UNY Style) -->
+    <aside class="sidebar-main">
+      <!-- Brand Header -->
+      <div class="sidebar-brand">
+        <div class="sidebar-logo-icon" style="background: var(--rose-600);"><i class="fa-solid fa-user-gear"></i></div>
+        <div class="sidebar-brand-text">
+          <div>ADMIN CENTER</div>
+          <div style="font-size: 0.65rem; color: #94a3b8; font-weight: 500;">CBT KUSUMA SMAN 1 MLATI</div>
         </div>
       </div>
 
-      <button onclick="logout()" class="btn btn-danger" style="padding: 0.4rem 0.85rem; font-size: 0.8rem;">
-        <i class="fa-solid fa-right-from-bracket"></i> Keluar
-      </button>
-    </div>
-  </header>
+      <!-- User Info Avatar Box -->
+      <div class="sidebar-user-box">
+        <div class="sidebar-user-avatar" style="background: var(--rose-600);"><i class="fa-solid fa-shield-cat"></i></div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name" id="sidebarAdminName">Super Admin System</div>
+          <div class="sidebar-user-role">Headmaster / Administrator</div>
+        </div>
+      </div>
 
-  <!-- Modern Navigation Tab Bar -->
-  <div class="nav-tab-bar">
-    <div class="nav-tab-container">
-      <button class="tab-btn active" onclick="switchAdminTab('command-center')" id="tab-command-center">
-        <i class="fa-solid fa-eye"></i> Master Command Center
-      </button>
-      <button class="tab-btn" onclick="switchAdminTab('users')" id="tab-users">
-        <i class="fa-solid fa-users-gear"></i> User & Role Management (RBAC)
-      </button>
-      <button class="tab-btn" onclick="switchAdminTab('security')" id="tab-security">
-        <i class="fa-solid fa-shield-halved"></i> Anti-Cheating Engine Config
-      </button>
-      <button class="tab-btn" onclick="switchAdminTab('health')" id="tab-health">
-        <i class="fa-solid fa-server"></i> Server Health & Observability
-      </button>
-      <button class="tab-btn" onclick="switchAdminTab('audit-logs')" id="tab-audit-logs">
-        <i class="fa-solid fa-receipt"></i> Immutable Audit Logs
-      </button>
-      <button class="tab-btn" onclick="switchAdminTab('backup')" id="tab-backup">
-        <i class="fa-solid fa-database"></i> Backup & Restore
-      </button>
-    </div>
-  </div>
+      <!-- Sidebar Menu Items -->
+      <nav class="sidebar-menu">
+        <button class="sidebar-menu-item active" onclick="switchAdminTab('dasbor')" id="side-dasbor">
+          <i class="fa-solid fa-house"></i> Dasbor Utama
+        </button>
+        <button class="sidebar-menu-item" onclick="switchAdminTab('command-center')" id="side-command-center">
+          <i class="fa-solid fa-eye"></i> Master Control Room
+        </button>
+        <button class="sidebar-menu-item" onclick="switchAdminTab('users')" id="side-users">
+          <i class="fa-solid fa-users-gear"></i> User & Role (RBAC)
+        </button>
+        <button class="sidebar-menu-item" onclick="switchAdminTab('security')" id="side-security">
+          <i class="fa-solid fa-shield-halved"></i> Anti-Cheating Config
+        </button>
+        <button class="sidebar-menu-item" onclick="switchAdminTab('health')" id="side-health">
+          <i class="fa-solid fa-server"></i> Server Health Metrics
+        </button>
+        <button class="sidebar-menu-item" onclick="switchAdminTab('audit-logs')" id="side-audit-logs">
+          <i class="fa-solid fa-receipt"></i> Immutable Audit Logs
+        </button>
+        <button class="sidebar-menu-item" onclick="switchAdminTab('backup')" id="side-backup">
+          <i class="fa-solid fa-database"></i> Backup & Restore
+        </button>
+      </nav>
+    </aside>
 
-  <!-- Main Container -->
-  <main style="max-width: 1440px; width: 100%; margin: 1.75rem auto; padding: 0 1.75rem; flex: 1;">
+    <!-- RIGHT MAIN CONTENT WRAPPER -->
+    <div class="main-content-wrapper">
+      
+      <!-- Top Header Bar -->
+      <header class="top-header-bar">
+        <div class="top-header-left">
+          <button class="toggle-sidebar-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+          <div class="top-header-title">MASTER ADMINISTRATION CENTER — CBT KUSUMA SMAN 1 MLATI</div>
+        </div>
 
-    <!-- TAB 1: MASTER COMMAND CENTER -->
-    <div id="section-command-center">
-      <div class="card-ui" style="padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; background: linear-gradient(135deg, #7f1d1d 0%, #0f172a 100%); color: white; border: none;">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-          <div>
-            <span class="badge badge-danger" style="margin-bottom: 0.5rem; background: rgba(220,38,38,0.3); color: #fca5a5; border: 1px solid rgba(252,165,165,0.3);">
-              <i class="fa-solid fa-shield-cat"></i> Executive Control Room
-            </span>
-            <h2 style="font-size: 1.35rem; font-weight: 800; color: white;">Master Command Center — Pengawasan Executive Lintas Sekolah</h2>
-            <p style="color: #cbd5e1; font-size: 0.85rem;">Pengawasan real-time seluruh sesi ujian, ambang batas pelanggaran, dan kunci master rilis cepat.</p>
+        <div class="top-header-right">
+          <div style="font-size: 0.85rem; font-weight: 700; color: var(--slate-600);"><i class="fa-solid fa-globe"></i> ID</div>
+          <button onclick="logout()" class="btn btn-danger" style="padding: 0.4rem 0.85rem; font-size: 0.8rem;">
+            <i class="fa-solid fa-right-from-bracket"></i> Keluar
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Body Container -->
+      <div class="dashboard-body-container">
+
+        <!-- TAB 1: DASBOR UTAMA ADMIN -->
+        <div id="section-dasbor">
+          <!-- Profile Academic Info Card (UNY Style Teal Header) -->
+          <div class="card-ui" style="margin-bottom: 1.75rem; border: none; overflow: hidden;">
+            <div class="card-header-banner card-header-rose">
+              <div><i class="fa-solid fa-shield-cat"></i> Informasi Kontrol Eksekutif Sistem CBT Kusuma</div>
+              <span class="badge" style="background: rgba(255,255,255,0.2); color: white;">v4.0 Enterprise</span>
+            </div>
+
+            <div style="padding: 1.5rem; background: #ffffff;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                <tbody>
+                  <tr style="border-bottom: 1px solid var(--slate-200);">
+                    <td style="width: 220px; font-weight: 700; color: var(--slate-600); padding: 0.65rem 0;">Username Executive Admin</td>
+                    <td style="width: 20px;">:</td>
+                    <td style="font-weight: 800; color: var(--navy-900);">admin@sman1mlati.sch.id</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--slate-200);">
+                    <td style="font-weight: 700; color: var(--slate-600); padding: 0.65rem 0;">Status Mesin Anti-Cheating</td>
+                    <td>:</td>
+                    <td><span class="badge badge-success"><i class="fa-solid fa-shield"></i> Aktif (Threshold: 3 Pelanggaran)</span></td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--slate-200);">
+                    <td style="font-weight: 700; color: var(--slate-600); padding: 0.65rem 0;">Status Server & Basis Data</td>
+                    <td>:</td>
+                    <td style="font-weight: 800; color: var(--emerald-600);">ONLINE (Port 3000 — SQLite Engine)</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: 700; color: var(--slate-600); padding: 0.65rem 0;">Kode Unlock Master Utama</td>
+                    <td>:</td>
+                    <td style="font-weight: 800; color: var(--amber-600); font-family: var(--font-mono); font-size: 1.1rem;">999999</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-          <div style="display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.08); padding: 0.75rem 1.25rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.15);">
-            <div>
-              <div style="font-size: 0.725rem; color: #fca5a5; font-weight: 700;">Kode Unlock Master Utama:</div>
-              <div style="font-size: 1.5rem; font-weight: 800; color: #f59e0b; letter-spacing: 4px; font-family: var(--font-mono);">999999</div>
+
+          <!-- Metrics Stat Cards Grid -->
+          <div class="metrics-grid">
+            <div class="metric-card" onclick="switchAdminTab('users')" style="cursor: pointer;">
+              <div>
+                <div class="metric-label">Total Akun Terdaftar</div>
+                <div class="metric-value" style="color: var(--blue-600);">318 Akun</div>
+              </div>
+              <div class="metric-icon" style="background: #eff6ff; color: var(--blue-600);"><i class="fa-solid fa-users-gear"></i></div>
+            </div>
+
+            <div class="metric-card" onclick="switchAdminTab('health')" style="cursor: pointer;">
+              <div>
+                <div class="metric-label">Status WebSocket Realtime</div>
+                <div class="metric-value" style="color: var(--emerald-600);">287 Sesi</div>
+              </div>
+              <div class="metric-icon" style="background: #dcfce7; color: var(--emerald-600);"><i class="fa-solid fa-network-wired"></i></div>
+            </div>
+
+            <div class="metric-card" onclick="switchAdminTab('audit-logs')" style="cursor: pointer;">
+              <div>
+                <div class="metric-label">Immutable Audit Trail</div>
+                <div class="metric-value" style="color: var(--rose-600);">Aktif</div>
+              </div>
+              <div class="metric-icon" style="background: #fef2f2; color: var(--rose-600);"><i class="fa-solid fa-receipt"></i></div>
             </div>
           </div>
         </div>
-      </div>
 
-      <iframe src="/proctor.html" style="width: 100%; height: 780px; border: none; border-radius: 14px; box-shadow: var(--shadow-md);"></iframe>
-    </div>
-
-    <!-- TAB 2: USER & ROLE MANAGEMENT -->
-    <div id="section-users" style="display: none;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
-        <div>
-          <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--navy-900);">User & Role Management (RBAC Enterprise)</h2>
-          <p style="color: var(--slate-600); font-size: 0.875rem;">Hak akses penuh pembuatan dan pengelolaan akun Siswa, Guru, Operator, & Admin.</p>
-        </div>
-
-        <button onclick="openAddUserModal()" class="btn btn-danger">
-          <i class="fa-solid fa-user-shield"></i> Tambah Pengguna Baru
-        </button>
-      </div>
-
-      <!-- User List Table Card -->
-      <div class="card-ui" style="overflow: hidden;">
-        <div class="table-responsive">
-          <table class="table-modern" id="usersTable">
-            <thead>
-              <tr>
-                <th style="width: 60px;">ID</th>
-                <th>Nama Lengkap Pengguna</th>
-                <th>Username / Email Sekolah</th>
-                <th style="width: 160px;">Peran Hak Akses</th>
-                <th style="width: 100px;">Aksi</th>
-              </tr>
-            </thead>
-            <tbody id="userListBody">
-              <!-- Rendered dynamically -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB 3: KONFIGURASI ANTI-CHEATING ENGINE -->
-    <div id="section-security" style="display: none;">
-      <div class="card-ui" style="padding: 2rem; max-width: 750px; margin: 0 auto;">
-        <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--navy-900); margin-bottom: 1.25rem; border-bottom: 2px solid var(--slate-200); padding-bottom: 0.75rem;">
-          <i class="fa-solid fa-sliders" style="color: var(--rose-600);"></i> Parameter Anti-Cheating Engine & Screen Lock (PRD Bab 6.3)
-        </h2>
-
-        <form onsubmit="alert('Konfigurasi Keamanan Anti-Cheating Berhasil Diperbarui!'); return false;">
-          <div class="form-group">
-            <label class="form-label">Ambang Batas Pelanggaran Maksimal (Threshold)</label>
-            <input type="number" class="form-control" value="3" required>
-            <span style="font-size: 0.775rem; color: var(--slate-600);">Jumlah toleransi pindah tab / blur aplikasi sebelum layar dikunci otomatis.</span>
+        <!-- TAB 2: MASTER COMMAND CENTER -->
+        <div id="section-command-center" style="display: none;">
+          <div class="card-ui" style="padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; background: linear-gradient(135deg, #7f1d1d 0%, #0f172a 100%); color: white; border: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+              <div>
+                <span class="badge badge-danger" style="margin-bottom: 0.5rem; background: rgba(220,38,38,0.3); color: #fca5a5; border: 1px solid rgba(252,165,165,0.3);">
+                  <i class="fa-solid fa-shield-cat"></i> Executive Control Room
+                </span>
+                <h2 style="font-size: 1.35rem; font-weight: 800; color: white;">Master Command Center — Pengawasan Executive Lintas Sekolah</h2>
+                <p style="color: #cbd5e1; font-size: 0.85rem;">Pengawasan real-time seluruh sesi ujian, ambang batas pelanggaran, dan kunci master rilis cepat.</p>
+              </div>
+              <div style="display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.08); padding: 0.75rem 1.25rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.15);">
+                <div>
+                  <div style="font-size: 0.725rem; color: #fca5a5; font-weight: 700;">Kode Unlock Master Utama:</div>
+                  <div style="font-size: 1.5rem; font-weight: 800; color: #f59e0b; letter-spacing: 4px; font-family: var(--font-mono);">999999</div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div class="form-group">
-            <label class="form-label">Interval Auto-Save Jawaban Ke Server (Detik)</label>
-            <input type="number" class="form-control" value="5" required>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Mode Penguncian Layar (Screen Lock Behavior)</label>
-            <select class="form-control">
-              <option>Kunci Paksa Klien & Server (Default PRD)</option>
-              <option>Peringatan Halus (Tanpa Lock)</option>
-            </select>
-          </div>
-
-          <button type="submit" class="btn btn-danger" style="width: 100%; justify-content: center; padding: 0.85rem; margin-top: 1rem;">
-            <i class="fa-solid fa-floppy-disk"></i> Simpan Konfigurasi Keamanan Engine
-          </button>
-        </form>
-      </div>
-    </div>
-
-    <!-- TAB 4: SERVER HEALTH & OBSERVABILITY -->
-    <div id="section-health" style="display: none;">
-      <div class="metrics-grid">
-        <div class="metric-card">
-          <div>
-            <div class="metric-label">Status Server Node.js</div>
-            <div class="metric-value" style="color: var(--emerald-600);">ONLINE (100%)</div>
-          </div>
-          <div class="metric-icon" style="background: #dcfce7; color: var(--emerald-600);"><i class="fa-solid fa-server"></i></div>
+          <iframe src="/proctor.html" style="width: 100%; height: 780px; border: none; border-radius: 14px; box-shadow: var(--shadow-md);"></iframe>
         </div>
 
-        <div class="metric-card">
-          <div>
-            <div class="metric-label">Koneksi WebSocket Aktif</div>
-            <div class="metric-value" style="color: var(--blue-600);">287 Sesi</div>
+        <!-- TAB 3: USER & ROLE MANAGEMENT -->
+        <div id="section-users" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--navy-900);">User & Role Management (RBAC Enterprise)</h2>
+              <p style="color: var(--slate-600); font-size: 0.875rem;">Hak akses penuh pembuatan dan pengelolaan akun Siswa, Guru, Operator, & Admin.</p>
+            </div>
+
+            <button onclick="openAddUserModal()" class="btn btn-danger">
+              <i class="fa-solid fa-user-shield"></i> Tambah Pengguna Baru
+            </button>
           </div>
-          <div class="metric-icon" style="background: #eff6ff; color: var(--blue-600);"><i class="fa-solid fa-network-wired"></i></div>
-        </div>
 
-        <div class="metric-card">
-          <div>
-            <div class="metric-label">Beban CPU & RAM</div>
-            <div class="metric-value" style="color: var(--amber-600);">12.4%</div>
+          <div class="card-ui" style="overflow: hidden;">
+            <div class="table-responsive">
+              <table class="table-modern" id="usersTable">
+                <thead>
+                  <tr>
+                    <th style="width: 60px;">ID</th>
+                    <th>Nama Lengkap Pengguna</th>
+                    <th>Username / Email Sekolah</th>
+                    <th style="width: 160px;">Peran Hak Akses</th>
+                    <th style="width: 100px;">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="userListBody">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
           </div>
-          <div class="metric-icon" style="background: #fef3c7; color: var(--amber-600);"><i class="fa-solid fa-microchip"></i></div>
         </div>
-      </div>
-    </div>
 
-    <!-- TAB 5: IMMUTABLE AUDIT LOGS VIEWER (Bab 9 PRD) -->
-    <div id="section-audit-logs" style="display: none;">
-      <div style="margin-bottom: 1.5rem;">
-        <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--navy-900);">Immutable System Audit Trail (Audit Logs PRD Bab 9)</h2>
-        <p style="color: var(--slate-600); font-size: 0.875rem;">Jejak audit permanen append-only untuk memantau keamanan dan aktivitas administratif.</p>
-      </div>
+        <!-- TAB 4: KONFIGURASI ANTI-CHEATING ENGINE -->
+        <div id="section-security" style="display: none;">
+          <div class="card-ui" style="padding: 2rem; max-width: 750px; margin: 0 auto;">
+            <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--navy-900); margin-bottom: 1.25rem; border-bottom: 2px solid var(--slate-200); padding-bottom: 0.75rem;">
+              <i class="fa-solid fa-sliders" style="color: var(--rose-600);"></i> Parameter Anti-Cheating Engine & Screen Lock (PRD Bab 6.3)
+            </h2>
 
-      <div class="card-ui" style="overflow: hidden;">
-        <div class="table-responsive">
-          <table class="table-modern">
-            <thead>
-              <tr>
-                <th>Timestamp (WIB)</th>
-                <th>Aktor / User</th>
-                <th>Peran</th>
-                <th>Kategori Event</th>
-                <th>Deskripsi Aktivitas</th>
-                <th>Severity</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style="font-family: var(--font-mono); font-size: 0.8rem;">2026-07-23 15:02:10</td>
-                <td style="font-weight: 700; color: var(--navy-900);">operator@sman1mlati.sch.id</td>
-                <td><span class="badge badge-warning">Operator</span></td>
-                <td><code>USER_MIGRATION</code></td>
-                <td>Seeding 287 data siswa resmi SMAN 1 Mlati</td>
-                <td><span class="badge badge-success">INFO</span></td>
-              </tr>
-              <tr>
-                <td style="font-family: var(--font-mono); font-size: 0.8rem;">2026-07-23 15:00:45</td>
-                <td style="font-weight: 700; color: var(--navy-900);">siswa3725@sman1mlati.sch.id</td>
-                <td><span class="badge badge-primary">Student</span></td>
-                <td><code>TAB_SWITCH</code></td>
-                <td>Meninggalkan layar ujian (Pelanggaran #1)</td>
-                <td><span class="badge badge-warning">WARNING</span></td>
-              </tr>
-              <tr>
-                <td style="font-family: var(--font-mono); font-size: 0.8rem;">2026-07-23 14:58:20</td>
-                <td style="font-weight: 700; color: var(--navy-900);">admin@sman1mlati.sch.id</td>
-                <td><span class="badge badge-danger">SuperAdmin</span></td>
-                <td><code>CONFIG_CHANGE</code></td>
-                <td>Memperbarui threshold Anti-Cheating ke 3</td>
-                <td><span class="badge badge-primary">AUDIT</span></td>
-              </tr>
-            </tbody>
-          </table>
+            <form onsubmit="alert('Konfigurasi Keamanan Anti-Cheating Berhasil Diperbarui!'); return false;">
+              <div class="form-group">
+                <label class="form-label">Ambang Batas Pelanggaran Maksimal (Threshold)</label>
+                <input type="number" class="form-control" value="3" required>
+                <span style="font-size: 0.775rem; color: var(--slate-600);">Jumlah toleransi pindah tab / blur aplikasi sebelum layar dikunci otomatis.</span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Interval Auto-Save Jawaban Ke Server (Detik)</label>
+                <input type="number" class="form-control" value="5" required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Mode Penguncian Layar (Screen Lock Behavior)</label>
+                <select class="form-control">
+                  <option>Kunci Paksa Klien & Server (Default PRD)</option>
+                  <option>Peringatan Halus (Tanpa Lock)</option>
+                </select>
+              </div>
+
+              <button type="submit" class="btn btn-danger" style="width: 100%; justify-content: center; padding: 0.85rem; margin-top: 1rem;">
+                <i class="fa-solid fa-floppy-disk"></i> Simpan Konfigurasi Keamanan Engine
+              </button>
+            </form>
+          </div>
         </div>
+
+        <!-- TAB 5: SERVER HEALTH & OBSERVABILITY -->
+        <div id="section-health" style="display: none;">
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <div>
+                <div class="metric-label">Status Server Node.js</div>
+                <div class="metric-value" style="color: var(--emerald-600);">ONLINE (100%)</div>
+              </div>
+              <div class="metric-icon" style="background: #dcfce7; color: var(--emerald-600);"><i class="fa-solid fa-server"></i></div>
+            </div>
+
+            <div class="metric-card">
+              <div>
+                <div class="metric-label">Koneksi WebSocket Aktif</div>
+                <div class="metric-value" style="color: var(--blue-600);">287 Sesi</div>
+              </div>
+              <div class="metric-icon" style="background: #eff6ff; color: var(--blue-600);"><i class="fa-solid fa-network-wired"></i></div>
+            </div>
+
+            <div class="metric-card">
+              <div>
+                <div class="metric-label">Beban CPU & RAM</div>
+                <div class="metric-value" style="color: var(--amber-600);">12.4%</div>
+              </div>
+              <div class="metric-icon" style="background: #fef3c7; color: var(--amber-600);"><i class="fa-solid fa-microchip"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 6: IMMUTABLE AUDIT LOGS VIEWER (Bab 9 PRD) -->
+        <div id="section-audit-logs" style="display: none;">
+          <div style="margin-bottom: 1.5rem;">
+            <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--navy-900);">Immutable System Audit Trail (Audit Logs PRD Bab 9)</h2>
+            <p style="color: var(--slate-600); font-size: 0.875rem;">Jejak audit permanen append-only untuk memantau keamanan dan aktivitas administratif.</p>
+          </div>
+
+          <div class="card-ui" style="overflow: hidden;">
+            <div class="table-responsive">
+              <table class="table-modern">
+                <thead>
+                  <tr>
+                    <th>Timestamp (WIB)</th>
+                    <th>Aktor / User</th>
+                    <th>Peran</th>
+                    <th>Kategori Event</th>
+                    <th>Deskripsi Aktivitas</th>
+                    <th>Severity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="font-family: var(--font-mono); font-size: 0.8rem;">2026-07-23 15:02:10</td>
+                    <td style="font-weight: 700; color: var(--navy-900);">operator@sman1mlati.sch.id</td>
+                    <td><span class="badge badge-warning">Operator</span></td>
+                    <td><code>USER_MIGRATION</code></td>
+                    <td>Seeding 287 data siswa resmi SMAN 1 Mlati</td>
+                    <td><span class="badge badge-success">INFO</span></td>
+                  </tr>
+                  <tr>
+                    <td style="font-family: var(--font-mono); font-size: 0.8rem;">2026-07-23 15:00:45</td>
+                    <td style="font-weight: 700; color: var(--navy-900);">siswa3725@sman1mlati.sch.id</td>
+                    <td><span class="badge badge-primary">Student</span></td>
+                    <td><code>TAB_SWITCH</code></td>
+                    <td>Meninggalkan layar ujian (Pelanggaran #1)</td>
+                    <td><span class="badge badge-warning">WARNING</span></td>
+                  </tr>
+                  <tr>
+                    <td style="font-family: var(--font-mono); font-size: 0.8rem;">2026-07-23 14:58:20</td>
+                    <td style="font-weight: 700; color: var(--navy-900);">admin@sman1mlati.sch.id</td>
+                    <td><span class="badge badge-danger">SuperAdmin</span></td>
+                    <td><code>CONFIG_CHANGE</code></td>
+                    <td>Memperbarui threshold Anti-Cheating ke 3</td>
+                    <td><span class="badge badge-primary">AUDIT</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 7: BACKUP & RESTORE -->
+        <div id="section-backup" style="display: none;">
+          <div class="card-ui" style="padding: 2.5rem; text-align: center;">
+            <i class="fa-solid fa-database" style="font-size: 3.5rem; color: var(--blue-600); margin-bottom: 1rem; display: block;"></i>
+            <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--navy-900); margin-bottom: 0.5rem;">Backup & Point-in-time Restore Data</h2>
+            <p style="color: var(--slate-600); font-size: 0.9rem; max-width: 520px; margin: 0 auto 1.5rem auto;">
+              Buat cadangan data SQLite/PostgreSQL secara instan atau pulihkan dari titik restore sebelumnya.
+            </p>
+
+            <button onclick="alert('Backup Basis Data Berhasil Dibuat! (cbt_kusuma_backup.db)')" class="btn btn-primary">
+              <i class="fa-solid fa-download"></i> Unduh Backup Basis Data Sekarang
+            </button>
+          </div>
+        </div>
+
       </div>
+
     </div>
 
-    <!-- TAB 6: BACKUP & RESTORE -->
-    <div id="section-backup" style="display: none;">
-      <div class="card-ui" style="padding: 2.5rem; text-align: center;">
-        <i class="fa-solid fa-database" style="font-size: 3.5rem; color: var(--blue-600); margin-bottom: 1rem; display: block;"></i>
-        <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--navy-900); margin-bottom: 0.5rem;">Backup & Point-in-time Restore Data</h2>
-        <p style="color: var(--slate-600); font-size: 0.9rem; max-width: 520px; margin: 0 auto 1.5rem auto;">
-          Buat cadangan data SQLite/PostgreSQL secara instan atau pulihkan dari titik restore sebelumnya.
-        </p>
-
-        <button onclick="alert('Backup Basis Data Berhasil Dibuat! (cbt_kusuma_backup.db)')" class="btn btn-primary">
-          <i class="fa-solid fa-download"></i> Unduh Backup Basis Data Sekarang
-        </button>
-      </div>
-    </div>
-
-  </main>
+  </div>
 
   <!-- Add User Modal -->
   <div class="modal-overlay" id="addUserModal">
@@ -293,5 +376,11 @@
   </div>
 
   <script src="/js/admin-dashboard.js"></script>
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.querySelector('.sidebar-main');
+      sidebar.classList.toggle('open');
+    }
+  </script>
 </body>
 </html>
