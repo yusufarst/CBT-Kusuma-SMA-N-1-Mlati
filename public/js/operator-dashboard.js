@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function switchOpTab(tabName) {
-  const tabs = ['data-induk', 'jadwal-sesi', 'rekap-nilai'];
+  const tabs = ['command-center', 'data-induk', 'jadwal-sesi', 'rekap-nilai'];
   tabs.forEach(t => {
     const btn = document.getElementById(`tab-${t}`);
     const sec = document.getElementById(`section-${t}`);
