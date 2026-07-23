@@ -86,10 +86,11 @@ db.serialize(() => {
 
       // Seed Users
       const stmtUser = db.prepare("INSERT INTO users (username, password, name, role, room_id, nis) VALUES (?, ?, ?, ?, ?, ?)");
-      // Pengawas (Guru) & Operator
+      // Super Admin, Operator, & Pengawas (Guru)
+      stmtUser.run("admin@sman1mlati.sch.id", "superadmin123", "Super Admin System (Bpk. Drs. Headmaster)", "superadmin", null, null);
+      stmtUser.run("operator@sman1mlati.sch.id", "admin123", "Operator CBT (Mas Yusuf)", "operator", null, null);
       stmtUser.run("guru001@sman1mlati.sch.id", "123456", "Dra. Ani Suryani (Guru/Pengawas)", "teacher", 1, null);
       stmtUser.run("guru002@sman1mlati.sch.id", "123456", "Budi Santoso, S.Pd. (Guru/Pengawas)", "teacher", 2, null);
-      stmtUser.run("operator@sman1mlati.sch.id", "admin123", "Operator CBT (Mas Yusuf)", "operator", null, null);
 
       // Siswa Ruang 01
       stmtUser.run("siswa001@sman1mlati.sch.id", "123456", "Ahmad Fauzi", "student", 1, "20261001");
@@ -182,6 +183,7 @@ db.serialize(() => {
     db.run("UPDATE users SET username = 'siswa001@sman1mlati.sch.id' WHERE username IN ('siswa101', 'siswa001')");
     db.run("UPDATE users SET username = 'siswa002@sman1mlati.sch.id' WHERE username IN ('siswa102', 'siswa002')");
     db.run("UPDATE users SET username = 'siswa003@sman1mlati.sch.id' WHERE username IN ('siswa201', 'siswa003')");
+    db.run("INSERT OR IGNORE INTO users (username, password, name, role, room_id, nis) VALUES ('admin@sman1mlati.sch.id', 'superadmin123', 'Super Admin System (Bpk. Drs. Headmaster)', 'superadmin', null, null)");
 
     // Safe migration for battery columns
     db.run("ALTER TABLE exam_sessions ADD COLUMN battery_level INTEGER DEFAULT 100", () => {});
