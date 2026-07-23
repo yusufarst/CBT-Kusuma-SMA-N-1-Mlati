@@ -15,20 +15,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function switchAdminTab(tabName) {
-  const tabs = ['command-center', 'users', 'security', 'health', 'backup'];
+  const tabs = ['command-center', 'users', 'security', 'health', 'audit-logs', 'backup'];
   tabs.forEach(t => {
     const btn = document.getElementById(`tab-${t}`);
     const sec = document.getElementById(`section-${t}`);
     if (btn && sec) {
       if (t === tabName) {
-        btn.className = 'tab-btn active';
-        btn.style.color = '#2563eb';
-        btn.style.borderBottom = '3px solid #2563eb';
+        btn.classList.add('active');
         sec.style.display = 'block';
       } else {
-        btn.className = 'tab-btn';
-        btn.style.color = '#64748b';
-        btn.style.borderBottom = 'none';
+        btn.classList.remove('active');
         sec.style.display = 'none';
       }
     }
@@ -46,7 +42,6 @@ async function loadUsers() {
 
       data.users.forEach((u) => {
         const tr = document.createElement('tr');
-        tr.style.borderBottom = '1px solid #e2e8f0';
 
         let roleBadge = '';
         if (u.role === 'superadmin') roleBadge = `<span class="badge badge-danger">Super Admin</span>`;
@@ -55,12 +50,12 @@ async function loadUsers() {
         else roleBadge = `<span class="badge badge-primary">Siswa</span>`;
 
         tr.innerHTML = `
-          <td style="padding: 0.85rem 1.25rem; font-weight: 700;">${u.id}</td>
-          <td style="padding: 0.85rem 1.25rem; font-weight: 700; color: #0f172a;">${u.name}</td>
-          <td style="padding: 0.85rem 1.25rem; color: #2563eb; font-weight: 600;">${u.username}</td>
-          <td style="padding: 0.85rem 1.25rem;">${roleBadge}</td>
-          <td style="padding: 0.85rem 1.25rem;">
-            <button onclick="deleteUser(${u.id}, '${u.name}')" class="btn btn-outline" style="padding: 0.35rem 0.65rem; font-size: 0.75rem; color: #dc2626;">
+          <td style="font-weight: 700;">${u.id}</td>
+          <td style="font-weight: 700; color: var(--navy-900);">${u.name}</td>
+          <td style="color: var(--blue-600); font-weight: 600;">${u.username}</td>
+          <td>${roleBadge}</td>
+          <td>
+            <button onclick="deleteUser(${u.id}, '${u.name}')" class="btn btn-outline" style="padding: 0.3rem 0.65rem; font-size: 0.75rem; color: var(--rose-600);">
               <i class="fa-solid fa-trash"></i> Hapus
             </button>
           </td>
