@@ -9,6 +9,9 @@ let isExamStarted = false;
 let socket = null;
 let timerSeconds = 3600;
 
+let batteryManager = null;
+let lastBatteryWarningPct = null;
+
 document.addEventListener('DOMContentLoaded', async () => {
   const userStr = localStorage.getItem('cbt_user');
   if (!userStr) {
@@ -41,7 +44,93 @@ document.addEventListener('DOMContentLoaded', async () => {
   await fetchSession();
   await fetchQuestions();
   startCPNSTimer();
+  initBatteryMonitoring();
 });
+
+async function initBatteryMonitoring() {
+  if ('getBattery' in navigator) {
+    try {
+      batteryManager = await navigator.getBattery();
+      updateBatteryStatus();
+
+      batteryManager.addEventListener('levelchange', updateBatteryStatus);
+      batteryManager.addEventListener('chargingchange', updateBatteryStatus);
+    } catch (e) {
+      console.warn('Battery API not supported on this device/browser:', e);
+    }
+  } else {
+    // Fallback display if battery API unavailable
+    const bText = document.getElementById('batteryText');
+    if (bText) bText.innerText = '100%';
+  }
+}
+
+function updateBatteryStatus() {
+  if (!batteryManager) return;
+
+  const levelPct = Math.round(batteryManager.level * 100);
+  const isCharging = batteryManager.charging;
+
+  const batteryText = document.getElementById('batteryText');
+  const batteryIcon = document.getElementById('batteryIcon');
+  const batteryBadge = document.getElementById('batteryBadge');
+
+  if (batteryText && batteryIcon && batteryBadge) {
+    batteryText.innerText = `${levelPct}%${isCharging ? ' ⚡' : ''}`;
+
+    if (isCharging) {
+      batteryBadge.className = 'badge badge-success';
+      batteryIcon.className = 'fa-solid fa-battery-charging';
+    } else if (levelPct <= 15) {
+      batteryBadge.className = 'badge badge-danger';
+      batteryIcon.className = 'fa-solid fa-battery-quarter fa-bounce';
+    } else if (levelPct <= 35) {
+      batteryBadge.className = 'badge badge-warning';
+      batteryIcon.className = 'fa-solid fa-battery-half';
+    } else {
+      batteryBadge.className = 'badge badge-success';
+      batteryIcon.className = 'fa-solid fa-battery-full';
+    }
+  }
+
+  // Trigger Low Battery Modal Warning on Student device if level <= 15% and not charging
+  if (!isCharging && levelPct <= 15 && lastBatteryWarningPct !== levelPct) {
+    lastBatteryWarningPct = levelPct;
+    showBatteryWarningModal(levelPct);
+  }
+
+  sendBatteryStatus(levelPct, isCharging);
+}
+
+async function sendBatteryStatus(levelPct, isCharging) {
+  if (!currentUser) return;
+  try {
+    fetch('/api/exam/battery', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        studentId: currentUser.id,
+        roomId: currentUser.room_id,
+        batteryLevel: levelPct,
+        isCharging: isCharging
+      })
+    });
+  } catch (e) {}
+}
+
+function showBatteryWarningModal(pct) {
+  const modal = document.getElementById('batteryWarningModal');
+  const pctEl = document.getElementById('modalBatteryPct');
+  if (modal && pctEl) {
+    pctEl.innerText = `${pct}%`;
+    modal.classList.add('active');
+  }
+}
+
+function closeBatteryModal() {
+  const modal = document.getElementById('batteryWarningModal');
+  if (modal) modal.classList.remove('active');
+}
 
 function startCPNSTimer() {
   setInterval(() => {
